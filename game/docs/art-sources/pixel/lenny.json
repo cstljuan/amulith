@@ -1,0 +1,76 @@
+{
+ "out": "out/lenny",
+ "line": "#142420",
+ "palette": [
+  "#142420",
+  "#1F4D38",
+  "#2E7A47",
+  "#5BA34E",
+  "#8CC46A",
+  "#F1E6C0",
+  "#DCCB94",
+  "#E3A49E",
+  "#F2D2C4",
+  "#8E2F3A",
+  "#5A2230",
+  "#5D3B2D",
+  "#2E1C18",
+  "#FFFFFF"
+ ],
+ "protect": [
+  "#FFFFFF",
+  "#5D3B2D",
+  "#2E1C18"
+ ],
+ "animations": [
+  {
+   "name": "walk_e",
+   "height": 58,
+   "frames": [
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-01.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-02.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-03.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-04.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-05.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-06.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-07.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-08.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-09.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-10.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-11.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-12.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-13.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-14.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-15.webp",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-16.webp"
+   ]
+  },
+  {
+   "name": "blink_s",
+   "height": 54,
+   "frames": [
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_00.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_01.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_02.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_03.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_04.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_05.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_06.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_07.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_08.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_09.png"
+   ]
+  },
+  {
+   "name": "view",
+   "height": 58,
+   "key": "#CFCDC7",
+   "frames": [
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/views/front.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/views/tq.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/views/side.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/views/back.png"
+   ]
+  }
+ ]
+}

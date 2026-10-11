@@ -23,12 +23,13 @@ export function pixelTexture(width: number, height: number, paint: (ctx: CanvasR
 }
 
 // Swap a stand-in for public/art/<path> if that file exists. Missing files keep the stand-in.
-// Painted art is high resolution, so it is mipmapped smoothly; tiles mirror-repeat to hide seams.
+// Art is mipmapped for distance; tiles mirror-repeat to hide seams.
 export function upgradeFromArt(texture: THREE.Texture, path: string, onLoad?: () => void): void {
   const image = new Image();
   image.onload = () => {
     texture.image = image;
-    texture.minFilter = THREE.LinearMipmapLinearFilter; texture.magFilter = THREE.LinearFilter;
+    // Pixel art cards keep hard pixels up close; repeating ground tiles stay smooth.
+    texture.minFilter = THREE.LinearMipmapLinearFilter; texture.magFilter = texture.wrapS === THREE.RepeatWrapping ? THREE.LinearFilter : THREE.NearestFilter;
     if (texture.wrapS === THREE.RepeatWrapping) texture.wrapS = texture.wrapT = THREE.MirroredRepeatWrapping;
     texture.needsUpdate = true; onLoad?.();
   };

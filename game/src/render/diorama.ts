@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { lookSprite } from './spriteLook';
 import { blightShroomSprite, bushSprite, gemSprite, grassTile, mushroomSprite, pillarSprite, rng, shrineDisc, soilTile, stoneTile, treeSprite, upgradeFromArt, waterTile } from './pixelArt';
 import { basinD, createTerrain, heightAt, WATER_Y } from './terrain';
 
@@ -40,7 +41,7 @@ export class Diorama {
     const cards = (map: THREE.Texture, w: number, h: number, spots: Spot[], art?: string) => {
       if (art) upgradeFromArt(map, art);
       const geo = new THREE.PlaneGeometry(w, h).translate(0, h / 2, 0);
-      const mat = new THREE.MeshLambertMaterial({ map, alphaTest: 0.5, side: THREE.DoubleSide });
+      const mat = lookSprite(new THREE.MeshLambertMaterial({ map, alphaTest: 0.5, side: THREE.DoubleSide }));
       const mesh = new THREE.InstancedMesh(geo, mat, Math.max(1, spots.length));
       mesh.count = spots.length;
       spots.forEach((o, i) => mesh.setMatrixAt(i, m.compose(p.set(o.x, o.y, o.z), tilt, sc.setScalar(o.s))));

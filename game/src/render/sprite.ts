@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { lookSprite } from './spriteLook';
 import { pixelTexture } from './pixelArt';
 
 export interface SheetMeta { frameWidth: number; frameHeight: number; columns: number; fps: number; animations: Record<string, number[]> }
@@ -19,14 +20,17 @@ export class SpriteActor {
   private action = '';
   private actionLeft = 0;
   private hit = 0;
+  private held = '';
   reducedMotion = false;
 
-  constructor(texture: THREE.Texture, meta: SheetMeta, height = 2.2, sheetPath?: string) {
+  // hidden: stay invisible until the sheet loads (characters with no procedural stand-in).
+  constructor(texture: THREE.Texture, meta: SheetMeta, height = 2.2, sheetPath?: string, hidden = false) {
+    this.root.visible = !hidden;
     this.texture = texture; this.meta = meta;
     texture.repeat.set(1 / meta.columns, meta.frameHeight / (texture.image as { height: number }).height);
     const width = height * meta.frameWidth / meta.frameHeight;
-    this.card = new THREE.Mesh(new THREE.PlaneGeometry(width, height).translate(0, height / 2, 0), new THREE.MeshLambertMaterial({ map: texture, alphaTest: 0.5, side: THREE.DoubleSide }));
-    this.shadow = new THREE.Mesh(new THREE.CircleGeometry(width * 0.32, 20), new THREE.MeshBasicMaterial({ color: 0x120c18, transparent: true, opacity: 0.38, depthWrite: false }));
+    this.card = new THREE.Mesh(new THREE.PlaneGeometry(width, height).translate(0, height / 2, 0), lookSprite(new THREE.MeshLambertMaterial({ map: texture, alphaTest: 0.5, side: THREE.DoubleSide })));
+    this.shadow = new THREE.Mesh(new THREE.CircleGeometry(width * 0.32, 20), new THREE.MeshBasicMaterial({ color: 0x120c18, map: softShadow(), transparent: true, opacity: 0.55, depthWrite: false }));
     this.shadow.rotation.x = -Math.PI / 2; this.shadow.position.y = 0.04; this.shadow.scale.y = 0.55;
     this.root.add(this.shadow, this.card);
     if (sheetPath) this.loadSheet(sheetPath);
@@ -40,8 +44,8 @@ export class SpriteActor {
       const meta = await res.json() as SheetMeta;
       const image = new Image();
       image.onload = () => {
-        this.meta = meta; this.texture.image = image;
-        this.texture.minFilter = THREE.LinearMipmapLinearFilter; this.texture.magFilter = THREE.LinearFilter; this.texture.needsUpdate = true;
+        this.meta = meta; this.texture.image = image; this.root.visible = true;
+        this.texture.minFilter = THREE.LinearMipmapLinearFilter; this.texture.magFilter = THREE.NearestFilter; this.texture.needsUpdate = true;
         this.texture.repeat.set(meta.frameWidth / image.width, meta.frameHeight / image.height);
         const h = (this.card.geometry.parameters.height), w = h * meta.frameWidth / meta.frameHeight;
         this.card.geometry.dispose(); this.card.geometry = new THREE.PlaneGeometry(w, h).translate(0, h / 2, 0);
@@ -50,10 +54,12 @@ export class SpriteActor {
     } catch { /* stand-in stays */ }
   }
 
-  setOpacity(value: number): void { const m = this.card.material; m.transparent = value < 1; m.opacity = value; this.shadow.material.opacity = 0.38 * value; }
+  setOpacity(value: number): void { const m = this.card.material; m.transparent = value < 1; m.opacity = value; this.shadow.material.opacity = 0.55 * value; }
 
   // One-shot pose (pulse, ask, hurt, dash) held for `seconds`, then back to idle or walk.
   act(name: string, seconds: number): void { if (this.meta.animations[name]) { this.action = name; this.actionLeft = seconds; } }
+  // Keep one animation (for example a sleeping pose) until hold('') releases it.
+  hold(name: string): void { this.held = name; }
   hurt(): void { this.hit = 1; this.act('hurt', 0.45); }
 
   // dx, dz: this frame's movement in world units. +z walks toward the camera (front).
@@ -69,7 +75,7 @@ export class SpriteActor {
     }
     this.actionLeft -= dt;
     const base = (moving ? 'walk' : 'idle');
-    const name = this.actionLeft > 0 && this.action ? this.action : this.pick(base);
+    const name = this.actionLeft > 0 && this.action ? this.action : this.held && this.meta.animations[this.held] ? this.held : this.pick(base);
     if (name !== this.animation) { this.animation = name; this.clock = 0; }
     const frames = this.meta.animations[name];
     const frame = frames[Math.floor(this.clock * this.meta.fps) % frames.length];
@@ -90,6 +96,18 @@ export class SpriteActor {
   }
 
   dispose(): void { this.card.geometry.dispose(); this.card.material.dispose(); this.shadow.geometry.dispose(); this.shadow.material.dispose(); this.texture.dispose(); }
+}
+
+// A soft contact shadow (dark center, feathered edge) so sprites sit on the ground, shared by every actor.
+let shadowTexture: THREE.Texture | null = null;
+function softShadow(): THREE.Texture {
+  if (shadowTexture) return shadowTexture;
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const ctx = c.getContext('2d')!, g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.5, 'rgba(255,255,255,0.7)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+  shadowTexture = new THREE.CanvasTexture(c);
+  return shadowTexture;
 }
 
 // Stand-in Wanderer: a hooded traveler with a lantern, 24 x 32 frames, 2 idle + 4 walk, facing right.

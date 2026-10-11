@@ -47,15 +47,25 @@ export function installVisuals(host: VisualsHost) {
   const enemies = new EnemySprites();
   const shards = new ShardSprites(pitch);
   post.enabled = params.get('post') !== '0';
+  if (params.has('px')) post.pixelHeight = Number(params.get('px')) || 0;
   ground.reducedMotion = rings.reducedMotion = reducedMotion;
   scene.add(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
   patchTree(ground.group); patchTree(diorama.group);
 
   const stand = wandererStandIn();
-  const actor = new SpriteActor(stand.texture, stand.meta, 3.0, 'wanderer/sheet');
+  const actor = new SpriteActor(stand.texture, stand.meta, 2.0, 'wanderer/sheet');
   actor.reducedMotion = reducedMotion;
   player.cutout.visible = false;
   player.visual.add(actor.root);
+
+  // Lenny keeps watch by the shrine; T.K. sleeps under the moss beside it and stands when Bloom wins.
+  // Cards are 32 world px per unit (64 px cells on 2.0 unit cards), so every sprite shares one pixel size.
+  const cast = (path: string, pose: string, x: number, z: number, height = 2.0) => {
+    const art = wandererStandIn(), s = new SpriteActor(art.texture, art.meta, height, path, true);
+    s.hold(pose); s.root.position.set(x, 0, z); scene.add(s.root); return s;
+  };
+  const lenny = cast('lenny/sheet', 'idle_s', -1.9, 1.0);
+  const tk = cast('tk/sheet', 'asleep_s', 2.4, -1.3, 2.75);
 
   // Initial land snapshot, then animated batches.
   const snapshot: LandCell[] = session.land.cells.map((faction, i) => ({ column: i % session.land.width, row: Math.floor(i / session.land.width), faction }));
@@ -86,6 +96,7 @@ export function installVisuals(host: VisualsHost) {
     // `lantern` arrives with the game-rules lantern (PR #15); radius is in world units.
     events.on('lantern', e => lighting.setLanternRadius(e.radius)),
     events.on('thinking', e => { llmBusy = e.active; }),
+    events.on('run', e => { tk.hold(e.result === 'win' && e.faction === 'bloom' ? 'stand_s' : 'asleep_s'); }),
   ];
 
   const last = new THREE.Vector3().copy(player.position);
@@ -102,11 +113,12 @@ export function installVisuals(host: VisualsHost) {
     render(dt: number) {
       time += dt;
       actor.update(dt, player.visual.position.x - last.x, player.visual.position.z - last.z);
+      lenny.update(dt, 0, 0); tk.update(dt, 0, 0);
       last.copy(player.visual.position);
       lighting.update(dt, player.visual.position, time, reducedMotion);
       lanternUniforms.uLantern.value.set(player.visual.position.x, player.visual.position.z, lighting.lanternRadius);
       lanternUniforms.uLanternDark.value = 0.3 + 0.45 * lighting.night;
-      patchTree(enemies.group); patchTree(shards.group); patchTree(player.visual);
+      patchTree(enemies.group); patchTree(shards.group); patchTree(player.visual); patchTree(lenny.root); patchTree(tk.root);
       ground.setNight(lighting.night);
       ground.update(dt, time);
       diorama.update(time);
@@ -123,8 +135,8 @@ export function installVisuals(host: VisualsHost) {
     dispose() {
       offs.forEach(off => off());
       scene.remove(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
-      player.visual.remove(actor.root);
-      [lighting, ground, diorama, motes, rings, post, actor, enemies, shards].forEach(d => d.dispose());
+      player.visual.remove(actor.root); scene.remove(lenny.root, tk.root);
+      [lighting, ground, diorama, motes, rings, post, actor, lenny, tk, enemies, shards].forEach(d => d.dispose());
     },
   };
 }
