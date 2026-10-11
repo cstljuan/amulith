@@ -56,6 +56,7 @@ export function installLevelScene(scene: THREE.Scene, session: GameSession, stat
       const ready=level.shards.filter(candidate=>session.shards.sites.find(site=>site.id===candidate.id)?.resolved).length>=level.shardCount;
       const sign=level.signs.find(site=>Math.hypot(site.x-position.x,site.z-position.z)<3);
       const signText=sign?lore.signs.find(s=>s.id===sign.id)?.text:'';
+      overlay.hidden=session.run.phase==='attract'||session.run.phase==='ending';
       const text=lore.name+'\n'+lore.subtitle+'\n'+(session.levels.elapsed<8?lore.introLines[0]+'\n':'')+(signText?signText+'\n':'')+(ready?'Follow the gold ring to '+(level.exit.next?LEVEL_LORE[level.exit.next].name:'finish the run')+'.':'Find the shard, then follow the gold ring.');
       if(overlay.textContent!==text)overlay.textContent=text;
       curtain.style.display=session.levels.transitioning?'flex':'none';
