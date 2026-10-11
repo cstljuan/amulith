@@ -16,7 +16,6 @@ Status: in development during the hackathon. Details land here as they are built
 | `case/` | Parametric CAD and STL for the printed hill |
 | `protocol/` | The message contract between the game and the Jetson service |
 | `tools/mock-remnant/` | Fake Jetson service so the game can be built on a laptop |
-| `.agents/skills/` | Shared agent skills (Codex reads this; `.claude/skills` links here) |
 
 ## Credits
 
