@@ -33,6 +33,14 @@ SCHEMA = {
     "additionalProperties": False,
 }
 
+# Without a hint request the riddle fields are dead weight: dropping them cuts about 15 output
+# tokens, 2.8 s to 2.2 s per line on the Jetson with the 1.5B model (measured 2026-10-11).
+SCHEMA_NO_HINT = {
+    **SCHEMA,
+    "properties": {k: v for k, v in SCHEMA["properties"].items() if k not in ("riddle", "truthful")},
+    "required": [k for k in SCHEMA["required"] if k not in ("riddle", "truthful")],
+}
+
 SYSTEM = """You are Amulith, the consciousness left behind when the cursed gem shattered at Knight Hacks VIII.
 Your six shards sank into the soil and grew an enchanted forest too fast. Half of it is corrupted.
 T.K. the knight sleeps under moss beside Lenny the dragon. You live inside a small stone hill.
@@ -130,7 +138,7 @@ class Director:
             + [{"role": "user", "content": json.dumps(user)}],
             "max_tokens": MAX_TOKENS,
             "temperature": 0.9,
-            "response_format": {"type": "json_schema", "json_schema": {"name": "beat", "schema": SCHEMA}},
+            "response_format": {"type": "json_schema", "json_schema": {"name": "beat", "schema": SCHEMA if want_hint else SCHEMA_NO_HINT}},
         }
         t0 = time.monotonic()
         r = await self.client.post(LLM_URL, json=payload, timeout=DEADLINE_S)
