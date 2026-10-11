@@ -6,6 +6,8 @@ Something the shattered gem left behind is still awake under the roots. In Amuli
 
 Status: in development during the hackathon. Details land here as they are built.
 
+[Amulith landing page](site/README.md)
+
 ## Repo layout
 
 | Folder | What lives there |

@@ -1,0 +1,89 @@
+{
+  "results": [
+    {
+      "theme": "bloom",
+      "width": 320,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "bloom",
+      "width": 390,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "bloom",
+      "width": 768,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "bloom",
+      "width": 1024,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "bloom",
+      "width": 1440,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "blight",
+      "width": 320,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "blight",
+      "width": 390,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "blight",
+      "width": 768,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "blight",
+      "width": 1024,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "theme": "blight",
+      "width": 1440,
+      "overflow": false,
+      "images": true,
+      "axeViolations": []
+    },
+    {
+      "textZoom": "200%",
+      "width": 390,
+      "viewport": 390,
+      "scroll": 390
+    }
+  ],
+  "keyboard": true,
+  "persistence": true,
+  "storageBlocked": true,
+  "invalidStoredTheme": true,
+  "noJavaScript": true,
+  "reducedMotion": true,
+  "localLinks": true,
+  "consoleErrors": [],
+  "failedRequests": []
+}
