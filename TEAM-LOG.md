@@ -2,6 +2,13 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 1:22 AM, Lawrence Capistrano, game-rules/obstacles-dash-interact
+- Reviewed and merged #16 at a56fa4a after dependency install, build, 19 tests, and browser checks of controller title choice, start, judge overlay, pause/resume and rendering. Normal merge commit f0faa06aea5811c739bbd0274c8671fdcba44fd2.
+- Added enemy obstacle grids from the existing render COLLIDERS supplied after installVisuals in main.ts. Circles include actor clearance and cell half-diagonal padding; blocked spawn/target cells use a nearby open cell. Navigation has no render dependency. Added a normalized 3-unit B/Shift dash over 0.18 s with 0.8 s cooldown, pause cancellation, and collision substeps to avoid tunneling. X/F emits interact on active-run press edges. New typed dash/interact position events.
+- main.ts changes: import COLLIDERS, set enemy obstacles, dispatch accepted dash and interact events, pass pause/collision callback to player.update; preserved visuals/UI/render cap/camera and final collision calls. No dependencies or render/fx/ui/audio/art/protocol/hardware files changed. Optional pulse-shape refactor left unchanged.
+- Verification: 21 tests PASS, TypeScript/Vite build PASS; headless Chrome with simulated standard controller PASS for title start, judge, pause/resume, B burst, X/F edges, paused interact guard, shrine collision and controlled obstacle chase. Existing bundle-size warning remains. Browser fixtures do not measure physical controller or Jetson GPU performance.
+- Coordination: issues #6/#7 contain interfaces. Dash pose subscription is pending in Juan's render lane (actor.act('dash',0.18)); interact consumers remain with UI. No Jetson service/deployment edits. No Discord connector available, team update supplied to Lawrence. Authorship is Lawrence's configured name and noreply email; no attribution trailers.
+
 ## 2026-10-11 1:05 AM, Juan Castillo (Claude Code), visuals/paper-world
 - Did: merged main (#15) into the visuals branch; enemies and shards now render as animated pixel sprites (walk, attack, defeated) from the enemies/shards events, replacing the placeholder views (hidden, not deleted). Four-direction Wanderer frames, curved heightfield terrain, prop collisions (resolveCollisions in main.ts), shaped pulses. UI lane #7: title and controller faction pick, HUD (land share, light, lantern, shards), Amulith dialogue with mood portraits and honest source label, hold-to-claim prompt, pause menu with settings, judge mode, endings with credits. Fonts bundled (Noto Serif/Sans, OFL). Build and 19 tests pass. Deployed to the Jetson for Juan.
 - Blocked: audio (no CC0 music yet), T.K. and Lenny art (waiting on Juan's sketches / lore images).

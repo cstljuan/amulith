@@ -3,6 +3,8 @@ import type { EventBus, GameEvents } from '../core/events.ts';
 import { astar } from '../pathfinding/astar.ts';
 import type { Point } from '../pathfinding/astar.ts';
 import type { Land } from '../rules/land.ts';
+import { obstacleGrid, nearestOpen } from '../world/obstacles.ts';
+import type { CircleObstacle } from '../world/obstacles.ts';
 export interface Enemy {
   id:number;kind:EnemyKind;state:'wander'|'chase'|'attack'|'defeated';x:number;z:number;
   hits:number;attackCooldown:number;pathTimer:number;landTimer:number;path:Point[];target:Point;
@@ -13,12 +15,21 @@ export class Enemies {
   private sequence = 0;
   private grid: boolean[][] = Array.from({length:40},()=>Array(60).fill(true));
   constructor(private bus:EventBus<GameEvents>,private land:Land,private random:()=>number=Math.random){}
+  setObstacles(circles: readonly CircleObstacle[]): void {
+    this.grid = obstacleGrid(circles);
+    for (const e of this.enemies) {
+      const point = cell(e.x,e.z);
+      if (!this.grid[point.y][point.x]) { const open = nearestOpen(this.grid,point); e.x=open.x-29.5; e.z=open.y-19.5; }
+      e.path=[]; e.pathTimer=0;
+    }
+  }
   reset():void{this.enemies=[];this.changed();}
   spawn(kind:EnemyKind,count:number,zone:Zone):void{
     this.enemies=this.enemies.filter(e=>e.state!=='defeated');
     const center=zone==='hollow'?-20:zone==='glade'?0:20;
     for(let i=0;i<Math.min(count,24-this.enemies.length);i++){
-      const x=center+(this.random()-0.5)*12,z=(this.random()-0.5)*28;
+      let x=center+(this.random()-0.5)*12,z=(this.random()-0.5)*28;
+      const point=cell(x,z);if(!this.grid[point.y][point.x]){const open=nearestOpen(this.grid,point);x=open.x-29.5;z=open.y-19.5;}
       this.enemies.push({id:++this.sequence,kind,state:'wander',x,z,hits:0,attackCooldown:0,pathTimer:0,landTimer:0,path:[],target:cell(x,z)});
     }this.changed();
   }
@@ -38,6 +49,7 @@ export class Enemies {
           e.pathTimer=0.5;
           if(e.state==='chase')e.target=cell(position.x,position.z);
           else if(!e.path.length)e.target=cell(Math.max(-29,Math.min(29,e.x+(this.random()-0.5)*10)),Math.max(-19,Math.min(19,e.z+(this.random()-0.5)*10)));
+          if(!this.grid[e.target.y][e.target.x])e.target=nearestOpen(this.grid,e.target);
           e.path=astar(this.grid,cell(e.x,e.z),e.target).slice(1);
         }
         const next=e.path[0];if(next){const x=next.x-29.5,z=next.y-19.5,dx=x-e.x,dz=z-e.z,d=Math.hypot(dx,dz),step=dt*(e.state==='chase'?2.5:1);

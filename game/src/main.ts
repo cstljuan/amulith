@@ -7,6 +7,7 @@ import { Wanderer } from './player/Wanderer';
 import { createWorld, zoneAt, ZONES } from './world/world';
 import { GameSession } from './rules/session';
 import { installVisuals, resolveCollisions } from './render';
+import { COLLIDERS } from './render/diorama';
 import { sizeRenderer } from './render/resolution';
 import { installUI } from './ui';
 import { EnemyView } from './enemies/EnemyView';
@@ -45,6 +46,7 @@ const unsubscribe = events.on('pause', event => {
 });
 session.start();
 const visuals = installVisuals({ renderer, scene, camera, events, player, session, world, replaces: [enemyView.group, shardView.group] });
+session.enemies.setObstacles(COLLIDERS);
 const ui = installUI({ events, input, session, player, renderer });
 const resize = () => {
   sizeRenderer(renderer, window.innerWidth, window.innerHeight);
@@ -60,8 +62,10 @@ const stop = startLoop({
     session.frame(input);
     if (input.pressed('pause')) events.emit('pause', { paused: !paused });
     if (!paused && input.pressed('pulse')) events.emit('pulse', { x: player.position.x, z: player.position.z });
+    if (input.pressed('dash') && player.motion.dash(input.actions.move, session.paused)) events.emit('dash', { x: player.position.x, z: player.position.z });
+    if (!session.paused && input.pressed('interact')) events.emit('interact', { x: player.position.x, z: player.position.z });
   },
-  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); resolveCollisions(player.position); },
+  update(dt) { session.update(dt); player.update(dt, input.actions.move, session.paused, resolveCollisions); resolveCollisions(player.position); },
   render(alpha, dt) {
     target.lerp(player.position, 1 - Math.exp(-6 * dt));
     desired.copy(target).add(offset);

@@ -8,6 +8,8 @@ export type GameEvents = {
   [K in RemnantMessage['type']]: Extract<RemnantMessage, { type: K }>;
 } & {
   pulse: { x: number; z: number };
+  dash: { x: number; z: number };
+  interact: { x: number; z: number };
   faction: { faction: Faction | null };
   pause: { paused: boolean };
   connection: { connected: boolean; mode: 'live' | 'mock' | 'offline' };
