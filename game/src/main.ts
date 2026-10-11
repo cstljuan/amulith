@@ -9,6 +9,8 @@ import { GameSession } from './rules/session';
 import { installVisuals, resolveCollisions } from './render';
 import { sizeRenderer } from './render/resolution';
 import { installUI } from './ui';
+import { EnemyView } from './enemies/EnemyView';
+import { ShardView } from './rules/ShardView';
 import './style.css';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
@@ -31,6 +33,9 @@ camera.position.copy(offset);
 camera.lookAt(target);
 const input = new Input();
 const session = new GameSession(config.remnant, events, player.position);
+const enemyView = new EnemyView(session.enemies);
+const shardView = new ShardView(session.shards);
+scene.add(enemyView.group, shardView.group);
 let paused = false;
 const status = document.querySelector<HTMLElement>('#status')!;
 const zoneLabel = document.querySelector<HTMLElement>('#zone')!;
@@ -63,9 +68,10 @@ const stop = startLoop({
     camera.position.copy(desired);
     camera.lookAt(target);
     player.render(alpha, camera);
+    enemyView.render(camera);shardView.render(camera);
     zoneLabel.textContent = ZONES.find(zone => zone.id === zoneAt(player.position.x))!.label;
     const share = session.land.share();
-    status.textContent = `${session.faction ?? 'Choose: 1 Bloom / 2 Blight'} | ${paused ? 'Paused' : 'Playing'} | ${session.client.mode} | Bloom ${Math.round(share.bloom*100)}% / Blight ${Math.round(share.blight*100)}%`;
+    status.textContent = `${session.faction ?? 'Choose: 1 Bloom / 2 Blight'} | ${session.run.phase}${session.run.result ? ' / '+session.run.result : ''} | ${session.client.mode} | HP ${Math.round(session.run.hp*100)}% | Shards ${session.run.shards}/3 | Bloom ${Math.round(share.bloom*100)}% / Blight ${Math.round(share.blight*100)}%`;
     visuals.render(dt);
     ui.frame(dt);
   },
@@ -74,6 +80,6 @@ const stop = startLoop({
 // Export the integration surface for lane modules and browser verification.
 export { config, events, input, player, session };
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  stop(); ui.dispose(); visuals.dispose(); session.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  stop(); ui.dispose(); visuals.dispose(); session.dispose(); enemyView.dispose(); shardView.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
   window.removeEventListener('resize', resize);
 });

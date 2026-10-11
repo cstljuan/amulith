@@ -11,6 +11,10 @@ Newest first. One entry per work session.
 - Did: locked the art style sheet in game/public/art/STYLE.md (palette with measured colorblind contrast, typography, cutout rules, file layout). Added src/render/palette.ts and src/render/resolution.ts (drawing buffer capped at 1920 x 1080 pixels, a 4K TV renders at 1920 x 1080).
 - Blocked: the cap needs a one-line change in main.ts (game-core); requested on issue #3.
 - Next: paper ground and torn zone edges, billboard cutout system, land flowers and veins.
+## 2026-10-10 11:33 PM, Lawrence Capistrano, game-rules/enemies-flow
+- Did: reviewed/merged #14 after Lawrence's approval; implemented #5 A*, enemy AI/attacks/two-pulse defeat, lantern, 3-of-6 shard selection/hold resolution, hints, 3% ask cost, and full run states/reset. Added local placeholder enemy/shard views and typed interfaces for UI/visuals. Nineteen unit tests, build and controlled mock-browser run-flow checks passed; screenshot in game/docs/enemies-flow.png.
+- Blocked: physical controller, real Jetson link/performance, five-minute game balance, authored visuals and ending UI/audio remain unverified or assigned to other lanes. Browser win/loss checks use controlled positions/time fixtures and are not a real judging-length run.
+- Next: open Task C PR for review. Coordination log and lane interfaces are in kh-skills PR #4.
 
 ## 2026-10-10 11:24 PM, Lawrence Capistrano, game-rules/net-land
 - Did: after Lawrence authorized merging #13 and taking B/C here, implemented #4 network/land/pulse, validated protocol messages, reconnect/disposal, offline director, shrine/faction fallback, and shared lane events. Six Node tests and production build passed; actual tools/mock-remnant browser integration passed with screenshot in game/docs/net-land.png.
