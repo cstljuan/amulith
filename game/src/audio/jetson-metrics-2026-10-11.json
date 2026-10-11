@@ -1,0 +1,1866 @@
+{
+  "default": [
+    {
+      "at": "2026-10-11T05:36:22.638Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "",
+      "thinking": true,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "59%",
+        "Frame rate": "35 fps",
+        "GPU": "92%",
+        "LLM speed": "15.2 tok/s",
+        "Last line": "n/a",
+        "Link": "live",
+        "Power": "16.8 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.6 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:23.666Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "",
+      "thinking": true,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "59%",
+        "Frame rate": "53 fps",
+        "GPU": "99%",
+        "LLM speed": "15.2 tok/s",
+        "Last line": "n/a",
+        "Link": "live",
+        "Power": "16.6 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:24.705Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "50%",
+        "Frame rate": "57 fps",
+        "GPU": "98%",
+        "LLM speed": "15.2 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "16.0 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:25.740Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "50%",
+        "Frame rate": "57 fps",
+        "GPU": "92%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.9 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:27.026Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "55%",
+        "Frame rate": "58 fps",
+        "GPU": "77%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.8 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:28.052Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "62%",
+        "Frame rate": "56 fps",
+        "GPU": "77%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:29.265Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "56 fps",
+        "GPU": "90%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.4 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "57.9 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:30.289Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "67%",
+        "Frame rate": "58 fps",
+        "GPU": "79%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.6 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.1 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:31.504Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "56 fps",
+        "GPU": "82%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.5 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.1 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:32.580Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "69%",
+        "Frame rate": "53 fps",
+        "GPU": "81%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:33.764Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "56 fps",
+        "GPU": "92%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.3 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:34.794Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "56 fps",
+        "GPU": "55%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.2 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:35.816Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "58 fps",
+        "GPU": "91%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.4 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.5 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:36.852Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "38 fps",
+        "GPU": "82%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.6 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:37.877Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "62%",
+        "Frame rate": "44 fps",
+        "GPU": "51%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "13.1 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:38.917Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "57 fps",
+        "GPU": "67%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "14.1 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:39.969Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "54 fps",
+        "GPU": "85%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.2 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.9 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:40.999Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "76%",
+        "Frame rate": "51 fps",
+        "GPU": "77%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.6 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:42.037Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "71%",
+        "Frame rate": "56 fps",
+        "GPU": "84%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.6 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:43.077Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "70%",
+        "Frame rate": "55 fps",
+        "GPU": "70%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.3 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:44.244Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "70%",
+        "Frame rate": "55 fps",
+        "GPU": "73%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.5 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:45.296Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "70%",
+        "Frame rate": "55 fps",
+        "GPU": "82%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.4 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:46.486Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "71%",
+        "Frame rate": "55 fps",
+        "GPU": "92%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.7 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:47.529Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "57 fps",
+        "GPU": "89%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "58.8 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:48.709Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "58 fps",
+        "GPU": "71%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.2 W",
+        "RAM": "5.7 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:49.744Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "58%",
+        "Frame rate": "55 fps",
+        "GPU": "75%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "14.8 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:51.001Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "61%",
+        "Frame rate": "54 fps",
+        "GPU": "90%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.2 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:52.025Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "38 fps",
+        "GPU": "65%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "13.3 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:53.054Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "65%",
+        "Frame rate": "56 fps",
+        "GPU": "69%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:36:54.083Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": true,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.4 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "70%",
+        "Frame rate": "54 fps",
+        "GPU": "77%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "LLM, 5.4 s",
+        "Link": "live",
+        "Power": "15.4 W",
+        "RAM": "5.6 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "59.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    }
+  ],
+  "post0": [
+    {
+      "at": "2026-10-11T05:37:05.221Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "",
+      "thinking": true,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "46%",
+        "Frame rate": "59 fps",
+        "GPU": "98%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "n/a",
+        "Link": "live",
+        "Power": "15.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:06.245Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "",
+      "thinking": true,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "50%",
+        "Frame rate": "59 fps",
+        "GPU": "97%",
+        "LLM speed": "18.3 tok/s",
+        "Last line": "n/a",
+        "Link": "live",
+        "Power": "16.0 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.5 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:07.280Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "57%",
+        "Frame rate": "53 fps",
+        "GPU": "97%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "16.8 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:08.308Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "43 fps",
+        "GPU": "79%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.8 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:09.335Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "58 fps",
+        "GPU": "88%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:10.368Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "62%",
+        "Frame rate": "57 fps",
+        "GPU": "83%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:11.399Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "59 fps",
+        "GPU": "70%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:12.429Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "59 fps",
+        "GPU": "70%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:13.775Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "59%",
+        "Frame rate": "58 fps",
+        "GPU": "76%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.7 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:15.021Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "69%",
+        "Frame rate": "58 fps",
+        "GPU": "65%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.0 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:16.049Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "53 fps",
+        "GPU": "79%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.0 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:17.223Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "67%",
+        "Frame rate": "59 fps",
+        "GPU": "89%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:18.249Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "65%",
+        "Frame rate": "58 fps",
+        "GPU": "92%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:19.467Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "59 fps",
+        "GPU": "87%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.0 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.6 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:20.502Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "64%",
+        "Frame rate": "37 fps",
+        "GPU": "0%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "13.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.5 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:21.538Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "59%",
+        "Frame rate": "59 fps",
+        "GPU": "79%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "13.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:22.562Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "50%",
+        "Frame rate": "59 fps",
+        "GPU": "85%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.3 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.4 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:23.594Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "51%",
+        "Frame rate": "59 fps",
+        "GPU": "97%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.4 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:24.623Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "53%",
+        "Frame rate": "59 fps",
+        "GPU": "87%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.3 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:25.644Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "49%",
+        "Frame rate": "59 fps",
+        "GPU": "74%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.3 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.6 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:26.665Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "49%",
+        "Frame rate": "59 fps",
+        "GPU": "76%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.2 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:27.768Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "54%",
+        "Frame rate": "59 fps",
+        "GPU": "70%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.6 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.5 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:28.812Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "59%",
+        "Frame rate": "59 fps",
+        "GPU": "89%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.9 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.7 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:30.003Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "58 fps",
+        "GPU": "81%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.0 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:31.043Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "68%",
+        "Frame rate": "59 fps",
+        "GPU": "72%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.1 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:32.236Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "63%",
+        "Frame rate": "59 fps",
+        "GPU": "78%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.3 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:33.290Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "70%",
+        "Frame rate": "59 fps",
+        "GPU": "87%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.0 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:34.470Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "58 fps",
+        "GPU": "87%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "15.1 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "60.9 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:35.503Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "62%",
+        "Frame rate": "59 fps",
+        "GPU": "77%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.7 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.2 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    },
+    {
+      "at": "2026-10-11T05:37:36.533Z",
+      "fullscreen": true,
+      "playing": true,
+      "post": false,
+      "screen": [
+        3840,
+        2160
+      ],
+      "source": "live on the Jetson, 5.0 s",
+      "thinking": false,
+      "title": "Amulith | The Wanderer",
+      "values": {
+        "Audio": "running",
+        "CPU": "66%",
+        "Frame rate": "59 fps",
+        "GPU": "64%",
+        "LLM speed": "15.5 tok/s",
+        "Last line": "LLM, 5.0 s",
+        "Link": "live",
+        "Power": "14.9 W",
+        "RAM": "5.8 / 7.3 GB",
+        "Render": "1920 x 1080",
+        "Shrine": "sleepy 100%",
+        "Temp": "61.1 C"
+      },
+      "viewport": [
+        3840,
+        2160
+      ]
+    }
+  ]
+}
