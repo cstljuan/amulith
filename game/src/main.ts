@@ -1,0 +1,67 @@
+import * as THREE from 'three';
+import { config } from './core/config';
+import { events } from './core/events';
+import { startLoop } from './core/loop';
+import { Input } from './input/Input';
+import { Wanderer } from './player/Wanderer';
+import { createWorld, zoneAt, ZONES } from './world/world';
+import './style.css';
+
+const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setClearColor(0x192724);
+const scene = new THREE.Scene();
+scene.add(new THREE.AmbientLight(0xffffff, 1.7));
+const sun = new THREE.DirectionalLight(0xffedcf, 2);
+sun.position.set(-10, 25, 15);
+scene.add(sun);
+const world = createWorld();
+scene.add(world.group);
+const player = new Wanderer();
+scene.add(player.visual);
+const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 150);
+const offset = new THREE.Vector3(0, 26, 26 / Math.tan(THREE.MathUtils.degToRad(50)));
+const target = new THREE.Vector3();
+const desired = new THREE.Vector3();
+camera.position.copy(offset);
+camera.lookAt(target);
+const input = new Input();
+let paused = false;
+const status = document.querySelector<HTMLElement>('#status')!;
+const zoneLabel = document.querySelector<HTMLElement>('#zone')!;
+const unsubscribe = events.on('pause', event => {
+  paused = event.paused;
+  status.textContent = paused ? 'Paused / Esc or Start to resume' : 'Explore the three regions';
+});
+const resize = () => {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+};
+resize();
+window.addEventListener('resize', resize);
+const stop = startLoop({
+  frame() {
+    input.poll();
+    if (input.pressed('pause')) events.emit('pause', { paused: !paused });
+    if (!paused && input.pressed('pulse')) events.emit('pulse', { x: player.position.x, z: player.position.z });
+  },
+  update(dt) { player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); },
+  render(alpha, dt) {
+    target.lerp(player.position, 1 - Math.exp(-6 * dt));
+    desired.copy(target).add(offset);
+    camera.position.copy(desired);
+    camera.lookAt(target);
+    player.render(alpha, camera);
+    zoneLabel.textContent = ZONES.find(zone => zone.id === zoneAt(player.position.x))!.label;
+    renderer.render(scene, camera);
+  },
+});
+
+// Configuration is ready for the network lane; no connection is opened by the scaffold.
+export { config, events, input, player };
+if (import.meta.hot) import.meta.hot.dispose(() => {
+  stop(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  window.removeEventListener('resize', resize);
+});

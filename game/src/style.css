@@ -1,0 +1,13 @@
+:root { font-family: Georgia, 'Times New Roman', serif; color: #f5edd6; background: #192724; }
+* { box-sizing: border-box; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; }
+canvas { display: block; width: 100%; height: 100%; }
+header, aside, footer { position: fixed; pointer-events: none; text-shadow: 0 2px 8px #10221e; }
+header { top: 28px; left: 32px; }
+.eyebrow { font: 11px system-ui, sans-serif; letter-spacing: .2em; }
+h1 { font-size: clamp(28px, 4vw, 46px); font-weight: normal; margin: 9px 0 6px; }
+header p { margin: 0; font-style: italic; }
+aside { top: 32px; right: 32px; font: 13px system-ui, sans-serif; }
+footer { bottom: 24px; left: 32px; font: 12px/1.8 system-ui, sans-serif; background: #142420c9; padding: 12px 16px; border-left: 2px solid #e4ca8b; }
+footer span { margin-left: 20px; }
+@media (max-width: 600px) { aside { top: 140px; left: 32px; } footer { left: 16px; right: 16px; bottom: 12px; font-size: 10px; } }
