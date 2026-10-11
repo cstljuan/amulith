@@ -20,7 +20,7 @@ export interface VisualsHost {
   camera: THREE.PerspectiveCamera;
   events: EventBus<GameEvents>;
   player: { position: THREE.Vector3; visual: THREE.Group; cutout: THREE.Object3D };
-  session: { land: Land; faction: Faction | null };
+  session: { land: Land; faction: Faction | null; levels: { current: { id: string } } };
   world?: { group: THREE.Object3D };
   // Placeholder views this layer replaces (the rules lanes' EnemyView and ShardView groups).
   replaces?: THREE.Object3D[];
@@ -67,12 +67,16 @@ export function installVisuals(host: VisualsHost) {
   const lenny = cast('lenny/sheet', 'idle_s', -1.9, 1.0);
   const tk = cast('tk/sheet', 'asleep_s', 2.4, -1.3, 2.75);
 
+  lenny.reducedMotion = tk.reducedMotion = reducedMotion;
+  lenny.root.visible = tk.root.visible = session.levels.current.id === 'grove';
+
   // Initial land snapshot, then animated batches.
   const snapshot: LandCell[] = session.land.cells.map((faction, i) => ({ column: i % session.land.width, row: Math.floor(i / session.land.width), faction }));
   ground.apply(snapshot, true);
   lighting.setFaction(session.faction);
   const offs = [
-    onSettings(s => { reducedMotion = ground.reducedMotion = rings.reducedMotion = actor.reducedMotion = enemies.reducedMotion = shards.reducedMotion = s.reducedMotion; }),
+    onSettings(s => { reducedMotion = ground.reducedMotion = rings.reducedMotion = actor.reducedMotion = enemies.reducedMotion = shards.reducedMotion = lenny.reducedMotion = tk.reducedMotion = s.reducedMotion; }),
+    events.on('level', e => { lenny.root.visible = tk.root.visible = e.id === 'grove'; }),
     events.on('enemies', list => enemies.set(list)),
     events.on('shards', list => shards.set(list)),
     events.on('shard-resolved', e => {

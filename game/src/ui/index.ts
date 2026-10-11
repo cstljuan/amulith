@@ -167,15 +167,14 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       audio.select();
     }),
     events.on('faction', e => { hud.hidden = !e.faction; }),
-    // Level manager (Lawrence's PR) emits 'level' with { id }; not on main yet, so it is read through an untyped bus.
-    (events as unknown as EventBus<Record<string, { id?: LevelId }>>).on('level', e => { if (e.id) showLevelIntro(e.id); }),
+    events.on('level', e => showLevelIntro(e.id)),
     events.on('shard-resolved', e => { for (const entry of CODEX_ENTRIES) if (entry.discoverAt.some(d => d.kind === 'item' && d.id === e.id)) discover(entry.id); }),
     events.on('shards', list => { shardList = list; }),
     events.on('lantern', e => { lantern = e.value; }),
     events.on('run', e => {
       const was = run?.phase; run = e;
       if (e.phase === 'attract') { hud.hidden = true; ending.hidden = true; intro.classList.add('gone'); introHideAt = 0; introId = null; }
-      if (e.phase === 'playing' && was !== 'playing') showLevelIntro('grove');
+      if (e.phase === 'playing' && was === 'attract') showLevelIntro(session.levels.current.id);
       if (e.phase === 'ending' && was !== 'ending') showEnding(e);
     }),
   ];

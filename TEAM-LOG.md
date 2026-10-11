@@ -2,6 +2,10 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11, Lawrence Capistrano, game-core/all-integration
+- Integrated levels, new art, landing page, lore UI and shrine vision under Lawrence's explicit merge authorization. Fixed later-level pause/resume intros and Grove cast visibility; applied reduced motion to Lenny and T.K.
+- Posted four art requests on #20 and optional protocol coordination on #38. Validation records are in the integration PR. Cloud vision fixtures cannot replace live camera or Jetson checks.
+
 ## 2026-10-11 09:25 UTC, Juan Castillo (Claude Code), hardware/shrine-vision
 - Did: shrine detector that needs no photo session at the venue (remnant/remnant/vision/). It learns the empty shrine by itself, detects hands by edge-touching foreground or motion, and tells sleepy from angry with explicit cues measured on the real figures (eyes, wing span, silhouette and green shape), plus a pretrained MobileNetV3 embedding as a tie-breaker. It abstains when the cues disagree, the frame is dark or covered, or two figures are present. remnant now runs it on /dev/video0, sends shrine changes, reports shrine_ready, and drops to 2 fps while the LLM generates. Debug preview: remnant/scripts/shrine_preview.py, also /vision/status, /vision/debug.jpg, POST /vision/calibrate.
 - Verified: 31 tests pass (9 synthetic, 22 capture replays). On desk1 (last 70% of each folder) empty, sleepy and angry are 98.6 to 100% per frame with no sleepy/angry swaps under any of 8 synthetic room shifts; brightness x1.5 makes sleepy abstain. Jetson: about 15 ms per frame alone, 48 ms with the LLM busy; 5 fps cut llama from 18.8 to about 15.5 tok/s, 2 fps was within noise (18.3), so the detector throttles while the LLM thinks.
