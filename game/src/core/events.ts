@@ -1,4 +1,5 @@
-import type { Faction, RemnantMessage } from '@protocol/messages';
+import type { Faction, RemnantMessage, GameEvent, Spawn } from '@protocol/messages';
+import type { LandCell } from '../rules/land.ts';
 
 export type GameEvents = {
   [K in RemnantMessage['type']]: Extract<RemnantMessage, { type: K }>;
@@ -6,6 +7,12 @@ export type GameEvents = {
   pulse: { x: number; z: number };
   faction: { faction: Faction | null };
   pause: { paused: boolean };
+  connection: { connected: boolean; mode: 'live' | 'mock' | 'offline' };
+  'game-event': GameEvent;
+  land: { changes: LandCell[]; share: { bloom: number; blight: number } };
+  spawn: Spawn;
+  'pulse-applied': { x: number; z: number; faction: Faction };
+  ask: undefined;
 };
 
 export class EventBus<Events extends object> {

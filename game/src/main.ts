@@ -5,6 +5,7 @@ import { startLoop } from './core/loop';
 import { Input } from './input/Input';
 import { Wanderer } from './player/Wanderer';
 import { createWorld, zoneAt, ZONES } from './world/world';
+import { GameSession } from './rules/session';
 import './style.css';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
@@ -26,13 +27,15 @@ const desired = new THREE.Vector3();
 camera.position.copy(offset);
 camera.lookAt(target);
 const input = new Input();
+const session = new GameSession(config.remnant, events, player.position);
 let paused = false;
 const status = document.querySelector<HTMLElement>('#status')!;
 const zoneLabel = document.querySelector<HTMLElement>('#zone')!;
 const unsubscribe = events.on('pause', event => {
-  paused = event.paused;
+  paused = session.paused;
   status.textContent = paused ? 'Paused / Esc or Start to resume' : 'Explore the three regions';
 });
+session.start();
 const resize = () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.setSize(window.innerWidth, window.innerHeight);
@@ -44,10 +47,11 @@ window.addEventListener('resize', resize);
 const stop = startLoop({
   frame() {
     input.poll();
+    session.frame(input);
     if (input.pressed('pause')) events.emit('pause', { paused: !paused });
     if (!paused && input.pressed('pulse')) events.emit('pulse', { x: player.position.x, z: player.position.z });
   },
-  update(dt) { player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); },
+  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); },
   render(alpha, dt) {
     target.lerp(player.position, 1 - Math.exp(-6 * dt));
     desired.copy(target).add(offset);
@@ -55,13 +59,15 @@ const stop = startLoop({
     camera.lookAt(target);
     player.render(alpha, camera);
     zoneLabel.textContent = ZONES.find(zone => zone.id === zoneAt(player.position.x))!.label;
+    const share = session.land.share();
+    status.textContent = `${session.faction ?? 'Choose: 1 Bloom / 2 Blight'} | ${paused ? 'Paused' : 'Playing'} | ${session.client.mode} | Bloom ${Math.round(share.bloom*100)}% / Blight ${Math.round(share.blight*100)}%`;
     renderer.render(scene, camera);
   },
 });
 
-// Configuration is ready for the network lane; no connection is opened by the scaffold.
-export { config, events, input, player };
+// Export the integration surface for lane modules and browser verification.
+export { config, events, input, player, session };
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  stop(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  stop(); session.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
   window.removeEventListener('resize', resize);
 });
