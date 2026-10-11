@@ -74,8 +74,9 @@ class Hub:
         self.relic.set_led(mode, level)
 
     async def on_relic(self, msg: dict) -> None:
+        edge = msg.pop("edge", False)
         await self.send(msg)
-        if msg.get("button") == "down":
+        if edge and msg.get("button") == "down":
             self.request_beat("player_asked_for_hint", want_hint=True)
 
     async def ticker(self) -> None:

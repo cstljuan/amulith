@@ -97,5 +97,8 @@ class Relic:
                 self.knob = round(raw / 1023, 2)
                 self._emit({"type": "relic", "knob": self.knob, "button": self.button})
         elif line in ("B 1", "B 0"):
-            self.button = "down" if line == "B 1" else "up"
-            self._emit({"type": "relic", "knob": self.knob if self.knob is not None else 0.5, "button": self.button})
+            new = "down" if line == "B 1" else "up"
+            if new == self.button:
+                return
+            self.button = new
+            self._emit({"type": "relic", "knob": self.knob if self.knob is not None else 0.5, "button": self.button, "edge": True})
