@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { updateSpriteLook } from './spriteLook';
 
 // Faction is time of day: Bloom is golden late afternoon, Blight is violet night, no choice yet is dusk.
 // Four lights total, no shadow maps (the LLM shares the GPU).
@@ -49,6 +50,7 @@ export class Lighting {
     this.mix('sunColor', this.sun.color); this.sun.intensity = lerp(DAY.sun, NIGHT.sun, t);
     this.mix('fog', this.fog.color); this.fog.density = lerp(DAY.fogDensity, NIGHT.fogDensity, t);
     this.clear.copy(this.fog.color);
+    updateSpriteLook(t);
   }
 
   dispose(): void { this.scene.remove(this.hemi, this.sun, this.sun.target, this.lantern); this.lantern.dispose(); this.sun.dispose(); this.hemi.dispose(); }

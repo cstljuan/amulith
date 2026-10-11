@@ -3,16 +3,16 @@
  "line": "#142420",
  "palette": [
   "#142420",
-  "#245730",
-  "#348D43",
-  "#4EAF52",
-  "#7CC86C",
-  "#F7F0C9",
-  "#E9DEA6",
-  "#E8B4AE",
-  "#F4DCD2",
-  "#842C34",
-  "#5E2228",
+  "#1F4D38",
+  "#2E7A47",
+  "#5BA34E",
+  "#8CC46A",
+  "#F1E6C0",
+  "#DCCB94",
+  "#E3A49E",
+  "#F2D2C4",
+  "#8E2F3A",
+  "#5A2230",
   "#5D3B2D",
   "#2E1C18",
   "#FFFFFF"
@@ -25,7 +25,7 @@
  "animations": [
   {
    "name": "walk_e",
-   "height": 120,
+   "height": 176,
    "frames": [
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-01.webp",
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/khix-lenny-walk-frame-02.webp",
@@ -47,7 +47,7 @@
   },
   {
    "name": "blink_s",
-   "height": 114,
+   "height": 168,
    "frames": [
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_00.png",
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/blink/blink_01.png",
@@ -63,7 +63,7 @@
   },
   {
    "name": "view",
-   "height": 120,
+   "height": 176,
    "key": "#CFCDC7",
    "frames": [
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/lenny/views/front.png",

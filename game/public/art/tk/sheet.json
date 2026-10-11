@@ -1,1 +1,1 @@
-{"frameWidth": 384, "frameHeight": 384, "columns": 10, "fps": 10, "animations": {"stand_s": [0], "stand_n": [1], "asleep_s": [2]}}
+{"frameWidth": 512, "frameHeight": 512, "columns": 10, "fps": 10, "animations": {"stand_s": [0], "stand_n": [1], "asleep_s": [2]}}

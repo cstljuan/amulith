@@ -29,7 +29,7 @@
  "animations": [
   {
    "name": "view",
-   "height": 168,
+   "height": 240,
    "frames": [
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/tk/views/front.png",
     "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/tk/views/back.png"

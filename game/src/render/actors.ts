@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { lookSprite } from './spriteLook';
 import type { EnemyKind } from '@protocol/messages';
 import type { Shard } from '../rules/shards';
 import { pixelTexture, upgradeFromArt } from './pixelArt';
@@ -70,7 +71,7 @@ export class ShardSprites {
     for (const s of shards) {
       let item = this.items.get(s.id);
       if (!item) {
-        const mat = new THREE.MeshLambertMaterial({ map: this.texture, emissiveMap: this.texture, emissive: 0xb080ff, alphaTest: 0.5, side: THREE.DoubleSide });
+        const mat = lookSprite(new THREE.MeshLambertMaterial({ map: this.texture, emissiveMap: this.texture, emissive: 0xb080ff, alphaTest: 0.5, side: THREE.DoubleSide }));
         const card = new THREE.Mesh(this.geometry, mat);
         card.position.set(s.x, 0, s.z); card.rotation.x = this.tilt;
         const beam = new THREE.Mesh(this.beamGeometry, this.beamMaterial); beam.position.set(s.x, 0, s.z);
