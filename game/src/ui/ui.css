@@ -49,6 +49,8 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .shards span { margin-left: 8px; font-size: 16px; font-weight: 700; letter-spacing: 0; }
 .hold { position: absolute; left: 50%; top: 58%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--night); border: 2px solid var(--ink); outline: 1px solid var(--rule); font-size: 18px; }
 .hold-bar { width: 120px; height: 8px; background: #0008; } .hold-bar div { height: 100%; background: #c9a7ff; }
+.shrine-prompt { position: absolute; left: 50%; top: 52%; transform: translateX(-50%); padding: 10px 16px; background: var(--night); border-left: 2px solid var(--gold); font-size: 18px; }
+.shrine-prompt small { margin-left: 12px; color: var(--gold); }
 
 /* Ending */
 .ending { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: radial-gradient(ellipse at center, rgba(10, 6, 16, .55), rgba(6, 3, 10, .94)); }
@@ -104,3 +106,6 @@ body > header, body > aside#status, body > footer { display: none !important; }
 
 @media (prefers-reduced-motion: reduce) { #ui * { transition: none !important; animation: none !important; } }
 #ui.still * { transition: none !important; animation: none !important; }
+
+.sound-unlock { position: absolute; bottom: 24px; left: 28px; pointer-events: auto; padding: 10px 14px; color: var(--parchment); background: var(--night); border: 1px solid var(--rule); font: 15px 'Amulith Sans', sans-serif; cursor: pointer; }
+@media (max-width: 1100px) { #ui.menu-open .judge { visibility: hidden; } }

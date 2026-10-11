@@ -3,6 +3,7 @@ import type { EventBus, GameEvents } from '../core/events';
 import type { Input } from '../input/Input';
 import type { GameSession } from '../rules/session';
 import { onSettings, settings, updateSettings } from './settings';
+import { installAudio } from '../audio';
 import './ui.css';
 
 const ZONE_NAMES = { hollow: 'Mushroom Hollow', glade: 'Petal Glade', rootdeep: 'Rootdeep' } as const;
@@ -30,7 +31,8 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       <div class="hud-run"><div class="hp"><span>Light</span><div class="hp-bar"><div data-hp></div></div></div>
         <div class="shards" data-shards></div><div class="lantern"><span>Lantern</span><div class="hp-bar lamp"><div data-lamp></div></div></div></div>
       <div class="hold" data-hold hidden><i class="btn a">A</i><span data-hold-text></span><div class="hold-bar"><div data-hold-bar></div></div></div>
-      <div class="hud-prompts"><span><i class="btn a">A</i>Pulse</span><span><i class="btn y">Y</i>Ask Amulith</span><span><i class="btn menu">MENU</i>Pause</span></div>
+      <div class="shrine-prompt" data-shrine-prompt hidden><i class="btn x">X</i>Talk to Amulith <small>F</small></div>
+      <div class="hud-prompts"><span><i class="btn a">A</i>Pulse</span><span><i class="btn b">B</i>Dash</span><span><i class="btn y">Y</i>Ask Amulith</span><span><i class="btn menu">MENU</i>Pause</span></div>
     </div>
     <div class="dialogue gone" role="status" aria-live="polite">
       <img alt="" data-face src="${art('amulith/calm.png')}">
@@ -50,15 +52,18 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       <div class="credits"><h3>Credits</h3>
         <p>Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.</p>
         <p>Built by Juan Castillo and Lawrence Capistrano. Amulith speaks through an open model running on the NVIDIA Jetson Orin Nano.</p>
-        <p>Art directed by Juan, generated with Higgsfield (GPT Image 2.5). Type: Noto Serif and Noto Sans (SIL OFL).</p></div>
+        <p>Art directed by Juan, generated with Higgsfield (GPT Image 2.5). Type: Noto Serif and Noto Sans (SIL OFL).</p>
+        <p>Music and effects: original compositions by Juan Castillo (CC0 1.0).</p></div>
     </div></div>
     <div class="pause" hidden>
       <div class="panel"><h2>Paused</h2><div class="say" data-say></div><ul data-menu></ul>
         <div class="hint"><i class="btn stick">L</i>move <i class="btn a">A</i>select <i class="btn b">B</i>resume</div></div>
     </div>
     <div class="judge" hidden><h3>JUDGE MODE / ON THE JETSON</h3><dl data-judge></dl>
-      <div class="note">Live from the device. n/a means the device did not report it.</div></div>`;
+      <div class="note">Live from the device. n/a means the device did not report it.</div></div>
+    <button class="sound-unlock" data-sound hidden>Enable sound: click or press a key</button>`;
   document.body.append(root);
+  const audio = installAudio(events, settings);
   // Dev builds expose the live game for browser checks (importing main.ts again would start a second game).
   if (import.meta.env.DEV) Object.assign(window, { __amulith: { events, session, player, input } });
   // Lay out for 1080p and scale up on bigger screens (the TV reports 3840 x 2160 at 1x).
@@ -80,9 +85,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
   let run: GameEvents['run'] | null = null, shardList: GameEvents['shards'] = [], lantern = 0.5;
   let mode = 'offline', thinking = false, typed = 0, typeText = '', hideAt = 0, clock = 0;
   let titleOut = 0, fps = 0, frames = 0, fpsClock = 0, choice: 'bloom' | 'blight' = 'bloom', menuIndex = 0, lastY = 0;
-  const audio = new Audio();
 
   const applySettings = () => {
+    audio.setSettings(settings);
     root.style.setProperty('--sub', { S: '24px', M: '30px', L: '38px' }[settings.subtitleSize]);
     root.classList.toggle('still', settings.reducedMotion);
     judge.hidden = !settings.judge;
@@ -94,6 +99,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     $('[data-line]').textContent = settings.reducedMotion ? text : '';
     dialogue.classList.remove('gone');
   };
+
+  let shrineSpokeAt = -10;
+  const nearShrine = (position: { x: number; z: number }) => Math.hypot(position.x, position.z + 0.2) <= 3.2;
 
   const offs = [
     onSettings(applySettings),
@@ -108,7 +116,14 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       $('[data-source]').textContent = e.source === 'llm' ? `live on the Jetson, ${(e.latency_ms / 1000).toFixed(1)} s` : 'scripted line';
       say(e.line);
     }),
-    events.on('speech', e => { try { audio.src = e.url; void audio.play().catch(() => undefined); } catch { /* no audio device */ } }),
+    events.on('interact', e => {
+      if (session.paused || !nearShrine(e) || thinking || clock - shrineSpokeAt < 3) return;
+      shrineSpokeAt = clock;
+      $<HTMLImageElement>('[data-face]').src = art('amulith/calm.png');
+      $('[data-source]').textContent = 'scripted shrine line';
+      say(session.faction === 'bloom' ? 'Break my pieces, little Wanderer. See what wakes beneath the moss.' : 'Bring my pieces home. Let the roots keep what they have found.');
+      audio.select();
+    }),
     events.on('faction', e => { hud.hidden = !e.faction; }),
     events.on('shards', list => { shardList = list; }),
     events.on('lantern', e => { lantern = e.value; }),
@@ -123,6 +138,8 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     { label: 'Resume', value: '', run: () => events.emit('pause', { paused: false }) },
     { label: 'Reduced motion', value: settings.reducedMotion ? 'On' : 'Off', run: () => updateSettings({ reducedMotion: !settings.reducedMotion }) },
     { label: 'Subtitle size', value: settings.subtitleSize, run: () => updateSettings({ subtitleSize: settings.subtitleSize === 'S' ? 'M' : settings.subtitleSize === 'M' ? 'L' : 'S' }) },
+    { label: 'Volume', value: `${Math.round(settings.volume * 100)}%`, run: () => updateSettings({ volume: settings.volume >= 1 ? 0 : Math.min(1, Math.round((settings.volume + 0.2) * 10) / 10) }) },
+    { label: 'Mute', value: settings.muted ? 'On' : 'Off', run: () => updateSettings({ muted: !settings.muted }) },
     { label: 'Judge mode', value: settings.judge ? 'On' : 'Off', run: () => updateSettings({ judge: !settings.judge }) },
     { label: 'Switch faction', value: session.faction === 'bloom' ? 'to Blight' : 'to Bloom', run: () => session.select(session.faction === 'bloom' ? 'angry' : 'sleepy') },
   ];
@@ -142,6 +159,10 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
   };
 
   const frame = (dt: number) => {
+    audio.frame(input.actions);
+    $('[data-sound]').hidden = audio.status() !== 'suspended';
+    $('[data-shrine-prompt]').hidden = session.paused || !session.faction || !nearShrine(player.position);
+    root.classList.toggle('menu-open', session.paused && Boolean(session.faction));
     clock += dt; frames++; fpsClock += dt;
     if (fpsClock >= 1) { fps = frames / fpsClock; frames = 0; fpsClock = 0; }
     if (input.pressed('judge')) updateSettings({ judge: !settings.judge });
@@ -153,17 +174,17 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
     if (!session.faction) {
       // Title: choose with the stick, confirm with A. A shrine figure also starts the run.
-      if (stepX) choice = stepX < 0 ? 'bloom' : 'blight';
+      if (stepX) { const next = stepX < 0 ? 'bloom' : 'blight'; if (choice !== next) audio.select(); choice = next; }
       root.querySelectorAll('[data-choice]').forEach(el => el.classList.toggle('on', (el as HTMLElement).dataset.choice === choice));
-      if (input.pressed('pulse')) session.select(choice === 'bloom' ? 'sleepy' : 'angry');
+      if (input.pressed('pulse')) { audio.select(); session.select(choice === 'bloom' ? 'sleepy' : 'angry'); }
     } else if (run?.phase === 'ending') {
       /* ending screen stays until the run resets to attract */
     } else if (session.paused) {
       if (pause.hidden) { pause.hidden = false; menuIndex = 0; }
       $('[data-say]').textContent = shrine?.state === 'empty' ? 'Put him back.' : '';
       const items = menu();
-      if (step) menuIndex = (menuIndex + step + items.length) % items.length;
-      if (input.pressed('pulse')) items[menuIndex].run();
+      if (step) { menuIndex = (menuIndex + step + items.length) % items.length; audio.select(); }
+      if (input.pressed('pulse')) { audio.select(); items[menuIndex].run(); }
       else if (input.pressed('dash')) events.emit('pause', { paused: false });
       drawMenu();
     } else if (!pause.hidden) pause.hidden = true;
@@ -203,6 +224,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
         ['Shrine', shrine ? `${shrine.state} ${(shrine.confidence * 100).toFixed(0)}%` : 'n/a'],
         ['Last line', lastDirector ? (lastDirector.source === 'llm' ? `LLM, ${(lastDirector.latency_ms / 1000).toFixed(1)} s` : 'scripted') : 'n/a'],
         ['Link', mode], ['Frame rate', `${fps.toFixed(0)} fps`], ['Render', `${canvas.width} x ${canvas.height}`],
+        ['Audio', settings.muted ? 'muted' : audio.status()],
       ];
       $('[data-judge]').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
     }
@@ -210,6 +232,6 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
   return {
     frame,
-    dispose() { offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.pause(); root.remove(); },
+    dispose() { offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.dispose(); root.remove(); },
   };
 }

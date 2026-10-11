@@ -79,6 +79,7 @@ export function installVisuals(host: VisualsHost) {
       rings.spawn(e.x, e.z, e.faction, shape); actor.act('pulse', 0.35);
     }),
     events.on('ask', () => actor.act('ask', 0.9)),
+    events.on('dash', () => actor.act('dash', 0.18)),
     events.on('game-event', e => { if (e.kind === 'player_hurt') actor.hurt(); }),
     // `lantern` arrives with the game-rules lantern (PR #15); radius is in world units.
     events.on('lantern', e => lighting.setLanternRadius(e.radius)),
