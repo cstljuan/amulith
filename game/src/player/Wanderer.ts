@@ -1,8 +1,10 @@
 import * as THREE from 'three';
 import { MAP } from '../world/world';
+import { Motion } from './motion';
 
 export const WALK_SPEED = 6;
 export class Wanderer {
+  readonly motion = new Motion();
   readonly position = new THREE.Vector3();
   private previous = new THREE.Vector3();
   readonly visual = new THREE.Group();
@@ -29,10 +31,17 @@ export class Wanderer {
     this.visual.add(this.cutout);
   }
 
-  update(dt: number, move: { x: number; y: number }): void {
+  update(dt: number, move: { x: number; y: number }, paused = false, collide?: (position: THREE.Vector3) => unknown): void {
     this.previous.copy(this.position);
-    this.position.x = THREE.MathUtils.clamp(this.position.x + move.x * WALK_SPEED * dt, MAP.minX + 0.9, MAP.maxX - 0.9);
-    this.position.z = THREE.MathUtils.clamp(this.position.z + move.y * WALK_SPEED * dt, MAP.minZ + 0.9, MAP.maxZ - 0.9);
+    const delta = this.motion.step(dt, move, paused);
+    // Small swept steps prevent a burst from passing through a narrow pillar.
+    const steps = Math.max(1, Math.ceil(Math.hypot(delta.x, delta.y) / 0.15));
+    for (let i=0;i<steps;i++) {
+      this.position.x += delta.x / steps; this.position.z += delta.y / steps;
+      collide?.(this.position);
+      this.position.x = THREE.MathUtils.clamp(this.position.x, MAP.minX + 0.9, MAP.maxX - 0.9);
+      this.position.z = THREE.MathUtils.clamp(this.position.z, MAP.minZ + 0.9, MAP.maxZ - 0.9);
+    }
     if (Math.abs(move.x) > 0.01) this.cutout.scale.x = move.x < 0 ? -1 : 1;
   }
 
