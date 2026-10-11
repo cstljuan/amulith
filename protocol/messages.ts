@@ -78,12 +78,13 @@ export interface Thinking {
 
 export interface Telemetry {
   type: "telemetry";
-  gpu_pct: number;
-  cpu_pct: number;
-  ram_used_mb: number;
-  ram_total_mb: number;
-  power_mw: number;
-  temp_c: number;
+  // null means the device did not report this field; never show it as 0.
+  gpu_pct: number | null;
+  cpu_pct: number | null;
+  ram_used_mb: number | null;
+  ram_total_mb: number | null;
+  power_mw: number | null;
+  temp_c: number | null;
   tok_s: number | null;
 }
 
@@ -110,6 +111,9 @@ export interface GameState {
   enemies_near: number;
   elapsed_s: number;
   asks_used: number;
+  // Optional: lets Amulith aim hints at the closest unresolved shard.
+  nearest_shard?: ShardId | null;
+  nearest_shard_zone?: Zone | null;
 }
 
 export type GameEventKind =
