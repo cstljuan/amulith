@@ -12,7 +12,7 @@ Detailed pixel-art sprites standing in a lit 3D diorama, like Octopath Traveler 
 - Props: single isolated object, 3/4 top-down view, warm light from the upper left, base at bottom center, transparent background.
 - Ground and cliff tiles: straight top-down (cliff: flat front), opaque, tileable. Code mirror-repeats them to hide seams.
 - Files: `game/public/art/<group>/<name>.png`. Props are trimmed and fitted to their in-game card (512 px tall) by `game/docs/art-sources/fit-props.py` (sheets: `build-sheet.py`); sources stay in `game/docs/art-sources/`, not in the shipped build.
-- Sprite sheets: `<name>/sheet.png` plus `sheet.json` (`frameWidth`, `frameHeight`, `columns`, `fps`, `animations`). Frames 256 x 384, one row, feet on the bottom edge.
+- Sprite sheets: `<name>/sheet.png` plus `sheet.json` (`frameWidth`, `frameHeight`, `columns`, `fps`, `animations`). Frames 384 x 384, up to 10 per row, feet on the bottom edge.
 
 Prompt base for props: "Single isolated game asset matching the attached reference art style exactly: <object>, detailed HD-2D pixel art, seen from a 3/4 top-down camera, warm light from the upper left. Base at bottom center. Transparent background, no text."
 

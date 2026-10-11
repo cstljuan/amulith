@@ -37,6 +37,29 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .btn.menu { border-radius: 6px; background: #2a2433; width: 34px; font-size: 11px; }
 .btn.stick { background: #2a2433; font-size: 11px; }
 
+/* Run HUD */
+.hud-run { position: absolute; top: 26px; right: 32px; display: grid; gap: 8px; justify-items: end; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; text-shadow: 0 2px 6px #000c; }
+.hud-run .hp, .hud-run .lantern { display: flex; align-items: center; gap: 10px; }
+.hp-bar { width: 170px; height: 10px; border: 2px solid var(--ink); outline: 1px solid var(--rule); background: rgba(10, 6, 16, .7); }
+.hp-bar div { height: 100%; background: var(--gold); transition: width .3s ease; }
+.hp-bar.lamp div { background: #ffcf7a; }
+.shards { display: flex; align-items: center; gap: 4px; }
+.shards img { width: 26px; height: 39px; opacity: .3; filter: grayscale(1); }
+.shards img.got { opacity: 1; filter: drop-shadow(0 0 6px #b080ff); }
+.shards span { margin-left: 8px; font-size: 16px; font-weight: 700; letter-spacing: 0; }
+.hold { position: absolute; left: 50%; top: 58%; transform: translateX(-50%); display: flex; align-items: center; gap: 10px; padding: 10px 16px; background: var(--night); border: 2px solid var(--ink); outline: 1px solid var(--rule); font-size: 18px; }
+.hold-bar { width: 120px; height: 8px; background: #0008; } .hold-bar div { height: 100%; background: #c9a7ff; }
+
+/* Ending */
+.ending { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: radial-gradient(ellipse at center, rgba(10, 6, 16, .55), rgba(6, 3, 10, .94)); }
+.ending-inner { max-width: 900px; padding: 0 30px; }
+.ending h2 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 84px; margin: 0; text-shadow: 0 4px 30px #000; }
+.ending p { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 26px; color: #e9dcc0; }
+.ending blockquote { font-family: 'Amulith Serif', serif; font-size: 24px; color: var(--vein); margin: 26px auto; max-width: 760px; }
+.credits { margin-top: 40px; font-size: 15px; color: #cfc4e0; line-height: 1.6; }
+.credits h3 { font-family: 'Amulith Serif', serif; font-weight: 400; letter-spacing: .3em; font-size: 16px; color: var(--gold); }
+.credits p { font-family: 'Amulith Sans', sans-serif; font-style: normal; font-size: 15px; margin: 6px 0; }
+
 /* Amulith dialogue */
 .dialogue { position: absolute; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(1040px, 86vw); display: grid; grid-template-columns: 128px 1fr; gap: 22px; align-items: center;
   background: linear-gradient(var(--night), rgba(12, 9, 18, 0.9)); border: 2px solid var(--ink); outline: 2px solid var(--rule); outline-offset: -6px; padding: 18px 26px 18px 18px; transition: opacity .35s ease, transform .35s ease; }

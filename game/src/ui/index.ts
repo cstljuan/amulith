@@ -27,6 +27,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       <div class="hud-zone"><small data-faction></small><span data-zone></span></div>
       <div class="hud-share"><div class="bar"><div class="blight-veins"></div><div class="bloom" data-bloom></div></div>
         <div class="labels"><span data-bloom-label></span><span data-blight-label></span></div></div>
+      <div class="hud-run"><div class="hp"><span>Light</span><div class="hp-bar"><div data-hp></div></div></div>
+        <div class="shards" data-shards></div><div class="lantern"><span>Lantern</span><div class="hp-bar lamp"><div data-lamp></div></div></div></div>
+      <div class="hold" data-hold hidden><i class="btn a">A</i><span data-hold-text></span><div class="hold-bar"><div data-hold-bar></div></div></div>
       <div class="hud-prompts"><span><i class="btn a">A</i>Pulse</span><span><i class="btn y">Y</i>Ask Amulith</span><span><i class="btn menu">MENU</i>Pause</span></div>
     </div>
     <div class="dialogue gone" role="status" aria-live="polite">
@@ -42,6 +45,13 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       </div>
       <div class="hint"><i class="btn stick">L</i>choose <i class="btn a">A</i>begin, or place a figure on the shrine</div>
     </div>
+    <div class="ending" hidden><div class="ending-inner">
+      <h2 data-end-title></h2><p data-end-text></p><blockquote data-end-line></blockquote>
+      <div class="credits"><h3>Credits</h3>
+        <p>Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.</p>
+        <p>Built by Juan Castillo and Lawrence Capistrano. Amulith speaks through an open model running on the NVIDIA Jetson Orin Nano.</p>
+        <p>Art directed by Juan, generated with Higgsfield (GPT Image 2.5). Type: Noto Serif and Noto Sans (SIL OFL).</p></div>
+    </div></div>
     <div class="pause" hidden>
       <div class="panel"><h2>Paused</h2><div class="say" data-say></div><ul data-menu></ul>
         <div class="hint"><i class="btn stick">L</i>move <i class="btn a">A</i>select <i class="btn b">B</i>resume</div></div>
@@ -49,16 +59,27 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     <div class="judge" hidden><h3>JUDGE MODE / ON THE JETSON</h3><dl data-judge></dl>
       <div class="note">Live from the device. n/a means the device did not report it.</div></div>`;
   document.body.append(root);
+  // Dev builds expose the live game for browser checks (importing main.ts again would start a second game).
+  if (import.meta.env.DEV) Object.assign(window, { __amulith: { events, session, player, input } });
   // Lay out for 1080p and scale up on bigger screens (the TV reports 3840 x 2160 at 1x).
   const fit = () => { root.style.zoom = String(Math.max(1, window.innerHeight / 1080)); };
   fit(); window.addEventListener('resize', fit);
   const $ = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
-  const hud = $('.hud'), title = $('.title'), pause = $('.pause'), judge = $('.judge'), dialogue = $('.dialogue');
+  const hud = $('.hud'), title = $('.title'), pause = $('.pause'), judge = $('.judge'), dialogue = $('.dialogue'), ending = $('.ending');
+  const showEnding = (e: GameEvents['run']) => {
+    const bloom = e.faction === 'bloom';
+    const [head, text] = e.result === 'lose' ? ['The lantern goes out.', bloom ? 'The roots keep the Knight. Amulith keeps the forest.' : 'Even the Gem forgets who fed it.']
+      : bloom ? ['The Knight wakes.', 'The last shard breaks. T.K. stands, and the gem goes dark.'] : ['The Gem is whole.', 'The shards fuse. The treeline closes behind you.'];
+    $('[data-end-title]').textContent = head; $('[data-end-text]').textContent = text;
+    $('[data-end-line]').textContent = lastDirector ? `"${lastDirector.line}"` : '';
+    ending.hidden = false; hud.hidden = true; pause.hidden = true;
+  };
 
   // State fed by events.
   let telemetry: Telemetry | null = null, shrine: Shrine | null = null, lastDirector: Director | null = null;
+  let run: GameEvents['run'] | null = null, shardList: GameEvents['shards'] = [], lantern = 0.5;
   let mode = 'offline', thinking = false, typed = 0, typeText = '', hideAt = 0, clock = 0;
-  let fps = 0, frames = 0, fpsClock = 0, choice: 'bloom' | 'blight' = 'bloom', menuIndex = 0, lastY = 0;
+  let titleOut = 0, fps = 0, frames = 0, fpsClock = 0, choice: 'bloom' | 'blight' = 'bloom', menuIndex = 0, lastY = 0;
   const audio = new Audio();
 
   const applySettings = () => {
@@ -88,7 +109,14 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       say(e.line);
     }),
     events.on('speech', e => { try { audio.src = e.url; void audio.play().catch(() => undefined); } catch { /* no audio device */ } }),
-    events.on('faction', e => { title.classList.toggle('gone', !!e.faction); window.setTimeout(() => { title.hidden = !!session.faction; }, 600); hud.hidden = !e.faction; }),
+    events.on('faction', e => { hud.hidden = !e.faction; }),
+    events.on('shards', list => { shardList = list; }),
+    events.on('lantern', e => { lantern = e.value; }),
+    events.on('run', e => {
+      const was = run?.phase; run = e;
+      if (e.phase === 'attract') { hud.hidden = true; ending.hidden = true; }
+      if (e.phase === 'ending' && was !== 'ending') showEnding(e);
+    }),
   ];
 
   const menu = () => [
@@ -118,12 +146,18 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     if (fpsClock >= 1) { fps = frames / fpsClock; frames = 0; fpsClock = 0; }
     if (input.pressed('judge')) updateSettings({ judge: !settings.judge });
     const { step, stepX } = navY();
+    // The title shows exactly while the run is in attract: fade out, then hide.
+    const attract = !session.faction;
+    if (attract) { title.hidden = false; title.classList.remove('gone'); titleOut = 0; }
+    else if (!title.hidden) { title.classList.add('gone'); titleOut += dt; if (titleOut > 0.6 || settings.reducedMotion) title.hidden = true; }
 
     if (!session.faction) {
       // Title: choose with the stick, confirm with A. A shrine figure also starts the run.
       if (stepX) choice = stepX < 0 ? 'bloom' : 'blight';
       root.querySelectorAll('[data-choice]').forEach(el => el.classList.toggle('on', (el as HTMLElement).dataset.choice === choice));
       if (input.pressed('pulse')) session.select(choice === 'bloom' ? 'sleepy' : 'angry');
+    } else if (run?.phase === 'ending') {
+      /* ending screen stays until the run resets to attract */
     } else if (session.paused) {
       if (pause.hidden) { pause.hidden = false; menuIndex = 0; }
       $('[data-say]').textContent = shrine?.state === 'empty' ? 'Put him back.' : '';
@@ -143,6 +177,17 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       $('[data-faction]').textContent = session.faction === 'bloom' ? 'Bloom / Wake the Knight' : 'Blight / Feed the Gem';
       const x = player.position.x;
       $('[data-zone]').textContent = ZONE_NAMES[x < -10 ? 'hollow' : x < 10 ? 'glade' : 'rootdeep'];
+      $('[data-hp]').style.width = `${((run?.hp ?? 1) * 100).toFixed(0)}%`;
+      $('[data-lamp]').style.width = `${(lantern * 100).toFixed(0)}%`;
+      const found = run?.shards ?? 0;
+      const shardsHtml = [0, 1, 2].map(i => `<img src="${art('shard/shard.png')}" class="${i < found ? 'got' : ''}" alt="">`).join('') + `<span>${found}/3 shards</span>`;
+      if ($('[data-shards]').dataset.n !== String(found)) { $('[data-shards]').innerHTML = shardsHtml; $('[data-shards]').dataset.n = String(found); }
+      const near = shardList.find(sh => sh.visible && !sh.resolved && Math.hypot(sh.x - player.position.x, sh.z - player.position.z) <= 1.4);
+      $('[data-hold]').hidden = !near || session.paused;
+      if (near) {
+        $('[data-hold-text]').textContent = session.faction === 'bloom' ? 'Hold to break the shard' : 'Hold to claim the shard';
+        $('[data-hold-bar]').style.width = `${(near.progress / 1.5 * 100).toFixed(0)}%`;
+      }
     }
 
     // Typed subtitles, then fade.

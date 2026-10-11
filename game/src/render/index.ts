@@ -4,6 +4,7 @@ import type { EventBus, GameEvents } from '../core/events';
 import type { Land, LandCell } from '../rules/land';
 import { Motes } from '../fx/particles';
 import { PulseRings, randomShape } from '../fx/pulses';
+import { EnemySprites, ShardSprites } from './actors';
 import { Diorama } from './diorama';
 export { resolveCollisions } from './diorama';
 import { Ground } from './ground';
@@ -20,6 +21,8 @@ export interface VisualsHost {
   player: { position: THREE.Vector3; visual: THREE.Group; cutout: THREE.Object3D };
   session: { land: Land; faction: Faction | null };
   world?: { group: THREE.Object3D };
+  // Placeholder views this layer replaces (the rules lanes' EnemyView and ShardView groups).
+  replaces?: THREE.Object3D[];
 }
 
 // The HD-2D layer. main.ts calls installVisuals once, visuals.render(dt) in place of
@@ -31,6 +34,7 @@ export function installVisuals(host: VisualsHost) {
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.05;
   if (host.world) host.world.group.visible = false;
+  host.replaces?.forEach(o => { o.visible = false; });
   const pitch = Math.atan2(camera.position.y, camera.position.z);
 
   const lighting = new Lighting(scene);
@@ -39,9 +43,11 @@ export function installVisuals(host: VisualsHost) {
   const motes = new Motes();
   const rings = new PulseRings();
   const post = new Post(renderer);
+  const enemies = new EnemySprites();
+  const shards = new ShardSprites(pitch);
   post.enabled = params.get('post') !== '0';
   ground.reducedMotion = rings.reducedMotion = reducedMotion;
-  scene.add(ground.group, diorama.group, motes.points, rings.group);
+  scene.add(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
 
   const stand = wandererStandIn();
   const actor = new SpriteActor(stand.texture, stand.meta, 3.0, 'wanderer/sheet');
@@ -54,7 +60,13 @@ export function installVisuals(host: VisualsHost) {
   ground.apply(snapshot, true);
   lighting.setFaction(session.faction);
   const offs = [
-    onSettings(s => { reducedMotion = ground.reducedMotion = rings.reducedMotion = actor.reducedMotion = s.reducedMotion; }),
+    onSettings(s => { reducedMotion = ground.reducedMotion = rings.reducedMotion = actor.reducedMotion = enemies.reducedMotion = shards.reducedMotion = s.reducedMotion; }),
+    events.on('enemies', list => enemies.set(list)),
+    events.on('shards', list => shards.set(list)),
+    events.on('shard-resolved', e => {
+      const p = shards.position(e.id);
+      if (p) for (let i = 0; i < 2; i++) rings.spawn(p.x, p.z, e.faction, randomShape(1.2 + i * 1.6));
+    }),
     events.on('land', e => ground.apply(e.changes)),
     events.on('faction', e => lighting.setFaction(e.faction)),
     events.on('pulse-applied', e => {
@@ -69,7 +81,7 @@ export function installVisuals(host: VisualsHost) {
     events.on('ask', () => actor.act('ask', 0.9)),
     events.on('game-event', e => { if (e.kind === 'player_hurt') actor.hurt(); }),
     // `lantern` arrives with the game-rules lantern (PR #15); radius is in world units.
-    (events as unknown as EventBus<Record<string, { radius?: number }>>).on('lantern', e => { if (typeof e.radius === 'number') lighting.setLanternRadius(e.radius); }),
+    events.on('lantern', e => lighting.setLanternRadius(e.radius)),
   ];
 
   const last = new THREE.Vector3().copy(player.position);
@@ -88,6 +100,8 @@ export function installVisuals(host: VisualsHost) {
       ground.update(dt, time);
       diorama.update(time);
       rings.update(dt);
+      enemies.update(dt);
+      shards.update(dt);
       motes.update(time, lighting.night, size.y, reducedMotion);
       post.uniforms.uNight.value = lighting.night;
       renderer.setClearColor(lighting.clear);
@@ -96,9 +110,9 @@ export function installVisuals(host: VisualsHost) {
     resize,
     dispose() {
       offs.forEach(off => off());
-      scene.remove(ground.group, diorama.group, motes.points, rings.group);
+      scene.remove(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
       player.visual.remove(actor.root);
-      [lighting, ground, diorama, motes, rings, post, actor].forEach(d => d.dispose());
+      [lighting, ground, diorama, motes, rings, post, actor, enemies, shards].forEach(d => d.dispose());
     },
   };
 }

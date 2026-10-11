@@ -50,6 +50,8 @@ export class SpriteActor {
     } catch { /* stand-in stays */ }
   }
 
+  setOpacity(value: number): void { const m = this.card.material; m.transparent = value < 1; m.opacity = value; this.shadow.material.opacity = 0.38 * value; }
+
   // One-shot pose (pulse, ask, hurt, dash) held for `seconds`, then back to idle or walk.
   act(name: string, seconds: number): void { if (this.meta.animations[name]) { this.action = name; this.actionLeft = seconds; } }
   hurt(): void { this.hit = 1; this.act('hurt', 0.45); }

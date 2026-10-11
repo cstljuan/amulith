@@ -44,7 +44,7 @@ const unsubscribe = events.on('pause', event => {
   status.textContent = paused ? 'Paused / Esc or Start to resume' : 'Explore the three regions';
 });
 session.start();
-const visuals = installVisuals({ renderer, scene, camera, events, player, session, world });
+const visuals = installVisuals({ renderer, scene, camera, events, player, session, world, replaces: [enemyView.group, shardView.group] });
 const ui = installUI({ events, input, session, player, renderer });
 const resize = () => {
   sizeRenderer(renderer, window.innerWidth, window.innerHeight);
