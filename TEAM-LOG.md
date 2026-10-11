@@ -2,6 +2,11 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11, Lawrence Capistrano, game-rules/level-deepwood
+- Replaced Deepwood scaffold with a 32 by 24 Rootdeep map, alternating root banks, two candidate final shards, three opening guards and two one-enemy waves. Faster opponents and stronger attacks provide the final escalation; the final exit requires resolving the active shard first. The 60-second target is a design goal, not measured playtime.
+- Used existing blight-tree and shrine-circle props as placeholders. Root-bank and final-seal art requests are prepared for issue #20, whose comments remain blocked by GitHub API network access. Lore, render, UI, audio, art and protocol files remain unchanged.
+- Validation: TypeScript/Vite production build and 32 tests passed on the manager base, including both-faction final exits, lore/art references, traversable collision paths, edge spawns, pause and timed-wave gates. No controller, Jetson or judging-length performance measurements claimed.
+
 ## 2026-10-11, Lawrence Capistrano, game-rules/level-hollow
 - Replaced Hollow scaffold data with a compact 44 by 28 map, two mushroom loops, 12 visible solid cap clusters, two candidate shard sites, guards and three bounded waves. One shard is active, and the eastern exit leads to Deepwood. Names/signs remain in the lore contract.
 - Reused existing mushroom cards, enemy sheets and shard art. Added data tints for Juan's art pass; Hollow cap-cluster and floor-tile requests are prepared for issue #20, whose comments are currently blocked by GitHub API network access.
