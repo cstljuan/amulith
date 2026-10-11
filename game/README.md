@@ -32,9 +32,21 @@ Choose Bloom with 1 or Blight with 2 (0 pauses), or place the matching shrine fi
 
 When disconnected, a same-contract scripted director emits every 25 active seconds. The land model starts half Bloom/half Blight, with Blight concentrated in Rootdeep. It exposes conversion, global/zone shares and batched changes; the visuals lane can subscribe to `land` to render individual cells. The scaffold's status text shows actual model shares rather than device telemetry. Null telemetry remains null in the event bus.
 
-Task B local events: `connection` carries `{connected,mode}`, `land` carries `{changes,share}`, `spawn` carries protocol Spawn, `pulse-applied` carries `{x,z,faction}`, `ask` has no payload, and `game-event` carries the original GameEvent for forwarding. Send run events through this bus. `GameSession.stateExtra` is an extension point for enemy/shard/run values in Task C.
+Local events: `connection` carries `{connected,mode}`, `land` carries `{changes,share}`, `spawn` carries protocol Spawn, `pulse-applied` carries `{x,z,faction}`, `ask` has no payload, and `game-event` carries the original GameEvent for forwarding. Send run events through this bus. `GameSession.state()` now derives all game state from the run, land, lantern, enemy and shard models.
 
 Tests use Node's built-in runner plus the already-installed TypeScript compiler to load TypeScript modules. No test dependency was added. `npm test` exercises malformed data, reconnect/disposal, land, cooldowns, shrine semantics and fallback timing. Use a browser with the provided mock for integration; physical controller and Jetson checks remain separate.
+
+## Run flow, enemies and shards
+
+Attract waits for a figure or keyboard selection. A selected faction starts play. Empty shrine pauses and Esc cannot bypass an absent figure. Replacing the figure resumes; an opposite figure flips faction and enemy type while preserving progress. Three resolved shards win; zero HP loses. Ending holds for 20 simulation seconds and then returns to attract. The next run resets land, HP, shards, enemies, elapsed time and ask count. Run-duration balancing toward the five-minute target has not been measured yet.
+
+Six fixed shard sites (two per zone) choose three active sites at each run start. Shards appear inside lantern radius. Stand within 1.4 units and hold pulse for 1.5 seconds to destroy (Bloom) or claim (Blight); moving, releasing, or pausing cancels the hold. `shards_found` in state reports the resolved/collected count. Nearest unresolved shard and zone are sent for director hints. Hints mark the named site even when false or inactive; the marker does not reveal or activate a collectible.
+
+Chompers hunt Bloom; Petalborn hunt Blight. Enemies wander, chase, attack on touch for 0.1 HP at a one-second cooldown, and are defeated by two accepted pulse presses. Each slowly converts land under it. Grid A* has eight neighbors, octile cost, no diagonal corner cutting, and at most one replan per enemy every 0.5 seconds. The current map has no obstacles; the pure pathfinder supports blocked cells for future scenery integration. Live enemies are capped at 24.
+
+Lantern value 0..1 comes from relic knob messages. Until the first relic message arrives, triggers or Q/R adjust it. Radius is `3 + 9 * value`; enemy detection is `4 + 10 * value`. Ask converts 3% of currently owned cells to the opposing faction (rounded to whole cells). Controller/keyboard asks send the protocol ask; relic button edges charge the same cost but never send a duplicate request because remnant handles the button itself.
+
+UI/visuals interfaces: `run` carries `{phase,faction,hp,elapsed_s,shards,asks_used,result}`; `lantern` carries `{value,radius,detectionRange,source}`; `shards` carries the six site snapshots; `enemies` carries `{id,kind,state,x,z}[]`; `shard-resolved` carries `{id,zone,faction}`. `session.run`, `.lantern`, `.shards`, `.enemies`, and `.land` expose the authoritative models. `run_end` is forwarded with final faction/result/shards/asks/elapsed fields. No ending screens, audio, authored art, or device telemetry rendering are implemented in this lane. Enemy/shard views are original local placeholders.
 
 Import shared protocol types with `import type { Director } from '@protocol/messages'`. Vite and TypeScript resolve this to the existing `../protocol` directory. Do not copy or modify protocol shapes.
 

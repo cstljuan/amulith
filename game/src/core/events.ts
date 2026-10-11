@@ -1,5 +1,8 @@
-import type { Faction, RemnantMessage, GameEvent, Spawn } from '@protocol/messages';
+import type { Faction, RemnantMessage, GameEvent, Spawn, ShardId, Zone } from '@protocol/messages';
 import type { LandCell } from '../rules/land.ts';
+import type { RunSnapshot } from '../rules/run.ts';
+import type { Shard } from '../rules/shards.ts';
+import type { Enemy } from '../enemies/enemies.ts';
 
 export type GameEvents = {
   [K in RemnantMessage['type']]: Extract<RemnantMessage, { type: K }>;
@@ -13,6 +16,11 @@ export type GameEvents = {
   spawn: Spawn;
   'pulse-applied': { x: number; z: number; faction: Faction };
   ask: undefined;
+  run: RunSnapshot;
+  lantern: { value: number; radius: number; detectionRange: number; source: 'relic'|'input' };
+  shards: Shard[];
+  'shard-resolved': { id: ShardId; zone: Zone; faction: Faction };
+  enemies: Pick<Enemy,'id'|'kind'|'state'|'x'|'z'>[];
 };
 
 export class EventBus<Events extends object> {
