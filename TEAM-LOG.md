@@ -2,6 +2,11 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 1:42 AM, Juan Castillo, ui-audio/relic-sound
+- Did: two local original CC0 music loops and seven cues, first-input unlock, faction crossfade, speech duck/recovery, pause volume/mute and persistence. Added the accepted dash pose consumer and X/F shrine interaction with honestly labelled scripted lines. Narrow-screen pause settings stay readable with judge mode enabled. No new dependencies or core/input/main.ts/protocol/hardware edits.
+- Verified: TypeScript/Vite build and all 21 tests pass. Browser audio, controller and ending fixtures verify silent start, cues, crossfade, voice duck/error recovery, settings, dash frame and shrine proximity. A fresh production context passed with external HTTP and all WebSockets blocked. Verification details and raw telemetry are in game/src/audio/.
+- Jetson: a temporary production copy loaded fullscreen at 1080p drawing resolution with the live LLM. Outside thinking, default averaged 79.04% GPU, 54.04 fps, 15.16 W; post=0 averaged 77.79%, 56.93 fps, 14.80 W (28 samples each). Existing game windows/workloads remained open, so these are combined-device measurements. The temporary test processes were closed; existing deployment/services were preserved.
+- Next: team merge and integrated deployment, physical controller/listening and real voice-engine check. Juan deferred item holding and art while the world/art session continues; T.K./Lenny sketches are unfinished. Refs #6 and #7.
 ## 2026-10-11 2:09 AM, Lawrence Capistrano, PR #18 review
 - Reviewed visuals/hd2d-polish head bbfcea2: 8-direction/faction sprite sheets, lantern shader patch, pixel pulse pool, d-pad input and no-hint director schema. No blocking code issue found.
 - Validation: 21 tests and TypeScript/Vite production build pass. Headless Chrome with post-processing enabled and a simulated standard controller verifies faction title start, d-pad movement, faction switch, pulse rendering, judge overlay, pause/resume, B dash, X/F edges, paused interact guard, shrine collision and controlled obstacle chase. No browser or shader errors; screenshot inspected. Checks wait on state/events instead of fixed wall-clock delays for software rendering.
