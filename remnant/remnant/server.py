@@ -5,10 +5,11 @@ Run: uvicorn remnant.server:app --host 0.0.0.0 --port 8765
 
 import asyncio
 import json
+import os
 import time
 from pathlib import Path
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Response, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from .director import Director
@@ -32,6 +33,8 @@ class Hub:
         self.state: dict | None = None
         self.faction: str | None = None
         self.shrine = "empty"
+        self.shrine_confidence = 0.0
+        self.vision = None  # ShrineCamera when the camera stack is available
         self.last_beat = 0.0
         self.counter = 0
         self.pending: asyncio.Task | None = None
@@ -58,7 +61,13 @@ class Hub:
         beat_id = f"b{self.counter}"
         await self.send({"type": "thinking", "active": True})
         self.led("thinking")
-        body = await self.director.beat(self.faction, trigger, want_hint, self.state)
+        if self.vision:
+            self.vision.set_busy(True)
+        try:
+            body = await self.director.beat(self.faction, trigger, want_hint, self.state)
+        finally:
+            if self.vision:
+                self.vision.set_busy(False)
         await self.send({"type": "thinking", "active": False})
         self.led("idle")
         await self.send({"type": "director", "id": beat_id, **body})
@@ -72,6 +81,22 @@ class Hub:
         elif time.monotonic() < self.led_override_until:
             return
         self.relic.set_led(mode, level)
+
+    @property
+    def shrine_ready(self) -> bool:
+        return bool(self.vision and self.vision.ready)
+
+    async def on_shrine(self, state: str, confidence: float) -> None:
+        """Accepted (debounced) detector state. A hand over an empty shrine is not
+        sent: the game ignores `hand`, so hand then empty would read as the figure
+        being lifted and pause a run that was started with the controller."""
+        if state == "hand" and self.shrine not in ("sleepy", "angry"):
+            return
+        if state == self.shrine:
+            return
+        self.shrine = state
+        self.shrine_confidence = round(float(confidence), 3)
+        await self.send({"type": "shrine", "state": state, "confidence": self.shrine_confidence})
 
     async def on_relic(self, msg: dict) -> None:
         edge = msg.pop("edge", False)
@@ -97,12 +122,46 @@ hub = Hub()
 async def startup() -> None:
     asyncio.create_task(hub.telemetry.run())
     asyncio.create_task(hub.ticker())
-    hub.relic = Relic(asyncio.get_running_loop(), hub.on_relic)
+    loop = asyncio.get_running_loop()
+    hub.relic = Relic(loop, hub.on_relic)
+    if os.environ.get("AMULITH_VISION", "1") != "0":
+        try:
+            from .vision.camera import ShrineCamera
+        except ImportError as exc:  # numpy/opencv missing: controller pick stays the only input
+            print(f"vision disabled: {exc}", flush=True)
+        else:
+            def on_change(state: str, confidence: float) -> None:
+                asyncio.run_coroutine_threadsafe(hub.on_shrine(state, confidence), loop)
+            hub.vision = ShrineCamera(on_change).start()
 
 
 @app.get("/health")
 async def health() -> dict:
     return {"ok": True, "llm": await hub.director.healthy()}
+
+
+@app.get("/vision/status")
+async def vision_status() -> dict:
+    if not hub.vision:
+        return {"ready": False, "enabled": False}
+    return {"enabled": True, "sent_state": hub.shrine, **hub.vision.status()}
+
+
+@app.get("/vision/debug.jpg")
+async def vision_debug() -> Response:
+    jpg = hub.vision.debug_jpeg() if hub.vision else None
+    if jpg is None:
+        return Response(status_code=503)
+    return Response(content=jpg, media_type="image/jpeg", headers={"Cache-Control": "no-store"})
+
+
+@app.post("/vision/calibrate")
+async def vision_calibrate() -> dict:
+    """Learn the empty shrine now (the shrine must be empty). Normally automatic."""
+    if not hub.vision:
+        return {"ok": False}
+    hub.vision.request_calibration()
+    return {"ok": True}
 
 
 @app.websocket("/ws")
@@ -111,9 +170,9 @@ async def ws_endpoint(ws: WebSocket) -> None:
     hub.clients.add(ws)
     await ws.send_text(json.dumps({
         "type": "hello", "version": PROTOCOL_VERSION, "mode": "live",
-        "llm_ready": await hub.director.healthy(), "shrine_ready": False, "relic_ready": bool(hub.relic and hub.relic.ready),
+        "llm_ready": await hub.director.healthy(), "shrine_ready": hub.shrine_ready, "relic_ready": bool(hub.relic and hub.relic.ready),
     }))
-    await ws.send_text(json.dumps({"type": "shrine", "state": hub.shrine, "confidence": 0.0}))
+    await ws.send_text(json.dumps({"type": "shrine", "state": hub.shrine, "confidence": hub.shrine_confidence}))
     try:
         while True:
             raw = await ws.receive_text()
