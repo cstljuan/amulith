@@ -7,7 +7,7 @@
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
-    "test": "node --import ./src/rules/tests/register.mjs --test src/net/tests/*.test.mjs src/rules/tests/*.test.mjs"
+    "test": "node --import ./src/rules/tests/register.mjs --test src/net/tests/*.test.mjs src/rules/tests/*.test.mjs src/pathfinding/tests/*.test.mjs src/enemies/tests/*.test.mjs"
   },
   "dependencies": { "three": "^0.186.0" },
   "devDependencies": {

@@ -33,6 +33,17 @@ export class Land {
     }
     this.notify(changes); return changes;
   }
+  tax(faction: Faction, fraction = 0.03): LandCell[] {
+    const owned = this.cells.map((f,i) => f === faction ? i : -1).filter(i => i >= 0);
+    const count = Math.round(owned.length * Math.max(0,Math.min(1,fraction)));
+    const changes: LandCell[] = [];
+    for (let n=0;n<count;n++) {
+      const chosen = Math.min(owned.length-1,Math.floor(this.random()*owned.length));
+      const [i] = owned.splice(chosen,1);const opposite = faction === 'bloom' ? 'blight' : 'bloom';
+      this.cells[i] = opposite;changes.push({column:i%this.width,row:Math.floor(i/this.width),faction:opposite});
+    }
+    this.notify(changes);return changes;
+  }
   share(): { bloom: number; blight: number } { return this.shares(this.cells); }
   zoneShare(zone: Zone): { bloom: number; blight: number } {
     return this.shares(this.cells.filter((_,i) => this.zone(i % this.width) === zone));
