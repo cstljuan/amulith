@@ -1,0 +1,41 @@
+{
+ "out": "out/tk",
+ "line": "#06090F",
+ "key": "#FFFFFF",
+ "keyTol": 14,
+ "inkTol": 45,
+ "palette": [
+  "#06090F",
+  "#1F2835",
+  "#626567",
+  "#8C9494",
+  "#B8C2C3",
+  "#D7E0DF",
+  "#EEF2F1",
+  "#2E9CB0",
+  "#55CBE0",
+  "#9CF0FC",
+  "#E8FFFF",
+  "#2A5C9C",
+  "#3C508C",
+  "#3F3886",
+  "#2A2660"
+ ],
+ "protect": [
+  "#E8FFFF",
+  "#9CF0FC",
+  "#55CBE0"
+ ],
+ "animations": [
+  {
+   "name": "view",
+   "height": 168,
+   "frames": [
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/tk/views/front.png",
+    "/home/juancstl/Projects/amulith-assets/knight-hacks-reference/tk/views/back.png"
+   ]
+  }
+ ],
+ "keyGlobal": 4,
+ "inkCut": 0.2
+}

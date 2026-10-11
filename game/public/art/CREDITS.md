@@ -17,3 +17,7 @@ Reference key art (`game/docs/keyart/`) was generated first from a text prompt; 
 ## Made in code
 
 Procedural stand-ins in `src/render/pixelArt.ts` (vein pattern, flower and thorn sprigs, water, cliff edge) are original and drawn at runtime.
+
+## Lenny and T.K. (pixel, 2026-10-11)
+
+`lenny/sheet.png` and `tk/sheet.png` are pixel art made in Aseprite from the official Knight Hacks IX character art (Hat Lenny reference sheet, the IX site walk cycle and blink animation, the Tech Knight reference sheet and hero art) by the Knight Hacks design team: Lena Tran, Gabriela Zambrano, Christina Nguyen, David Navarrete and Amira Bhuiyan. Lenny, T.K. and the lore belong to Knight Hacks. Non-commercial fan project. Pipeline: `game/docs/art-sources/pixel/`.
