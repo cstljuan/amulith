@@ -12,6 +12,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from .director import Director
+from .relic import Relic
 from .telemetry import Telemetry
 
 PROTOCOL_VERSION = 1
@@ -34,6 +35,8 @@ class Hub:
         self.last_beat = 0.0
         self.counter = 0
         self.pending: asyncio.Task | None = None
+        self.relic: Relic | None = None
+        self.led_override_until = 0.0
 
     async def send(self, msg: dict) -> None:
         data = json.dumps(msg)
@@ -54,9 +57,26 @@ class Hub:
         self.counter += 1
         beat_id = f"b{self.counter}"
         await self.send({"type": "thinking", "active": True})
+        self.led("thinking")
         body = await self.director.beat(self.faction, trigger, want_hint, self.state)
         await self.send({"type": "thinking", "active": False})
+        self.led("idle")
         await self.send({"type": "director", "id": beat_id, **body})
+
+    def led(self, mode: str, level: float = 1.0, game: bool = False) -> None:
+        """Remnant drives the LED by default; a game request wins for 3 s."""
+        if not self.relic:
+            return
+        if game:
+            self.led_override_until = time.monotonic() + 3.0
+        elif time.monotonic() < self.led_override_until:
+            return
+        self.relic.set_led(mode, level)
+
+    async def on_relic(self, msg: dict) -> None:
+        await self.send(msg)
+        if msg.get("button") == "down":
+            self.request_beat("player_asked_for_hint", want_hint=True)
 
     async def ticker(self) -> None:
         while True:
@@ -76,6 +96,7 @@ hub = Hub()
 async def startup() -> None:
     asyncio.create_task(hub.telemetry.run())
     asyncio.create_task(hub.ticker())
+    hub.relic = Relic(asyncio.get_running_loop(), hub.on_relic)
 
 
 @app.get("/health")
@@ -89,7 +110,7 @@ async def ws_endpoint(ws: WebSocket) -> None:
     hub.clients.add(ws)
     await ws.send_text(json.dumps({
         "type": "hello", "version": PROTOCOL_VERSION, "mode": "live",
-        "llm_ready": await hub.director.healthy(), "shrine_ready": False, "relic_ready": False,
+        "llm_ready": await hub.director.healthy(), "shrine_ready": False, "relic_ready": bool(hub.relic and hub.relic.ready),
     }))
     await ws.send_text(json.dumps({"type": "shrine", "state": hub.shrine, "confidence": 0.0}))
     try:
@@ -108,6 +129,8 @@ async def ws_endpoint(ws: WebSocket) -> None:
                     hub.faction = msg["faction"]
             elif kind == "ask":
                 hub.request_beat("player_asked_for_hint", want_hint=True)
+            elif kind == "led":
+                hub.led(str(msg.get("mode")), float(msg.get("level", 1.0) or 0), game=True)
             elif kind == "event":
                 if msg.get("kind") in ("run_start", "shard_found", "shard_resolved", "faction_flip", "run_end"):
                     hub.request_beat(str(msg.get("kind")))
