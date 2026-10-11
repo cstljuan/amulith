@@ -1,9 +1,12 @@
-// Amulith relic: Grove rotary knob (A0), Grove button (D2), Grove LED (D3, PWM).
+// Amulith relic: Grove rotary knob (A0), Grove button (D3), Grove LED (D4).
+// D4 has no hardware PWM on the Uno, so brightness is software PWM in loop().
+// Wiring verified by the hardware session 2026-10-10 (LED must stay out of the UART socket).
 // Serial 115200, line based. See firmware/README.md for the contract.
 
 const uint8_t PIN_KNOB = A0;
-const uint8_t PIN_BUTTON = 2;
-const uint8_t PIN_LED = 3;
+const uint8_t PIN_BUTTON = 3;
+const uint8_t PIN_LED = 4;
+const unsigned long SOFT_PWM_PERIOD_US = 2000;
 
 const unsigned long DEBOUNCE_MS = 25;
 const unsigned long KNOB_MIN_GAP_MS = 40;
@@ -79,7 +82,9 @@ void driveLed(unsigned long now) {
     case SOLID: out = level; break;
     case OFF: out = 0; break;
   }
-  analogWrite(PIN_LED, out);
+  // software PWM: on for out/255 of each 2 ms period
+  unsigned long phase = micros() % SOFT_PWM_PERIOD_US;
+  digitalWrite(PIN_LED, phase < (unsigned long)out * SOFT_PWM_PERIOD_US / 255 ? HIGH : LOW);
 }
 
 void handleLine() {
