@@ -2,6 +2,12 @@
 
 Newest first. Add entries instead of rewriting old ones. Every agent reads the LOCKED SPEC before working.
 
+## 2026-10-11 5:20 AM: Shrine vision without on-device training (replaces spec section 5.2 and cut order item 7)
+- Who decided: Juan Castillo (handoff of 2026-10-11, approved in the hotel session), written up by Claude Code.
+- Judging rooms change light, background and camera angle every 6 minutes with 2 minutes of setup, so there is no photo session at the venue. The detector must not rely on a classifier trained on desk photos.
+- Approach: a layered, untrained detector in remnant/remnant/vision/. It learns the empty shrine automatically, then uses explicit color and shape cues, a pretrained embedding only as a tie-breaker, abstention when the cues disagree, and a time window before it switches state. The controller faction pick stays the fallback.
+- No model or dataset is trained or published to the Hub for vision. Say so in judging and on Devpost.
+
 ## 2026-10-11 12:20 AM: Art direction changes to HD-2D (replaces spec section 7 paper look)
 - Who decided: Juan Castillo (references: Octopath Traveler and Sea of Stars, shared by Lawrence on Discord 10:19 PM), written up by Claude Code.
 - World: a 3D diorama (tiered cliffs, water, foliage) with pixel-art sprite characters on billboards, in the HD-2D style. Tilt-shift blur, soft glow on light sources, vignette and color grade in one post-processing pass. Knight Hacks lore unchanged.

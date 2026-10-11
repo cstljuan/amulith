@@ -2,6 +2,11 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 09:25 UTC, Juan Castillo (Claude Code), hardware/shrine-vision
+- Did: shrine detector that needs no photo session at the venue (remnant/remnant/vision/). It learns the empty shrine by itself, detects hands by edge-touching foreground or motion, and tells sleepy from angry with explicit cues measured on the real figures (eyes, wing span, silhouette and green shape), plus a pretrained MobileNetV3 embedding as a tie-breaker. It abstains when the cues disagree, the frame is dark or covered, or two figures are present. remnant now runs it on /dev/video0, sends shrine changes, reports shrine_ready, and drops to 2 fps while the LLM generates. Debug preview: remnant/scripts/shrine_preview.py, also /vision/status, /vision/debug.jpg, POST /vision/calibrate.
+- Verified: 31 tests pass (9 synthetic, 22 capture replays). On desk1 (last 70% of each folder) empty, sleepy and angry are 98.6 to 100% per frame with no sleepy/angry swaps under any of 8 synthetic room shifts; brightness x1.5 makes sleepy abstain. Jetson: about 15 ms per frame alone, 48 ms with the LLM busy; 5 fps cut llama from 18.8 to about 15.5 tok/s, 2 fps was within noise (18.3), so the detector throttles while the LLM thinks.
+- Not verified: live figures under real light (the room was dark during this session), and the game rendering on the Jetson at the same time. The figures have no petal hat; angry is the winged standing one.
+
 ## 2026-10-11 08:46 UTC, Juan Castillo, lore/bible
 - Did: added the world bible, canon and fan-addition boundaries, places, faction beliefs, T.K./Lenny character limits, glossary and shared Remnant voice guide under docs/lore/. Progression IDs stay separate from the existing wire zones. No reserved gameplay, art, rendering, vision or UI paths changed.
 - Coordination: four parallel workspace lanes handle levels-contract, bible, remnant-voice and npcs-items-codex in isolated branches. Codex Cloud task API access returned HTTP 401; these are workspace agents, not standalone Cloud tasks. The levels-only PR #25 shipped first. Shared the guide with the Remnant lane.
