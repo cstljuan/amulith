@@ -82,11 +82,16 @@ export function installVisuals(host: VisualsHost) {
     events.on('game-event', e => { if (e.kind === 'player_hurt') actor.hurt(); }),
     // `lantern` arrives with the game-rules lantern (PR #15); radius is in world units.
     events.on('lantern', e => lighting.setLanternRadius(e.radius)),
+    events.on('thinking', e => { llmBusy = e.active; }),
   ];
 
   const last = new THREE.Vector3().copy(player.position);
   const size = new THREE.Vector2();
   let time = 0;
+  // The LLM shares this GPU and runs about twice as fast when the game is not drawing. While Amulith
+  // is generating (`thinking`), draw every third frame; ?llmThrottle=1 forces it on for measuring.
+  const forceThrottle = params.get('llmThrottle') === '1';
+  let llmBusy = false, skip = 0;
   const resize = () => { renderer.getDrawingBufferSize(size); post.setSize(size.x, size.y); };
   resize();
 
@@ -105,6 +110,7 @@ export function installVisuals(host: VisualsHost) {
       motes.update(time, lighting.night, size.y, reducedMotion);
       post.uniforms.uNight.value = lighting.night;
       renderer.setClearColor(lighting.clear);
+      if ((llmBusy || forceThrottle) && skip++ % 3 !== 0) return;
       post.render(scene, camera);
     },
     resize,

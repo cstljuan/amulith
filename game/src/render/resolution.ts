@@ -2,7 +2,9 @@ import type { WebGLRenderer } from 'three';
 
 // The LLM shares the Jetson GPU, so the drawing buffer never exceeds 1080p worth of pixels.
 // A 4K TV renders at half resolution and the browser upscales the canvas.
-export const MAX_RENDER_PIXELS = 1920 * 1080;
+// ?render=720 (or 900, 1080) lowers the cap further on the TV.
+const renderRows = Number(new URLSearchParams(window.location.search).get('render')) || 1080;
+export const MAX_RENDER_PIXELS = Math.round(renderRows * 16 / 9) * renderRows;
 
 export function renderPixelRatio(cssWidth: number, cssHeight: number, devicePixelRatio: number, maxPixels = MAX_RENDER_PIXELS): number {
   const area = Math.max(1, cssWidth * cssHeight);
