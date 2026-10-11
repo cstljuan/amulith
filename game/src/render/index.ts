@@ -47,24 +47,25 @@ export function installVisuals(host: VisualsHost) {
   const enemies = new EnemySprites();
   const shards = new ShardSprites(pitch);
   post.enabled = params.get('post') !== '0';
+  if (params.has('px')) post.pixelHeight = Number(params.get('px')) || 0;
   ground.reducedMotion = rings.reducedMotion = reducedMotion;
   scene.add(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
   patchTree(ground.group); patchTree(diorama.group);
 
   const stand = wandererStandIn();
-  const actor = new SpriteActor(stand.texture, stand.meta, 3.0, 'wanderer/sheet');
+  const actor = new SpriteActor(stand.texture, stand.meta, 2.0, 'wanderer/sheet');
   actor.reducedMotion = reducedMotion;
   player.cutout.visible = false;
   player.visual.add(actor.root);
 
   // Lenny keeps watch by the shrine; T.K. sleeps under the moss beside it and stands when Bloom wins.
-  // Same card height as the Wanderer, so every sprite shares one pixel size on screen.
-  const cast = (path: string, pose: string, x: number, z: number, height = 3.0) => {
+  // Cards are 32 world px per unit (64 px cells on 2.0 unit cards), so every sprite shares one pixel size.
+  const cast = (path: string, pose: string, x: number, z: number, height = 2.0) => {
     const art = wandererStandIn(), s = new SpriteActor(art.texture, art.meta, height, path, true);
     s.hold(pose); s.root.position.set(x, 0, z); scene.add(s.root); return s;
   };
-  const lenny = cast('lenny/sheet', 'idle_s', -2.3, 1.1);
-  const tk = cast('tk/sheet', 'asleep_s', 2.6, -1.3, 4.0);
+  const lenny = cast('lenny/sheet', 'idle_s', -1.9, 1.0);
+  const tk = cast('tk/sheet', 'asleep_s', 2.4, -1.3, 2.75);
 
   // Initial land snapshot, then animated batches.
   const snapshot: LandCell[] = session.land.cells.map((faction, i) => ({ column: i % session.land.width, row: Math.floor(i / session.land.width), faction }));

@@ -1,4 +1,4 @@
-"""Aseprite json-array export to the game's sheet.json (2x frames, 10 columns)."""
+"""Aseprite json-array export to the game's sheet.json (native frames, 10 columns)."""
 import json
 import sys
 frame = int(sys.argv[3]) if len(sys.argv) > 3 else 384

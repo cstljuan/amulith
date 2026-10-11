@@ -8,6 +8,7 @@ export const spriteLook = {
   uRim: { value: new THREE.Color(0xffdf9e) },
   uRimStrength: { value: 0.42 },
   uFeet: { value: new THREE.Color(0x4a5a3a) },
+  uLift: { value: 0.35 },
 };
 
 export function lookSprite<T extends THREE.MeshLambertMaterial>(mat: T): T {
@@ -16,9 +17,9 @@ export function lookSprite<T extends THREE.MeshLambertMaterial>(mat: T): T {
     prev.call(mat, shader, renderer);
     Object.assign(shader.uniforms, spriteLook);
     shader.vertexShader = 'varying vec2 vCardUv;\n' + shader.vertexShader.replace('#include <uv_vertex>', '#include <uv_vertex>\n  vCardUv = uv;');
-    shader.fragmentShader = 'uniform vec3 uRim;\nuniform float uRimStrength;\nuniform vec3 uFeet;\nvarying vec2 vCardUv;\n' + shader.fragmentShader
+    shader.fragmentShader = 'uniform vec3 uRim;\nuniform float uRimStrength;\nuniform vec3 uFeet;\nuniform float uLift;\nvarying vec2 vCardUv;\n' + shader.fragmentShader
       .replace('#include <map_fragment>', `#include <map_fragment>
-  diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * uFeet * 1.6, (1.0 - smoothstep(0.0, 0.2, vCardUv.y)) * 0.35);`)
+  diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * uFeet * 1.6, (1.0 - smoothstep(0.0, 0.12, vCardUv.y)) * 0.2);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
   {
     // Mirrored cards (scale.x = -1) render back faces, so the light side flips with them.
@@ -26,6 +27,8 @@ export function lookSprite<T extends THREE.MeshLambertMaterial>(mat: T): T {
     vec2 toLight = vec2(gl_FrontFacing ? -2.0 : 2.0, 2.0) * tx;
     float rim = 1.0 - texture2D(map, vMapUv + toLight).a;
     totalEmissiveRadiance += uRim * rim * uRimStrength * diffuseColor.rgb * 1.4;
+    // Sprites stay readable against the ground, as in HD-2D games: a little of their own color is self-lit.
+    totalEmissiveRadiance += diffuseColor.rgb * uLift;
   }`);
   };
   mat.customProgramCacheKey = () => 'spriteLook';
@@ -43,4 +46,5 @@ export function updateSpriteLook(night: number): void {
   spriteLook.uRim.value.setHex(0xffdf9e).lerp(new THREE.Color(0xb59cff), night);
   spriteLook.uRimStrength.value = THREE.MathUtils.lerp(0.42, 0.6, night);
   spriteLook.uFeet.value.setHex(0x4a5a3a).lerp(new THREE.Color(0x2a1a40), night);
+  spriteLook.uLift.value = THREE.MathUtils.lerp(0.35, 0.22, night);
 }

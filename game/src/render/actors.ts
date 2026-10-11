@@ -27,7 +27,7 @@ export class EnemySprites {
       if (entry && entry.kind !== e.kind) { this.drop(e.id); entry = undefined; }
       if (!entry) {
         const b = blank();
-        const actor = new SpriteActor(b.texture, b.meta, e.kind === 'chomper' ? 2.9 : 3.1, `${e.kind}/sheet`);
+        const actor = new SpriteActor(b.texture, b.meta, e.kind === 'chomper' ? 2.2 : 2.0, `${e.kind}/sheet`);
         actor.reducedMotion = this.reducedMotion;
         entry = { actor, kind: e.kind, x: e.x, z: e.z, fade: 1, defeated: false };
         actor.root.position.set(e.x, 0, e.z);

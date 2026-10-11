@@ -39,15 +39,19 @@ def shift(rgb, dv, ds, hue_to, amount):
 
 
 def shade(img, keep=()):
-    """Cel shading on the edge band of the silhouette, plus ink outline. img: native RGBA."""
+    """Cel shading on the edge band of the silhouette, plus ink outline. img: native RGBA.
+    Band widths scale with the sprite's height (tuned on a 180 px figure)."""
     a = np.array(img.convert('RGBA'))
+    bb = img.getbbox()
+    k = ((bb[3] - bb[1]) if bb else 64) / 180
+    blur, hi_max, lo_max = max(1, round(5 * k)), max(1, round(3 * k)), max(1, round(5 * k))
     alpha = a[..., 3] > 127
     rgb = a[..., :3].astype(np.float64)
     ink = (np.abs(rgb - INK).max(-1) < 30) | (rgb.max(-1) < 40)
     protected = ink.copy()
     for c in keep:
         protected |= np.abs(rgb - np.array(c)).max(-1) < 8
-    b = box_blur(alpha.astype(np.float64), 5)
+    b = box_blur(alpha.astype(np.float64), blur)
     gy, gx = np.gradient(b)
     n = -np.stack([gx, gy], -1)  # outward normal
     norm = np.linalg.norm(n, axis=-1) + 1e-9
@@ -56,12 +60,12 @@ def shade(img, keep=()):
     # distance to the outside, in pixels (up to 4)
     dist = np.zeros(alpha.shape)
     cur = alpha.copy()
-    for d in range(1, 7):
+    for d in range(1, lo_max + 2):
         p = np.pad(cur, 1)
         cur = cur & p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]
         dist += cur
-    hi = alpha & ~protected & edge & (facing > 0.3) & (dist >= 1) & (dist <= 3)
-    lo = alpha & ~protected & edge & (facing < -0.25) & (dist >= 1) & (dist <= 5)
+    hi = alpha & ~protected & edge & (facing > 0.3) & (dist >= 1) & (dist <= hi_max)
+    lo = alpha & ~protected & edge & (facing < -0.25) & (dist >= 1) & (dist <= lo_max)
     flat = rgb.reshape(-1, 3)
     cols, inv = np.unique(flat.astype(np.uint8), axis=0, return_inverse=True)
     inv = inv.reshape(alpha.shape)
@@ -78,27 +82,29 @@ def shade(img, keep=()):
     return Image.fromarray(out.astype(np.uint8))
 
 
-def restyle(src, dst, colors=20, cell=None):
+def restyle(src, dst, colors=20, cell=None, factor=2.0, upscale=True):
     im = Image.open(src).convert('RGBA')
     W, H = im.size
     cw, ch = cell or (W, H)
     # one palette for the whole file so frames of a sheet never flicker between colors
     a = np.array(im)
     a[..., :3] = np.where(a[..., 3:4] > 0, a[..., :3], 0)
-    small = Image.fromarray(a).resize((W // 2, H // 2), Image.BOX)
+    nw, nh = max(1, round(W / factor)), max(1, round(H / factor))
+    small = Image.fromarray(a).resize((nw, nh), Image.BOX)
     s = np.array(small)
     opaque = s[..., 3] > 127
     pal_img = Image.fromarray(s[opaque][:, :3][None]).quantize(colors, method=Image.MAXCOVERAGE, kmeans=4)
     q = Image.fromarray(s[..., :3]).quantize(palette=pal_img, dither=Image.Dither.NONE).convert('RGB')
     s[..., :3] = np.array(q)
     s[..., 3] = np.where(opaque, 255, 0)
-    out = Image.new('RGBA', (W // 2, H // 2))
-    for y in range(0, H // 2, ch // 2):
-        for x in range(0, W // 2, cw // 2):
-            tile = Image.fromarray(s[y:y + ch // 2, x:x + cw // 2])
+    out = Image.new('RGBA', (nw, nh))
+    tw, th = max(1, round(cw / factor)), max(1, round(ch / factor))
+    for y in range(0, nh, th):
+        for x in range(0, nw, tw):
+            tile = Image.fromarray(s[y:y + th, x:x + tw])
             if tile.getbbox():
                 out.paste(shade(tile), (x, y))
-    out.resize((W, H), Image.NEAREST).save(dst)
+    (out.resize((W, H), Image.NEAREST) if upscale else out).save(dst)
 
 
 if __name__ == '__main__':
@@ -109,4 +115,5 @@ if __name__ == '__main__':
         args = sys.argv[2:]
         colors = int(args[args.index('--colors') + 1]) if '--colors' in args else 20
         cell = tuple(int(v) for v in args[args.index('--cell') + 1:args.index('--cell') + 3]) if '--cell' in args else None
-        restyle(args[0], args[1], colors, cell)
+        factor = float(args[args.index('--factor') + 1]) if '--factor' in args else 2.0
+        restyle(args[0], args[1], colors, cell, factor, upscale='--native' not in args)

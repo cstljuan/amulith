@@ -30,7 +30,7 @@ export class SpriteActor {
     texture.repeat.set(1 / meta.columns, meta.frameHeight / (texture.image as { height: number }).height);
     const width = height * meta.frameWidth / meta.frameHeight;
     this.card = new THREE.Mesh(new THREE.PlaneGeometry(width, height).translate(0, height / 2, 0), lookSprite(new THREE.MeshLambertMaterial({ map: texture, alphaTest: 0.5, side: THREE.DoubleSide })));
-    this.shadow = new THREE.Mesh(new THREE.CircleGeometry(width * 0.32, 20), new THREE.MeshBasicMaterial({ color: 0x120c18, transparent: true, opacity: 0.38, depthWrite: false }));
+    this.shadow = new THREE.Mesh(new THREE.CircleGeometry(width * 0.32, 20), new THREE.MeshBasicMaterial({ color: 0x120c18, map: softShadow(), transparent: true, opacity: 0.55, depthWrite: false }));
     this.shadow.rotation.x = -Math.PI / 2; this.shadow.position.y = 0.04; this.shadow.scale.y = 0.55;
     this.root.add(this.shadow, this.card);
     if (sheetPath) this.loadSheet(sheetPath);
@@ -54,7 +54,7 @@ export class SpriteActor {
     } catch { /* stand-in stays */ }
   }
 
-  setOpacity(value: number): void { const m = this.card.material; m.transparent = value < 1; m.opacity = value; this.shadow.material.opacity = 0.38 * value; }
+  setOpacity(value: number): void { const m = this.card.material; m.transparent = value < 1; m.opacity = value; this.shadow.material.opacity = 0.55 * value; }
 
   // One-shot pose (pulse, ask, hurt, dash) held for `seconds`, then back to idle or walk.
   act(name: string, seconds: number): void { if (this.meta.animations[name]) { this.action = name; this.actionLeft = seconds; } }
@@ -96,6 +96,18 @@ export class SpriteActor {
   }
 
   dispose(): void { this.card.geometry.dispose(); this.card.material.dispose(); this.shadow.geometry.dispose(); this.shadow.material.dispose(); this.texture.dispose(); }
+}
+
+// A soft contact shadow (dark center, feathered edge) so sprites sit on the ground, shared by every actor.
+let shadowTexture: THREE.Texture | null = null;
+function softShadow(): THREE.Texture {
+  if (shadowTexture) return shadowTexture;
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const ctx = c.getContext('2d')!, g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+  g.addColorStop(0, 'rgba(255,255,255,1)'); g.addColorStop(0.5, 'rgba(255,255,255,0.7)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  ctx.fillStyle = g; ctx.fillRect(0, 0, 64, 64);
+  shadowTexture = new THREE.CanvasTexture(c);
+  return shadowTexture;
 }
 
 // Stand-in Wanderer: a hooded traveler with a lantern, 24 x 32 frames, 2 idle + 4 walk, facing right.
