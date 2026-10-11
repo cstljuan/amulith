@@ -9,7 +9,7 @@ Newest first. Add entries instead of rewriting old ones. Every agent reads the L
 - GPU budget: the LLM shares the GPU, so render at most 1920 x 1080, no shadow maps (contact shadows instead), one post pass, and measure in judge mode after each effect.
 - Scope: one hero zone fully detailed around a stone-circle shrine; other zones are recolors (cut order item 3).
 - Unchanged from section 7: accessibility (subtitles, colorblind-safe factions by light and shape, reduced motion, controller prompts), credits to the Knight Hacks design team, no decorative dot grids or halftone textures. Fireflies and spores are in-world particles, kept few.
-- Assets: Juan's sketches as reference, refined and animated with Higgsfield (GPT Image, AutoSprite). Every generated asset is listed in game/public/art/CREDITS.md.
+- Assets: Juan's sketches as reference, refined in Aseprite (sources generated with GPT Image). Every generated asset is listed in game/public/art/CREDITS.md.
 - The physical papercraft shrine stays.
 
 ## 2026-10-10 8:00 PM: LOCKED SPEC, Amulith v1

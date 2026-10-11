@@ -52,7 +52,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       <div class="credits"><h3>Credits</h3>
         <p>Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.</p>
         <p>Built by Juan Castillo and Lawrence Capistrano. Amulith speaks through an open model running on the NVIDIA Jetson Orin Nano.</p>
-        <p>Art directed by Juan, generated with Higgsfield (GPT Image 2.5). Type: Noto Serif and Noto Sans (SIL OFL).</p>
+        <p>Pixel art by Juan in Aseprite, from AI-generated sources (GPT Image 2.5). Lenny and T.K. pixel art from official Knight Hacks IX art. Type: Noto Serif and Noto Sans (SIL OFL).</p>
         <p>Music and effects: original compositions by Juan Castillo (CC0 1.0).</p></div>
     </div></div>
     <div class="pause" hidden>
