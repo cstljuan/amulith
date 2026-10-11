@@ -7,6 +7,7 @@ npm install
 npm run dev
 npm run build
 npm run preview
+npm test
 ```
 
 Open the local URL printed by Vite. The canvas fills the viewport. The Wanderer walks across a 60 x 40 map with Mushroom Hollow on the left, Petal Glade in the center, and Rootdeep on the right. Placeholder art is drawn locally on a canvas; no external assets or CDN are used.
@@ -23,11 +24,17 @@ Open the local URL printed by Vite. The canvas fills the viewport. The Wanderer 
 | Judge | J | Back |
 | Lower / raise lantern | Q / R | Left / right trigger |
 
-Movement, turn flipping, pulse events, and pause work in this scaffold. Dash, ask, judge, and lantern are exposed as input actions for the owning lanes; their gameplay effects are not implemented yet. Click the game and press a gamepad button if the browser has not activated the controller. Nonstandard gamepads are ignored; keyboard remains available. Blur clears held input. Disconnect clears input and the next frame polls available controllers again.
+Choose Bloom with 1 or Blight with 2 (0 pauses), or place the matching shrine figure. Movement, turning, pulse conversion (radius 3, cooldown 0.6 s), shrine pause/flip, and asks work. Dash, judge, and lantern gameplay effects are for later lanes. Click the game and press a gamepad button if the browser has not activated the controller. Nonstandard gamepads are ignored; keyboard remains available. Blur clears held input. Disconnect clears input and the next frame polls available controllers again.
 
 ## Configuration and contracts
 
-`?remnant=host:port` defaults to `localhost:8765`. `?mock=1` sets the mock flag. Example: `http://localhost:5173/?remnant=10.37.2.234:8765&mock=1`. These values are exported from `src/core/config.ts`; networking belongs to the next lane.
+`?remnant=host:port` defaults to `localhost:8765`. `?mock=1` sets the mock flag. Example: `http://localhost:5173/?remnant=10.37.2.234:8765`. Start `tools/mock-remnant` with its documented npm commands for local testing, then use `?mock=1`. The hello message labels the actual connection mode; the flag alone does not fabricate a live or mock service. The client connects to `ws://<remnant>/ws`, drops malformed messages, retries every 2 seconds, and sends state every 2 active simulation seconds. There is no queued replay of offline asks/events.
+
+When disconnected, a same-contract scripted director emits every 25 active seconds. The land model starts half Bloom/half Blight, with Blight concentrated in Rootdeep. It exposes conversion, global/zone shares and batched changes; the visuals lane can subscribe to `land` to render individual cells. The scaffold's status text shows actual model shares rather than device telemetry. Null telemetry remains null in the event bus.
+
+Task B local events: `connection` carries `{connected,mode}`, `land` carries `{changes,share}`, `spawn` carries protocol Spawn, `pulse-applied` carries `{x,z,faction}`, `ask` has no payload, and `game-event` carries the original GameEvent for forwarding. Send run events through this bus. `GameSession.stateExtra` is an extension point for enemy/shard/run values in Task C.
+
+Tests use Node's built-in runner plus the already-installed TypeScript compiler to load TypeScript modules. No test dependency was added. `npm test` exercises malformed data, reconnect/disposal, land, cooldowns, shrine semantics and fallback timing. Use a browser with the provided mock for integration; physical controller and Jetson checks remain separate.
 
 Import shared protocol types with `import type { Director } from '@protocol/messages'`. Vite and TypeScript resolve this to the existing `../protocol` directory. Do not copy or modify protocol shapes.
 

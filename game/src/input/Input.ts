@@ -1,4 +1,4 @@
-export type Action = 'pulse' | 'dash' | 'ask' | 'pause' | 'judge';
+export type Action = 'pulse' | 'dash' | 'ask' | 'pause' | 'judge' | 'bloom' | 'blight' | 'empty';
 export interface ActionMap {
   move: { x: number; y: number };
   pulse: boolean;
@@ -6,6 +6,9 @@ export interface ActionMap {
   ask: boolean;
   pause: boolean;
   judge: boolean;
+  bloom: boolean;
+  blight: boolean;
+  empty: boolean;
   lanternDelta: number;
 }
 
@@ -15,11 +18,14 @@ const bindings: Record<Action, { keys: string[]; button: number }> = {
   ask: { keys: ['KeyE'], button: 3 },
   pause: { keys: ['Escape'], button: 9 },
   judge: { keys: ['KeyJ'], button: 8 },
+  bloom: { keys: ['Digit1','Numpad1'], button: -1 },
+  blight: { keys: ['Digit2','Numpad2'], button: -1 },
+  empty: { keys: ['Digit0','Numpad0'], button: -1 },
 };
 const handled = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'KeyQ', 'KeyR', ...Object.values(bindings).flatMap(b => b.keys)]);
 
 export class Input {
-  readonly actions: ActionMap = { move: { x: 0, y: 0 }, pulse: false, dash: false, ask: false, pause: false, judge: false, lanternDelta: 0 };
+  readonly actions: ActionMap = { move: { x: 0, y: 0 }, pulse: false, dash: false, ask: false, pause: false, judge: false, bloom:false,blight:false,empty:false,lanternDelta: 0 };
   private keys = new Set<string>();
   private edges = new Set<Action>();
   private pending = new Set<Action>();
