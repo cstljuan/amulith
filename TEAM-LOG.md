@@ -2,6 +2,20 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 1:05 AM, Juan Castillo (Claude Code), visuals/paper-world
+- Did: merged main (#15) into the visuals branch; enemies and shards now render as animated pixel sprites (walk, attack, defeated) from the enemies/shards events, replacing the placeholder views (hidden, not deleted). Four-direction Wanderer frames, curved heightfield terrain, prop collisions (resolveCollisions in main.ts), shaped pulses. UI lane #7: title and controller faction pick, HUD (land share, light, lantern, shards), Amulith dialogue with mood portraits and honest source label, hold-to-claim prompt, pause menu with settings, judge mode, endings with credits. Fonts bundled (Noto Serif/Sans, OFL). Build and 19 tests pass. Deployed to the Jetson for Juan.
+- Blocked: audio (no CC0 music yet), T.K. and Lenny art (waiting on Juan's sketches / lore images).
+- Next: audio, item holding/interaction, Vercel landing page for the domain.
+
+## 2026-10-11 1:15 AM, Juan Castillo (Claude Code), visuals/paper-world
+- Did: switched the art direction to HD-2D (DECISIONS.md entry 12:20 AM). Built the render layer in src/render and src/fx: land shader (Bloom grass with flowers, Blight soil with creeping veins and thorns, one draw plus two instanced), voxel cliff diorama with stream, billboard trees and props, stone shrine with the Amulith gem, day/night lighting by faction with a lantern point light, one post pass (tilt-shift, mip glow, vignette, grade), fireflies/spores, pulse rings, pixel sprite actor for the Wanderer. Assets generated in Higgsfield (GPT Image 2.5), listed in public/art/CREDITS.md. Build and tests pass.
+- Blocked: Jetson GPU numbers not measured yet. main.ts touched (install hook, render cap, closer camera); flagged on issue #3. AutoSprite is not callable through the Higgsfield connector, walk frames came from GPT Image instead.
+- Next: enemy, shard, T.K. and Lenny sprites (after #15 merges), Juan's sketches, then UI lane #7.
+
+## 2026-10-11 12:30 AM, Juan Castillo (Claude Code), visuals/paper-world
+- Did: locked the art style sheet in game/public/art/STYLE.md (palette with measured colorblind contrast, typography, cutout rules, file layout). Added src/render/palette.ts and src/render/resolution.ts (drawing buffer capped at 1920 x 1080 pixels, a 4K TV renders at 1920 x 1080).
+- Blocked: the cap needs a one-line change in main.ts (game-core); requested on issue #3.
+- Next: paper ground and torn zone edges, billboard cutout system, land flowers and veins.
 ## 2026-10-10 11:33 PM, Lawrence Capistrano, game-rules/enemies-flow
 - Did: reviewed/merged #14 after Lawrence's approval; implemented #5 A*, enemy AI/attacks/two-pulse defeat, lantern, 3-of-6 shard selection/hold resolution, hints, 3% ask cost, and full run states/reset. Added local placeholder enemy/shard views and typed interfaces for UI/visuals. Nineteen unit tests, build and controlled mock-browser run-flow checks passed; screenshot in game/docs/enemies-flow.png.
 - Blocked: physical controller, real Jetson link/performance, five-minute game balance, authored visuals and ending UI/audio remain unverified or assigned to other lanes. Browser win/loss checks use controlled positions/time fixtures and are not a real judging-length run.

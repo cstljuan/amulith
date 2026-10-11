@@ -6,6 +6,9 @@ import { Input } from './input/Input';
 import { Wanderer } from './player/Wanderer';
 import { createWorld, zoneAt, ZONES } from './world/world';
 import { GameSession } from './rules/session';
+import { installVisuals, resolveCollisions } from './render';
+import { sizeRenderer } from './render/resolution';
+import { installUI } from './ui';
 import { EnemyView } from './enemies/EnemyView';
 import { ShardView } from './rules/ShardView';
 import './style.css';
@@ -22,8 +25,8 @@ const world = createWorld();
 scene.add(world.group);
 const player = new Wanderer();
 scene.add(player.visual);
-const camera = new THREE.PerspectiveCamera(48, 1, 0.1, 150);
-const offset = new THREE.Vector3(0, 26, 26 / Math.tan(THREE.MathUtils.degToRad(50)));
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 150);
+const offset = new THREE.Vector3(0, 17, 17 / Math.tan(THREE.MathUtils.degToRad(47)));
 const target = new THREE.Vector3();
 const desired = new THREE.Vector3();
 camera.position.copy(offset);
@@ -41,9 +44,11 @@ const unsubscribe = events.on('pause', event => {
   status.textContent = paused ? 'Paused / Esc or Start to resume' : 'Explore the three regions';
 });
 session.start();
+const visuals = installVisuals({ renderer, scene, camera, events, player, session, world, replaces: [enemyView.group, shardView.group] });
+const ui = installUI({ events, input, session, player, renderer });
 const resize = () => {
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
+  sizeRenderer(renderer, window.innerWidth, window.innerHeight);
+  visuals.resize();
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
 };
@@ -56,7 +61,7 @@ const stop = startLoop({
     if (input.pressed('pause')) events.emit('pause', { paused: !paused });
     if (!paused && input.pressed('pulse')) events.emit('pulse', { x: player.position.x, z: player.position.z });
   },
-  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); },
+  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); resolveCollisions(player.position); },
   render(alpha, dt) {
     target.lerp(player.position, 1 - Math.exp(-6 * dt));
     desired.copy(target).add(offset);
@@ -67,13 +72,14 @@ const stop = startLoop({
     zoneLabel.textContent = ZONES.find(zone => zone.id === zoneAt(player.position.x))!.label;
     const share = session.land.share();
     status.textContent = `${session.faction ?? 'Choose: 1 Bloom / 2 Blight'} | ${session.run.phase}${session.run.result ? ' / '+session.run.result : ''} | ${session.client.mode} | HP ${Math.round(session.run.hp*100)}% | Shards ${session.run.shards}/3 | Bloom ${Math.round(share.bloom*100)}% / Blight ${Math.round(share.blight*100)}%`;
-    renderer.render(scene, camera);
+    visuals.render(dt);
+    ui.frame(dt);
   },
 });
 
 // Export the integration surface for lane modules and browser verification.
 export { config, events, input, player, session };
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  stop(); session.dispose(); enemyView.dispose(); shardView.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  stop(); ui.dispose(); visuals.dispose(); session.dispose(); enemyView.dispose(); shardView.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
   window.removeEventListener('resize', resize);
 });
