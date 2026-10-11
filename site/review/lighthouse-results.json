@@ -1,0 +1,34 @@
+[
+  {
+    "theme": "bloom",
+    "device": "mobile",
+    "score": 100,
+    "lighthouseVersion": "13.5.0",
+    "fetchTime": "2026-10-11T08:54:39.378Z",
+    "failedAudits": []
+  },
+  {
+    "theme": "bloom",
+    "device": "desktop",
+    "score": 100,
+    "lighthouseVersion": "13.5.0",
+    "fetchTime": "2026-10-11T08:54:48.681Z",
+    "failedAudits": []
+  },
+  {
+    "theme": "blight",
+    "device": "mobile",
+    "score": 100,
+    "lighthouseVersion": "13.5.0",
+    "fetchTime": "2026-10-11T08:54:55.336Z",
+    "failedAudits": []
+  },
+  {
+    "theme": "blight",
+    "device": "desktop",
+    "score": 100,
+    "lighthouseVersion": "13.5.0",
+    "fetchTime": "2026-10-11T08:55:01.763Z",
+    "failedAudits": []
+  }
+]

@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { lookSprite } from './spriteLook';
 import type { EnemyKind } from '@protocol/messages';
 import type { Shard } from '../rules/shards';
 import { pixelTexture, upgradeFromArt } from './pixelArt';
@@ -26,7 +27,7 @@ export class EnemySprites {
       if (entry && entry.kind !== e.kind) { this.drop(e.id); entry = undefined; }
       if (!entry) {
         const b = blank();
-        const actor = new SpriteActor(b.texture, b.meta, e.kind === 'chomper' ? 2.9 : 3.1, `${e.kind}/sheet`);
+        const actor = new SpriteActor(b.texture, b.meta, e.kind === 'chomper' ? 2.2 : 2.0, `${e.kind}/sheet`);
         actor.reducedMotion = this.reducedMotion;
         entry = { actor, kind: e.kind, x: e.x, z: e.z, fade: 1, defeated: false };
         actor.root.position.set(e.x, 0, e.z);
@@ -70,7 +71,7 @@ export class ShardSprites {
     for (const s of shards) {
       let item = this.items.get(s.id);
       if (!item) {
-        const mat = new THREE.MeshLambertMaterial({ map: this.texture, emissiveMap: this.texture, emissive: 0xb080ff, alphaTest: 0.5, side: THREE.DoubleSide });
+        const mat = lookSprite(new THREE.MeshLambertMaterial({ map: this.texture, emissiveMap: this.texture, emissive: 0xb080ff, alphaTest: 0.5, side: THREE.DoubleSide }));
         const card = new THREE.Mesh(this.geometry, mat);
         card.position.set(s.x, 0, s.z); card.rotation.x = this.tilt;
         const beam = new THREE.Mesh(this.beamGeometry, this.beamMaterial); beam.position.set(s.x, 0, s.z);

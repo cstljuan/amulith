@@ -66,3 +66,11 @@ The loop uses a 60 Hz fixed simulation with a 100 ms elapsed-time clamp and inte
 | `src/ui`, `src/audio` | ui-audio |
 
 The small HTML title and controls are scaffold placeholders, ready for the ui-audio lane. The Wanderer texture is original procedural placeholder art. No third-party art is included. Three.js supplies rendering; Vite supplies development/build tooling; TypeScript and the approved `@types/three` development package supply static checks.
+
+## Forest progression
+
+A run resolves one randomly chosen shard from two sites in each level: Shrine Grove, Mushroom Hollow, then Rootdeep. Hold Space (controller A) for 1.5 seconds next to a revealed shard, then walk into the gold exit ring. A short paper curtain loads the next level. Faction, land, HP, elapsed play time, asks, lantern and resolved shard identities carry between levels. The final Rootdeep exit wins the run; resolving its shard alone does not end it.
+
+For judge fixtures, use `?level=grove`, `?level=hollow` or `?level=deepwood`. Choose Bloom with 1 or Blight with 2 as usual. Direct Hollow and Rootdeep starts seed one or two previous shards; these are controlled skipped-level fixtures. Keyboard WASD/arrows move, Q/R adjusts the lantern, Space holds/pulses, Shift dashes, E asks and Escape pauses. All ordinary actions retain their standard-controller equivalents.
+
+Level definitions live in `src/levels/`. Layouts declare bounds, visible obstacles, shard candidates, enemy guards/waves and exits. Existing art cards and floor materials remain placeholders; the art lane owns new sprites and tiles. Progression IDs differ from protocol zones. The wire state has no progression-level field yet, so the Remnant can only see the existing region until the platform lane extends the contract.

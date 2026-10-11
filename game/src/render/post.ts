@@ -2,6 +2,9 @@ import * as THREE from 'three';
 
 // One fullscreen pass: tilt-shift blur outside a horizontal focus band, glow taken from the
 // target's own mipmaps (no extra blur passes), vignette and a day/night grade.
+// HD-2D: the world renders into a low-resolution target (pixelHeight rows, about 32 px per world
+// unit, so sprite texels land 1:1) and is scaled up with hard pixels; the depth of field, glow and
+// grade run at full resolution on top. pixelHeight 0 renders at full resolution.
 export class Post {
   private target: THREE.WebGLRenderTarget;
   private scene = new THREE.Scene();
@@ -15,14 +18,16 @@ export class Post {
     uBlur: { value: 1 },
     uNight: { value: 0.5 },
     uGlow: { value: 0.55 },
+    uLodShift: { value: 0 },
   };
+  pixelHeight = 448;
   enabled = true;
 
   constructor(private renderer: THREE.WebGLRenderer) {
     const hdr = renderer.extensions.has('EXT_color_buffer_half_float') || renderer.extensions.has('EXT_color_buffer_float');
     this.target = new THREE.WebGLRenderTarget(1, 1, {
       type: hdr ? THREE.HalfFloatType : THREE.UnsignedByteType,
-      generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter, magFilter: THREE.LinearFilter, depthBuffer: true,
+      generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter, magFilter: THREE.NearestFilter, depthBuffer: true,
     });
     this.uniforms.tColor.value = this.target.texture;
     this.quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), new THREE.ShaderMaterial({
@@ -32,7 +37,7 @@ export class Post {
 varying vec2 vUv;
 uniform sampler2D tColor;
 uniform vec2 uTexel;
-uniform float uFocus, uBand, uBlur, uNight, uGlow;
+uniform float uFocus, uBand, uBlur, uNight, uGlow, uLodShift;
 const float GOLDEN = 2.39996;
 void main() {
   vec3 base = texture2D(tColor, vUv).rgb;
@@ -47,7 +52,7 @@ void main() {
     }
     color = sum / 12.0;
   }
-  vec3 glow = textureLod(tColor, vUv, 3.0).rgb * 0.5 + textureLod(tColor, vUv, 5.0).rgb * 0.5;
+  vec3 glow = textureLod(tColor, vUv, max(0.0, 3.0 - uLodShift)).rgb * 0.5 + textureLod(tColor, vUv, max(0.0, 5.0 - uLodShift)).rgb * 0.5;
   color += max(glow - vec3(0.72), 0.0) * uGlow * 1.6;
   vec3 dayGrade = vec3(1.02, 1.0, 0.97), nightGrade = vec3(0.86, 0.9, 1.12);
   color *= mix(dayGrade, nightGrade, uNight);
@@ -62,7 +67,9 @@ void main() {
   }
 
   setSize(width: number, height: number): void {
-    this.target.setSize(width, height);
+    const s = this.pixelHeight > 0 && height > this.pixelHeight ? this.pixelHeight / height : 1;
+    this.target.setSize(Math.max(1, Math.round(width * s)), Math.max(1, Math.round(height * s)));
+    this.uniforms.uLodShift.value = Math.log2(1 / s);
     this.uniforms.uTexel.value.set(1 / width, 1 / height).multiplyScalar(height / 1080);
   }
 

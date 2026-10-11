@@ -7,6 +7,7 @@ import type { Enemy } from '../enemies/enemies.ts';
 export type GameEvents = {
   [K in RemnantMessage['type']]: Extract<RemnantMessage, { type: K }>;
 } & {
+  level: { id: import('../levels/types.ts').LevelId };
   pulse: { x: number; z: number };
   dash: { x: number; z: number };
   interact: { x: number; z: number };

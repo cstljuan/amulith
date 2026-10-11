@@ -12,7 +12,7 @@ export class Run {
   private endingTime = 0;
   private shrinePresent = false;
   private resolved = new Set<ShardId>();
-  constructor(private bus: EventBus<GameEvents>) {}
+  constructor(private bus: EventBus<GameEvents>, private canWin: ()=>boolean = ()=>true) {}
   snapshot(): RunSnapshot { return {phase:this.phase,faction:this.faction,hp:this.hp,elapsed_s:this.elapsed,shards:this.shards,asks_used:this.asksUsed,result:this.result}; }
   private changed(): void { this.bus.emit('run',this.snapshot()); }
   select(state: ShrineState): void {
@@ -49,8 +49,10 @@ export class Run {
     if (this.phase !== 'playing' || this.resolved.has(shard)) return;
     this.resolved.add(shard); this.shards++;
     this.bus.emit('game-event',{type:'event',kind:'shard_resolved',data:{shard,zone,faction:this.faction,action:this.faction === 'bloom' ? 'destroyed' : 'claimed'}});this.changed();
-    if (this.shards >= 3) this.end('win');
+    if (this.shards >= 3 && this.canWin()) this.end('win');
   }
+  seedProgress(ids: ShardId[]): void { for(const id of ids)this.resolved.add(id);this.shards=this.resolved.size;this.changed(); }
+  finish(): void { if(this.phase==='playing'&&this.shards>=3&&this.canWin())this.end('win'); }
   ask(): boolean { if (this.phase !== 'playing') return false; this.asksUsed++; this.changed(); return true; }
   private end(result: 'win' | 'lose'): void {
     this.phase = 'ending'; this.result = result; this.endingTime = 0;

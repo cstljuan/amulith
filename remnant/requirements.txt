@@ -2,3 +2,5 @@ fastapi==0.115.6
 uvicorn[standard]==0.34.0
 httpx==0.28.1
 pyserial==3.5
+numpy==2.5.4
+opencv-python-headless==5.0.0.93

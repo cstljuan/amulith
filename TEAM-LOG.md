@@ -2,6 +2,30 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11, Lawrence Capistrano, game-core/all-integration
+- Integrated levels, new art, landing page, lore UI and shrine vision under Lawrence's explicit merge authorization. Fixed later-level pause/resume intros and Grove cast visibility; applied reduced motion to Lenny and T.K.
+- Posted four art requests on #20 and optional protocol coordination on #38. Validation records are in the integration PR. Cloud vision fixtures cannot replace live camera or Jetson checks.
+
+## 2026-10-11 09:25 UTC, Juan Castillo (Claude Code), hardware/shrine-vision
+- Did: shrine detector that needs no photo session at the venue (remnant/remnant/vision/). It learns the empty shrine by itself, detects hands by edge-touching foreground or motion, and tells sleepy from angry with explicit cues measured on the real figures (eyes, wing span, silhouette and green shape), plus a pretrained MobileNetV3 embedding as a tie-breaker. It abstains when the cues disagree, the frame is dark or covered, or two figures are present. remnant now runs it on /dev/video0, sends shrine changes, reports shrine_ready, and drops to 2 fps while the LLM generates. Debug preview: remnant/scripts/shrine_preview.py, also /vision/status, /vision/debug.jpg, POST /vision/calibrate.
+- Verified: 31 tests pass (9 synthetic, 22 capture replays). On desk1 (last 70% of each folder) empty, sleepy and angry are 98.6 to 100% per frame with no sleepy/angry swaps under any of 8 synthetic room shifts; brightness x1.5 makes sleepy abstain. Jetson: about 15 ms per frame alone, 48 ms with the LLM busy; 5 fps cut llama from 18.8 to about 15.5 tok/s, 2 fps was within noise (18.3), so the detector throttles while the LLM thinks.
+- Not verified: live figures under real light (the room was dark during this session), and the game rendering on the Jetson at the same time. The figures have no petal hat; angry is the winged standing one.
+
+## 2026-10-11, Lawrence Capistrano, game-rules/level-deepwood
+- Replaced Deepwood scaffold with a 32 by 24 Rootdeep map, alternating root banks, two candidate final shards, three opening guards and two one-enemy waves. Faster opponents and stronger attacks provide the final escalation; the final exit requires resolving the active shard first. The 60-second target is a design goal, not measured playtime.
+- Used existing blight-tree and shrine-circle props as placeholders. Root-bank and final-seal art requests are prepared for issue #20, whose comments remain blocked by GitHub API network access. Lore, render, UI, audio, art and protocol files remain unchanged.
+- Validation: TypeScript/Vite production build and 32 tests passed on the manager base, including both-faction final exits, lore/art references, traversable collision paths, edge spawns, pause and timed-wave gates. No controller, Jetson or judging-length performance measurements claimed.
+
+## 2026-10-11, Lawrence Capistrano, game-rules/level-hollow
+- Replaced Hollow scaffold data with a compact 44 by 28 map, two mushroom loops, 12 visible solid cap clusters, two candidate shard sites, guards and three bounded waves. One shard is active, and the eastern exit leads to Deepwood. Names/signs remain in the lore contract.
+- Reused existing mushroom cards, enemy sheets and shard art. Added data tints for Juan's art pass; Hollow cap-cluster and floor-tile requests are prepared for issue #20, whose comments are currently blocked by GitHub API network access.
+- Validation: TypeScript/Vite production build and 31 tests passed, including both shard routes, enemy tuning and actual enemy movement/spawn clearance across both factions and deterministic edge samples. No hardware or judging-length balance measurements claimed.
+
+## 2026-10-11, Lawrence Capistrano, game-core/level-manager
+- Added data-driven progression through grove, hollow and deepwood, one randomized shard per level, gated exits, a short curtain and judge URL starts. Faction, land, HP, play time, asks, lantern and resolved site flags carry. Hollow and Deepwood definitions are initial scaffolds for their separate layout tasks.
+- Kept lore/render/UI/audio/art/protocol files unchanged. Reused existing art in an instanced level adapter, preserved land conversion and the renderer's every-third-frame thinking throttle.
+- Validation: TypeScript/Vite build, 21 existing tests and six new progression checks passed. Controlled Chromium runs completed three real shard holds and exits for both factions; judge starts, loss and reset passed. Physical controller, Jetson GPU performance and judging-length balance were not measured.
+- GitHub API network access is blocked in this environment. New feature issue claims, PR publication, art comments and protocol level-field request remain pending that access. The handoff's existing coordination issues #3 and #5 are assigned to Lawrence.
 ## 2026-10-11 08:46 UTC, Juan Castillo, lore/bible
 - Did: added the world bible, canon and fan-addition boundaries, places, faction beliefs, T.K./Lenny character limits, glossary and shared Remnant voice guide under docs/lore/. Progression IDs stay separate from the existing wire zones. No reserved gameplay, art, rendering, vision or UI paths changed.
 - Coordination: four parallel workspace lanes handle levels-contract, bible, remnant-voice and npcs-items-codex in isolated branches. Codex Cloud task API access returned HTTP 401; these are workspace agents, not standalone Cloud tasks. The levels-only PR #25 shipped first. Shared the guide with the Remnant lane.
