@@ -2,6 +2,11 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 4:05 AM, Lawrence Capistrano, PR #19 merge review
+- Reviewed c4a8564 and tested its clean merge with main 7ee592b, preserving #18 sprite/lantern/pulse changes. No source edits made during review. All 21 tests and TypeScript/Vite production build pass.
+- Re-ran supplied audio integration fixtures against the combined tree: silent startup, simulated controller start, both local music loops, effects, faction crossfade, speech duck/recovery/error, scripted shrine interaction, dash pose, pause volume/mute, settings persistence and ending pass. Fresh production context passes with external HTTP and WebSockets blocked. No browser exceptions or missing bundled audio.
+- Existing bundle warning remains. Physical controller/audio listening, live voice-engine playback and a full judging-length run remain integration checks. Jetson measurements in the PR are Juan's recorded combined-workload samples, not independently remeasured here. No hardware/deployment operations.
+
 ## 2026-10-11 1:42 AM, Juan Castillo, ui-audio/relic-sound
 - Did: two local original CC0 music loops and seven cues, first-input unlock, faction crossfade, speech duck/recovery, pause volume/mute and persistence. Added the accepted dash pose consumer and X/F shrine interaction with honestly labelled scripted lines. Narrow-screen pause settings stay readable with judge mode enabled. No new dependencies or core/input/main.ts/protocol/hardware edits.
 - Verified: TypeScript/Vite build and all 21 tests pass. Browser audio, controller and ending fixtures verify silent start, cues, crossfade, voice duck/error recovery, settings, dash frame and shrine proximity. A fresh production context passed with external HTTP and all WebSockets blocked. Verification details and raw telemetry are in game/src/audio/.
