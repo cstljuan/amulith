@@ -58,6 +58,7 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .ending h2 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 84px; margin: 0; text-shadow: 0 4px 30px #000; }
 .ending p { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 26px; color: #e9dcc0; }
 .ending blockquote { font-family: 'Amulith Serif', serif; font-size: 24px; color: var(--vein); margin: 26px auto; max-width: 760px; }
+.ending .outro { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 24px; color: var(--gold); margin: 6px auto 0; max-width: 760px; line-height: 1.4; }
 .credits { margin-top: 40px; font-size: 15px; color: #cfc4e0; line-height: 1.6; }
 .credits h3 { font-family: 'Amulith Serif', serif; font-weight: 400; letter-spacing: .3em; font-size: 16px; color: var(--gold); }
 .credits p { font-family: 'Amulith Sans', sans-serif; font-style: normal; font-size: 15px; margin: 6px 0; }
@@ -77,6 +78,7 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .title { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: radial-gradient(ellipse at center, rgba(10, 6, 16, .25), rgba(10, 6, 16, .82)); transition: opacity .6s ease; }
 .title.gone { opacity: 0; }
 .title h1 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: clamp(64px, 10vw, 150px); letter-spacing: .14em; margin: 0; text-shadow: 0 6px 30px #000, 0 0 40px rgba(150, 90, 255, .35); }
+.title .flavor { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 28px; color: var(--gold); margin: 10px 0 14px; letter-spacing: .04em; }
 .title p { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 30px; margin: 8px 0 42px; color: #e9dcc0; }
 .choices { display: flex; gap: 28px; justify-content: center; }
 .choice { width: 300px; padding: 22px 20px; border: 2px solid var(--ink); outline: 2px solid transparent; outline-offset: -7px; background: var(--night); transition: transform .2s ease, outline-color .2s ease; }
@@ -85,6 +87,13 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .choice.bloom h2 { color: var(--bloom); } .choice.blight h2 { color: var(--vein); }
 .choice.on { outline-color: var(--gold); transform: translateY(-6px); }
 .title .hint { margin-top: 30px; font-size: 16px; color: #d6cbe4; }
+
+/* Level intro card */
+.level-intro { position: absolute; left: 50%; top: 16%; transform: translateX(-50%); width: min(820px, 80vw); text-align: center; padding: 26px 40px 28px; background: var(--night); border: 2px solid var(--ink); outline: 2px solid var(--rule); outline-offset: -8px; transition: opacity 1.2s ease; }
+.level-intro.gone { opacity: 0; }
+.level-intro h2 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 56px; letter-spacing: .06em; margin: 0; text-shadow: 0 4px 24px #000; }
+.level-intro .sub { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 24px; color: var(--gold); margin: 4px 0 16px; }
+.level-intro p { font-family: 'Amulith Serif', serif; font-size: 24px; line-height: 1.4; margin: 6px 0; color: #e9dcc0; }
 
 /* Pause */
 .pause { position: absolute; inset: 0; display: grid; place-content: center; background: rgba(8, 5, 14, .72); }
@@ -96,6 +105,15 @@ body > header, body > aside#status, body > footer { display: none !important; }
 .pause li.on { border-left-color: var(--gold); background: rgba(232, 189, 90, .1); }
 .pause li b { color: var(--gold); font-weight: 700; }
 .pause .hint { margin-top: 20px; text-align: center; font-size: 14px; color: #cfc4e0; }
+
+.pause .panel.codex { width: 1000px; }
+.codex-body { display: grid; grid-template-columns: 340px 1fr; gap: 28px; min-height: 360px; }
+.pause .codex li { font-size: 19px; padding: 10px 14px; }
+.pause .codex li.locked { color: #8f84a3; font-style: italic; }
+.codex article { padding: 6px 4px; }
+.codex article h3 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 32px; margin: 0 0 4px; }
+.codex article small { display: block; font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: var(--gold); margin-bottom: 14px; }
+.codex article p { font-family: 'Amulith Serif', serif; font-size: 22px; line-height: 1.5; margin: 0; color: #e9dcc0; }
 
 /* Judge mode */
 .judge { position: absolute; top: 84px; right: 28px; width: 330px; padding: 16px 18px; background: rgba(6, 10, 8, .86); border: 1px solid #76b900; font: 15px/1.55 'Amulith Sans', ui-monospace, monospace; }
