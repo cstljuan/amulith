@@ -1,0 +1,153 @@
+{
+  "version": 1,
+  "review_date": "2026-10-10",
+  "distribution_snapshot": true,
+  "canonical": {
+    "repository": "cstljuan/AI-Resource-Library",
+    "branch": "review/amulith-locked-skills-2026-10-10",
+    "commit": "43e0d8c66c4239f992a0c853dd83bade84d73d42",
+    "upstream_merge_pending": true,
+    "collection_path": "sources/amulith-reviewed-skills.json"
+  },
+  "discovery_roots": [
+    ".agents/skills",
+    ".claude/skills"
+  ],
+  "skills": [
+    {
+      "name": "threejs-scene-workflow",
+      "canonical_path": ".agents/skills/threejs-scene-workflow",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [
+        {
+          "repository": "mrdoob/three.js",
+          "revision": "43488e632d91441c095a71c9c3d2d46c75983745",
+          "license": "MIT",
+          "relationship": "reference only"
+        }
+      ],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "637db4cfd72a00dcd06342b402ad298e9d74f3baef05f30a1fa2ab7b6b5303f5",
+        "SKILL.md": "72121169a99eb4a8d6aa4b41a9679b45eef8d99af07f000923249b5a868659a1"
+      }
+    },
+    {
+      "name": "build123d-mcp-workflow",
+      "canonical_path": ".agents/skills/build123d-mcp-workflow",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [
+        {
+          "repository": "pzfreo/build123d-mcp",
+          "revision": "eb76d294d69245cf673263aea33337025e9e5c71",
+          "license": "Apache-2.0",
+          "relationship": "reference only"
+        }
+      ],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "3cc782bae1fc2d0cccc368c376c6e54ee5e3316c7d4790703deb01eb102054eb",
+        "SKILL.md": "65c8495648005f5f48a925948a9d151b5e3a81ab2109d1d1f3fed5763508038d"
+      }
+    },
+    {
+      "name": "threejs-paper-game",
+      "canonical_path": ".agents/skills/threejs-paper-game",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [
+        {
+          "repository": "mrdoob/three.js",
+          "revision": "43488e632d91441c095a71c9c3d2d46c75983745",
+          "license": "MIT",
+          "relationship": "reference only"
+        }
+      ],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "e2092f080d7c3b5e4950722179ea496ef474458ae76d143b722cd359e14d2bff",
+        "SKILL.md": "245b0ff1d8be5d32159a528146574318d61d4c37ef64b6ef6d07e3ace529bbc0"
+      }
+    },
+    {
+      "name": "jetson-local-director",
+      "canonical_path": ".agents/skills/jetson-local-director",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [
+        {
+          "repository": "NVIDIA/skills",
+          "revision": "14a98ae278cec7e867695189d0f4003c08e4f765",
+          "license": "README: documentation CC-BY-4.0, code Apache-2.0; selected SKILL frontmatter Apache-2.0",
+          "relationship": "reference only"
+        },
+        {
+          "repository": "huggingface/skills",
+          "revision": "c3ff942be3e07116b475253f0a8fc4f54682c1a8",
+          "license": "Apache-2.0",
+          "relationship": "reference only"
+        },
+        {
+          "repository": "ggml-org/llama.cpp",
+          "revision": "23b0202a189c44a54625aadcb37a946dd1d6278d",
+          "license": "MIT",
+          "relationship": "server documentation reference only"
+        }
+      ],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "2491169f7d103debf584b129f38d1e3ba22f53c6a44ad9d5c951724f66925590",
+        "SKILL.md": "992757293bf11395fa1d8689a5cb2084b7f9193cb0ccf18b942622a940c28605"
+      }
+    },
+    {
+      "name": "shrine-vision-classifier",
+      "canonical_path": ".agents/skills/shrine-vision-classifier",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "b0468b44607266b84851cd501857d5f01f8b96ee562e041241a77779feaf151f",
+        "SKILL.md": "dcdb67a0c87a4ed779528b53adcecc378252226fff2f6526421fadbf83945867"
+      }
+    },
+    {
+      "name": "arduino-usb-relic",
+      "canonical_path": ".agents/skills/arduino-usb-relic",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "b0468b44607266b84851cd501857d5f01f8b96ee562e041241a77779feaf151f",
+        "SKILL.md": "0d9c96c3efd76b31cb603ccf6e842857cd08f54ed302e6a1fcabb7fbaf1146b4"
+      }
+    },
+    {
+      "name": "offline-game-qa",
+      "canonical_path": ".agents/skills/offline-game-qa",
+      "license": "MIT",
+      "authorship": "library-authored",
+      "upstreams": [],
+      "files": {
+        "LICENSE": "e8b047854bd35a69db75d8067377aac32af4327225fae47aebb2531b91e446bf",
+        "NOTICE.md": "b0468b44607266b84851cd501857d5f01f8b96ee562e041241a77779feaf151f",
+        "SKILL.md": "4ec05223cc07088a67de1eef77afc0aec8b6d51d53176fa685b37b9f0df14a8d"
+      }
+    }
+  ],
+  "project_spec": {
+    "repository": "cstljuan/amulith",
+    "revision": "d21a2c1",
+    "file": "DECISIONS.md",
+    "engine": "Vite + TypeScript + Three.js (no React)"
+  },
+  "verification_tool": {
+    "canonical_path": "scripts/verify_skill_snapshot.py",
+    "snapshot_path": "tools/verify-skills.py",
+    "sha256": "573ef4f5cc0466eb839b28cf84344e0b0f70c919a580c525b04c2eae7d4cdd10"
+  }
+}

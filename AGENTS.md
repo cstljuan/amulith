@@ -1,6 +1,6 @@
 # Agent rules for Amulith
 
-Read this, the LOCKED SPEC in `DECISIONS.md`, and `protocol/` before any task. The spec is the source of truth for what we are building. Skills are installed per machine (not in this repo); use the ones relevant to your lane.
+Read this, the LOCKED SPEC in `DECISIONS.md`, and `protocol/` before any task. The spec is the source of truth for what we are building. Reviewed skills are available project-locally in `.agents/skills/` (Codex) and `.claude/skills/` (Claude Code); use the ones relevant to your lane and see `skills-sync.json` and `SKILLS.md` for canonical source pins and sync rules.
 
 ## Coordination
 

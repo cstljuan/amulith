@@ -1,0 +1,78 @@
+{
+  "checked": "2026-10-10",
+  "source_commit": "43e0d8c66c4239f992a0c853dd83bade84d73d42",
+  "results": [
+    {
+      "harness": "codex",
+      "ok": true,
+      "method": "fresh app-server skills/list, forceReload",
+      "model_prompt_sent": false,
+      "skills": [
+        {
+          "name": "arduino-usb-relic",
+          "path": ".agents/skills/arduino-usb-relic/SKILL.md"
+        },
+        {
+          "name": "build123d-mcp-workflow",
+          "path": ".agents/skills/build123d-mcp-workflow/SKILL.md"
+        },
+        {
+          "name": "jetson-local-director",
+          "path": ".agents/skills/jetson-local-director/SKILL.md"
+        },
+        {
+          "name": "offline-game-qa",
+          "path": ".agents/skills/offline-game-qa/SKILL.md"
+        },
+        {
+          "name": "shrine-vision-classifier",
+          "path": ".agents/skills/shrine-vision-classifier/SKILL.md"
+        },
+        {
+          "name": "threejs-paper-game",
+          "path": ".agents/skills/threejs-paper-game/SKILL.md"
+        },
+        {
+          "name": "threejs-scene-workflow",
+          "path": ".agents/skills/threejs-scene-workflow/SKILL.md"
+        }
+      ]
+    },
+    {
+      "harness": "claude-code",
+      "ok": true,
+      "method": "fresh SDK initialize command inventory",
+      "model_prompt_sent": false,
+      "skills": [
+        {
+          "name": "arduino-usb-relic",
+          "path": ".claude/skills/arduino-usb-relic/SKILL.md"
+        },
+        {
+          "name": "build123d-mcp-workflow",
+          "path": ".claude/skills/build123d-mcp-workflow/SKILL.md"
+        },
+        {
+          "name": "jetson-local-director",
+          "path": ".claude/skills/jetson-local-director/SKILL.md"
+        },
+        {
+          "name": "offline-game-qa",
+          "path": ".claude/skills/offline-game-qa/SKILL.md"
+        },
+        {
+          "name": "shrine-vision-classifier",
+          "path": ".claude/skills/shrine-vision-classifier/SKILL.md"
+        },
+        {
+          "name": "threejs-paper-game",
+          "path": ".claude/skills/threejs-paper-game/SKILL.md"
+        },
+        {
+          "name": "threejs-scene-workflow",
+          "path": ".claude/skills/threejs-scene-workflow/SKILL.md"
+        }
+      ]
+    }
+  ]
+}
