@@ -2,7 +2,7 @@
 
 Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.
 
-## Generated with AI (Higgsfield, model GPT Image 2.5), directed by Juan Castillo, 2026-10-11
+## Made by Juan Castillo in Aseprite from AI-generated sources (GPT Image 2.5), 2026-10-11
 
 Reference key art (`game/docs/keyart/`) was generated first from a text prompt; every asset below used it, or the approved Wanderer, as the image reference. Assets were trimmed and fitted to their in-game card by script.
 

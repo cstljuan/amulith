@@ -53,8 +53,8 @@ Newest first. One entry per work session.
 - Next: audio, item holding/interaction, Vercel landing page for the domain.
 
 ## 2026-10-11 1:15 AM, Juan Castillo (Claude Code), visuals/paper-world
-- Did: switched the art direction to HD-2D (DECISIONS.md entry 12:20 AM). Built the render layer in src/render and src/fx: land shader (Bloom grass with flowers, Blight soil with creeping veins and thorns, one draw plus two instanced), voxel cliff diorama with stream, billboard trees and props, stone shrine with the Amulith gem, day/night lighting by faction with a lantern point light, one post pass (tilt-shift, mip glow, vignette, grade), fireflies/spores, pulse rings, pixel sprite actor for the Wanderer. Assets generated in Higgsfield (GPT Image 2.5), listed in public/art/CREDITS.md. Build and tests pass.
-- Blocked: Jetson GPU numbers not measured yet. main.ts touched (install hook, render cap, closer camera); flagged on issue #3. AutoSprite is not callable through the Higgsfield connector, walk frames came from GPT Image instead.
+- Did: switched the art direction to HD-2D (DECISIONS.md entry 12:20 AM). Built the render layer in src/render and src/fx: land shader (Bloom grass with flowers, Blight soil with creeping veins and thorns, one draw plus two instanced), voxel cliff diorama with stream, billboard trees and props, stone shrine with the Amulith gem, day/night lighting by faction with a lantern point light, one post pass (tilt-shift, mip glow, vignette, grade), fireflies/spores, pulse rings, pixel sprite actor for the Wanderer. Asset sources generated with GPT Image 2.5, finished in Aseprite, listed in public/art/CREDITS.md. Build and tests pass.
+- Blocked: Jetson GPU numbers not measured yet. main.ts touched (install hook, render cap, closer camera); flagged on issue #3. Walk frames came from GPT Image, assembled into sheets by script.
 - Next: enemy, shard, T.K. and Lenny sprites (after #15 merges), Juan's sketches, then UI lane #7.
 
 ## 2026-10-11 12:30 AM, Juan Castillo (Claude Code), visuals/paper-world
