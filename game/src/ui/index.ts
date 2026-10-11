@@ -49,6 +49,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     <div class="judge" hidden><h3>JUDGE MODE / ON THE JETSON</h3><dl data-judge></dl>
       <div class="note">Live from the device. n/a means the device did not report it.</div></div>`;
   document.body.append(root);
+  // Lay out for 1080p and scale up on bigger screens (the TV reports 3840 x 2160 at 1x).
+  const fit = () => { root.style.zoom = String(Math.max(1, window.innerHeight / 1080)); };
+  fit(); window.addEventListener('resize', fit);
   const $ = <T extends HTMLElement = HTMLElement>(sel: string) => root.querySelector<T>(sel)!;
   const hud = $('.hud'), title = $('.title'), pause = $('.pause'), judge = $('.judge'), dialogue = $('.dialogue');
 
@@ -162,6 +165,6 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
   return {
     frame,
-    dispose() { offs.forEach(off => off()); audio.pause(); root.remove(); },
+    dispose() { offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.pause(); root.remove(); },
   };
 }
