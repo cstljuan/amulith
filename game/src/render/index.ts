@@ -6,6 +6,7 @@ import { Motes } from '../fx/particles';
 import { PulseRings, randomShape } from '../fx/pulses';
 import { EnemySprites, ShardSprites } from './actors';
 import { Diorama } from './diorama';
+import { lanternUniforms, patchTree } from './lanternLight';
 export { resolveCollisions } from './diorama';
 import { Ground } from './ground';
 import { Lighting } from './lighting';
@@ -48,6 +49,7 @@ export function installVisuals(host: VisualsHost) {
   post.enabled = params.get('post') !== '0';
   ground.reducedMotion = rings.reducedMotion = reducedMotion;
   scene.add(ground.group, diorama.group, motes.points, rings.group, enemies.group, shards.group);
+  patchTree(ground.group); patchTree(diorama.group);
 
   const stand = wandererStandIn();
   const actor = new SpriteActor(stand.texture, stand.meta, 3.0, 'wanderer/sheet');
@@ -68,7 +70,7 @@ export function installVisuals(host: VisualsHost) {
       if (p) for (let i = 0; i < 2; i++) rings.spawn(p.x, p.z, e.faction, randomShape(1.2 + i * 1.6));
     }),
     events.on('land', e => ground.apply(e.changes)),
-    events.on('faction', e => lighting.setFaction(e.faction)),
+    events.on('faction', e => { lighting.setFaction(e.faction); void actor.loadSheet(e.faction ? `wanderer/sheet-${e.faction}` : 'wanderer/sheet'); }),
     events.on('pulse-applied', e => {
       // The rules convert a radius-3 circle; the shape's spikes convert extra lobes so no two pulses match.
       const shape = randomShape();
@@ -101,10 +103,13 @@ export function installVisuals(host: VisualsHost) {
       actor.update(dt, player.visual.position.x - last.x, player.visual.position.z - last.z);
       last.copy(player.visual.position);
       lighting.update(dt, player.visual.position, time, reducedMotion);
+      lanternUniforms.uLantern.value.set(player.visual.position.x, player.visual.position.z, lighting.lanternRadius);
+      lanternUniforms.uLanternDark.value = 0.3 + 0.45 * lighting.night;
+      patchTree(enemies.group); patchTree(shards.group); patchTree(player.visual);
       ground.setNight(lighting.night);
       ground.update(dt, time);
       diorama.update(time);
-      rings.update(dt);
+      rings.update(dt, size.y);
       enemies.update(dt);
       shards.update(dt);
       motes.update(time, lighting.night, size.y, reducedMotion);

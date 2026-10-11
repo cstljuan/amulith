@@ -14,7 +14,7 @@ export class Lighting {
   readonly clear = new THREE.Color();
   night = 0.5;
   private target = 0.5;
-  private lanternRadius = 7.5;
+  lanternRadius = 7.5;
   private b = new THREE.Color();
 
   constructor(private scene: THREE.Scene) {

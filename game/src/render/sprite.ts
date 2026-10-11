@@ -4,7 +4,7 @@ import { pixelTexture } from './pixelArt';
 export interface SheetMeta { frameWidth: number; frameHeight: number; columns: number; fps: number; animations: Record<string, number[]> }
 
 // A pixel sprite on a camera-facing card with feet at its origin. Every motion is a drawn frame:
-// front, back and side walks and idles (left mirrors the side), one-shot action poses, hit flash,
+// eight-direction walks and idles (west mirrors east), one-shot action poses, hit flash,
 // and a contact shadow.
 export class SpriteActor {
   readonly root = new THREE.Group();
@@ -15,7 +15,7 @@ export class SpriteActor {
   private animation = '';
   private clock = 0;
   private facing = 1;
-  private direction: 'front' | 'back' | 'side' = 'front';
+  private direction: 's' | 'se' | 'e' | 'ne' | 'n' = 's';
   private action = '';
   private actionLeft = 0;
   private hit = 0;
@@ -33,7 +33,7 @@ export class SpriteActor {
   }
 
   // Loads public/art/<path>.json and <path>.png (for example an AutoSprite export). Missing files keep the stand-in.
-  private async loadSheet(path: string) {
+  async loadSheet(path: string) {
     try {
       const res = await fetch(`${import.meta.env.BASE_URL}art/${path}.json`);
       if (!res.ok) return;
@@ -61,8 +61,11 @@ export class SpriteActor {
     this.clock += dt;
     const moving = Math.hypot(dx, dz) > 0.0005;
     if (moving) {
-      if (Math.abs(dz) > Math.abs(dx) * 0.9) this.direction = dz > 0 ? 'front' : 'back';
-      else { this.direction = 'side'; this.facing = dx < 0 ? -1 : 1; }
+      // Eight directions from the motion angle (+z is toward the camera, south). West-facing views
+      // mirror their east-facing frames.
+      const octant = (Math.round(Math.atan2(dz, dx) / (Math.PI / 4)) + 8) % 8;
+      const map = [['e', 1], ['se', 1], ['s', 1], ['se', -1], ['e', -1], ['ne', -1], ['n', 1], ['ne', 1]] as const;
+      this.direction = map[octant][0]; this.facing = map[octant][1];
     }
     this.actionLeft -= dt;
     const base = (moving ? 'walk' : 'idle');
@@ -73,8 +76,7 @@ export class SpriteActor {
     const img = this.texture.image as { width: number; height: number };
     const col = frame % this.meta.columns, row = Math.floor(frame / this.meta.columns);
     this.texture.offset.set(col * this.meta.frameWidth / img.width, 1 - (row + 1) * this.meta.frameHeight / img.height);
-    // Left is the mirrored side view; front and back are never mirrored.
-    const mirror = this.direction === 'side' || this.animation === this.action ? this.facing : 1;
+    const mirror = this.facing;
     this.card.scale.set(mirror, 1, 1);
     this.hit = Math.max(0, this.hit - dt * 2.5);
     this.card.material.emissive.setRGB(this.hit * 0.8, this.hit * 0.1, this.hit * 0.1);
@@ -82,7 +84,9 @@ export class SpriteActor {
 
   private pick(base: string): string {
     const a = this.meta.animations;
-    return [`${base}_${this.direction}`, `${base}_side`, base, 'idle_side'].find(n => a[n]) ?? Object.keys(a)[0];
+    // Older sheets only have front/back/side; enemies only have side.
+    const legacy = { s: 'front', se: 'front', e: 'side', ne: 'back', n: 'back' }[this.direction];
+    return [`${base}_${this.direction}`, `${base}_${legacy}`, `${base}_side`, base, 'idle_side'].find(n => a[n]) ?? Object.keys(a)[0];
   }
 
   dispose(): void { this.card.geometry.dispose(); this.card.material.dispose(); this.shadow.geometry.dispose(); this.shadow.material.dispose(); this.texture.dispose(); }
