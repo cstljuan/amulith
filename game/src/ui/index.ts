@@ -4,9 +4,14 @@ import type { Input } from '../input/Input';
 import type { GameSession } from '../rules/session';
 import { onSettings, settings, updateSettings } from './settings';
 import { installAudio } from '../audio';
+import { LEVEL_LORE, type LevelId } from '../lore/levels';
+import { CODEX_ENTRIES } from '../lore/codex';
 import './ui.css';
 
 const ZONE_NAMES = { hollow: 'Mushroom Hollow', glade: 'Petal Glade', rootdeep: 'Rootdeep' } as const;
+const CODEX_KEY = 'amulith.codex';
+const loadCodex = (): Set<string> => { try { const v = JSON.parse(localStorage.getItem(CODEX_KEY) ?? '[]'); return new Set(Array.isArray(v) ? v.filter(x => typeof x === 'string') : []); } catch { return new Set(); } };
+const INTRO_SECONDS = 7;
 const art = (path: string) => `${import.meta.env.BASE_URL}art/${path}`;
 const na = (v: number | null | undefined, unit = '', digits = 0) => (v === null || v === undefined ? 'n/a' : `${v.toFixed(digits)}${unit}`);
 
@@ -40,6 +45,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     </div>
     <div class="title">
       <h1>AMULITH</h1>
+      <div class="flavor">${LEVEL_LORE.grove.subtitle}</div>
       <p>Place him on the stone.</p>
       <div class="choices">
         <div class="choice bloom on" data-choice="bloom"><h2>Bloom</h2><span>Wake the Knight. Sleepy Lenny.</span></div>
@@ -47,8 +53,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       </div>
       <div class="hint"><i class="btn stick">L</i>choose <i class="btn a">A</i>begin, or place a figure on the shrine</div>
     </div>
+    <div class="level-intro gone" role="status" aria-live="polite"><h2 data-intro-name></h2><div class="sub" data-intro-sub></div><div class="lines" data-intro-lines></div></div>
     <div class="ending" hidden><div class="ending-inner">
-      <h2 data-end-title></h2><p data-end-text></p><blockquote data-end-line></blockquote>
+      <h2 data-end-title></h2><p data-end-text></p><div class="outro" data-end-outro></div><blockquote data-end-line></blockquote>
       <div class="credits"><h3>Credits</h3>
         <p>Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.</p>
         <p>Built by Juan Castillo and Lawrence Capistrano. Amulith speaks through an open model running on the NVIDIA Jetson Orin Nano.</p>
@@ -58,6 +65,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     <div class="pause" hidden>
       <div class="panel"><h2>Paused</h2><div class="say" data-say></div><ul data-menu></ul>
         <div class="hint"><i class="btn stick">L</i>move <i class="btn a">A</i>select <i class="btn b">B</i>resume</div></div>
+      <div class="panel codex" data-codex hidden><h2>Codex</h2><div class="say" data-codex-count></div>
+        <div class="codex-body"><ul data-codex-list></ul><article data-codex-detail></article></div>
+        <div class="hint"><i class="btn stick">L</i>move <i class="btn b">B</i>back</div></div>
     </div>
     <div class="judge" hidden><h3>JUDGE MODE / ON THE JETSON</h3><dl data-judge></dl>
       <div class="note">Live from the device. n/a means the device did not report it.</div></div>
@@ -77,7 +87,9 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       : bloom ? ['The Knight wakes.', 'The last shard breaks. T.K. stands, and the gem goes dark.'] : ['The Gem is whole.', 'The shards fuse. The treeline closes behind you.'];
     $('[data-end-title]').textContent = head; $('[data-end-text]').textContent = text;
     $('[data-end-line]').textContent = lastDirector ? `"${lastDirector.line}"` : '';
-    ending.hidden = false; hud.hidden = true; pause.hidden = true;
+    const outro = e.result === 'win' ? LEVEL_LORE.deepwood[bloom ? 'outroBloom' : 'outroBlight'] : [];
+    $('[data-end-outro]').replaceChildren(...outro.map(l => Object.assign(document.createElement('div'), { textContent: l })));
+    ending.hidden = false; hud.hidden = true; pause.hidden = true; intro.classList.add('gone'); introHideAt = 0;
   };
 
   // State fed by events.
@@ -85,6 +97,36 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
   let run: GameEvents['run'] | null = null, shardList: GameEvents['shards'] = [], lantern = 0.5;
   let mode = 'offline', thinking = false, typed = 0, typeText = '', hideAt = 0, clock = 0;
   let titleOut = 0, fps = 0, frames = 0, fpsClock = 0, choice: 'bloom' | 'blight' = 'bloom', menuIndex = 0, lastY = 0;
+
+  // Level intro card. The level manager's 'level' event (if present) and run start both call this.
+  const intro = $('.level-intro');
+  let introHideAt = 0, introId: LevelId | null = null, introAt = -10;
+  const discovered = loadCodex();
+  const discover = (id: string) => {
+    if (discovered.has(id)) return;
+    discovered.add(id);
+    try { localStorage.setItem(CODEX_KEY, JSON.stringify([...discovered])); } catch { /* storage blocked */ }
+  };
+  const showLevelIntro = (id: LevelId) => {
+    const lore = LEVEL_LORE[id];
+    if (!lore || (introId === id && clock - introAt < 1)) return;
+    introId = id; introAt = clock; introHideAt = clock + INTRO_SECONDS;
+    $('[data-intro-name]').textContent = lore.name; $('[data-intro-sub]').textContent = lore.subtitle;
+    $('[data-intro-lines]').replaceChildren(...lore.introLines.map(l => Object.assign(document.createElement('p'), { textContent: l })));
+    intro.classList.remove('gone');
+    for (const entry of CODEX_ENTRIES) if (entry.discoverAt.some(d => d.kind === 'level' && d.id === id)) discover(entry.id);
+  };
+  let codexOpen = false, codexIndex = 0;
+  const codexEl = $('[data-codex]'), panelEl = $('.pause .panel');
+  const drawCodex = () => {
+    $('[data-codex-count]').textContent = `${CODEX_ENTRIES.filter(c => discovered.has(c.id)).length} of ${CODEX_ENTRIES.length} found`;
+    $('[data-codex-list]').innerHTML = CODEX_ENTRIES.map((c, i) => `<li class="${i === codexIndex ? 'on' : ''}${discovered.has(c.id) ? '' : ' locked'}"><span>${discovered.has(c.id) ? c.title : 'Undiscovered'}</span></li>`).join('');
+    const c = CODEX_ENTRIES[codexIndex];
+    $('[data-codex-detail]').innerHTML = discovered.has(c.id)
+      ? `<h3>${c.title}</h3><small>${c.provenance === 'knight-hacks-canon' ? 'Knight Hacks canon' : 'Amulith original'} / ${LEVEL_LORE[c.level].name}</small><p>${c.text}</p>`
+      : '<h3>Undiscovered</h3><p>Keep walking. The forest has not told you this yet.</p>';
+  };
+  const setCodex = (open: boolean) => { codexOpen = open; codexIndex = 0; codexEl.hidden = !open; panelEl.hidden = open; };
 
   const applySettings = () => {
     audio.setSettings(settings);
@@ -125,17 +167,22 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       audio.select();
     }),
     events.on('faction', e => { hud.hidden = !e.faction; }),
+    // Level manager (Lawrence's PR) emits 'level' with { id }; not on main yet, so it is read through an untyped bus.
+    (events as unknown as EventBus<Record<string, { id?: LevelId }>>).on('level', e => { if (e.id) showLevelIntro(e.id); }),
+    events.on('shard-resolved', e => { for (const entry of CODEX_ENTRIES) if (entry.discoverAt.some(d => d.kind === 'item' && d.id === e.id)) discover(entry.id); }),
     events.on('shards', list => { shardList = list; }),
     events.on('lantern', e => { lantern = e.value; }),
     events.on('run', e => {
       const was = run?.phase; run = e;
-      if (e.phase === 'attract') { hud.hidden = true; ending.hidden = true; }
+      if (e.phase === 'attract') { hud.hidden = true; ending.hidden = true; intro.classList.add('gone'); introHideAt = 0; introId = null; }
+      if (e.phase === 'playing' && was !== 'playing') showLevelIntro('grove');
       if (e.phase === 'ending' && was !== 'ending') showEnding(e);
     }),
   ];
 
   const menu = () => [
     { label: 'Resume', value: '', run: () => events.emit('pause', { paused: false }) },
+    { label: 'Codex', value: `${CODEX_ENTRIES.filter(c => discovered.has(c.id)).length}/${CODEX_ENTRIES.length}`, run: () => setCodex(true) },
     { label: 'Reduced motion', value: settings.reducedMotion ? 'On' : 'Off', run: () => updateSettings({ reducedMotion: !settings.reducedMotion }) },
     { label: 'Subtitle size', value: settings.subtitleSize, run: () => updateSettings({ subtitleSize: settings.subtitleSize === 'S' ? 'M' : settings.subtitleSize === 'M' ? 'L' : 'S' }) },
     { label: 'Volume', value: `${Math.round(settings.volume * 100)}%`, run: () => updateSettings({ volume: settings.volume >= 1 ? 0 : Math.min(1, Math.round((settings.volume + 0.2) * 10) / 10) }) },
@@ -180,13 +227,19 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     } else if (run?.phase === 'ending') {
       /* ending screen stays until the run resets to attract */
     } else if (session.paused) {
-      if (pause.hidden) { pause.hidden = false; menuIndex = 0; }
+      if (pause.hidden) { pause.hidden = false; menuIndex = 0; setCodex(false); }
       $('[data-say]').textContent = shrine?.state === 'empty' ? 'Put him back.' : '';
-      const items = menu();
-      if (step) { menuIndex = (menuIndex + step + items.length) % items.length; audio.select(); }
-      if (input.pressed('pulse')) { audio.select(); items[menuIndex].run(); }
-      else if (input.pressed('dash')) events.emit('pause', { paused: false });
-      drawMenu();
+      if (codexOpen) {
+        if (step) { codexIndex = (codexIndex + step + CODEX_ENTRIES.length) % CODEX_ENTRIES.length; audio.select(); }
+        if (input.pressed('dash') || input.pressed('pulse')) { audio.select(); setCodex(false); }
+        drawCodex();
+      } else {
+        const items = menu();
+        if (step) { menuIndex = (menuIndex + step + items.length) % items.length; audio.select(); }
+        if (input.pressed('pulse')) { audio.select(); items[menuIndex].run(); }
+        else if (input.pressed('dash')) events.emit('pause', { paused: false });
+        drawMenu();
+      }
     } else if (!pause.hidden) pause.hidden = true;
 
     // HUD
@@ -213,6 +266,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
     // Typed subtitles, then fade.
     if (typed < typeText.length) { typed = Math.min(typeText.length, typed + dt * 45); $('[data-line]').textContent = typeText.slice(0, Math.floor(typed)); }
+    if (introHideAt && clock > introHideAt) { intro.classList.add('gone'); introHideAt = 0; }
     if (!thinking && hideAt && clock > hideAt) { dialogue.classList.add('gone'); hideAt = 0; }
 
     if (settings.judge) {
@@ -232,6 +286,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
   return {
     frame,
+    showLevelIntro,
     dispose() { offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.dispose(); root.remove(); },
   };
 }
