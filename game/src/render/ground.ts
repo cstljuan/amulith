@@ -51,9 +51,14 @@ float blightAt(vec2 g) {
 }`)
         .replace('#include <map_fragment>', `
 vec2 tuv = vGround / uTile;
-vec3 grassC = texture2D(map, tuv).rgb;
-vec3 soilC = texture2D(uSoil, tuv).rgb;
+float dn = 0.5 + 0.5 * sin(vGround.x * 0.13 + 1.0) * sin(vGround.y * 0.17);
+vec2 tuv2 = mat2(0.8, -0.6, 0.6, 0.8) * tuv * 0.63 + 0.37;
+vec3 grassC = mix(texture2D(map, tuv).rgb, texture2D(map, tuv2).rgb, dn);
+vec3 soilC = mix(texture2D(uSoil, tuv).rgb, texture2D(uSoil, tuv2).rgb, dn);
 float b = blightAt(vGround);
+// Blend into the terrain's own Bloom/Blight split at the rectangle's edge so no straight seam shows.
+float rim = max(smoothstep(27.5, 30.0, abs(vGround.x)), smoothstep(17.5, 20.0, abs(vGround.y)));
+b = mix(b, smoothstep(6.0, 18.0, vGround.x), rim);
 diffuseColor.rgb *= mix(grassC, soilC, b);`)
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
 vec2 va = texture2D(uVein, vGround / 12.0).rg;

@@ -3,18 +3,21 @@ import { pixelTexture } from './pixelArt';
 
 export interface SheetMeta { frameWidth: number; frameHeight: number; columns: number; fps: number; animations: Record<string, number[]> }
 
-// A pixel sprite on a camera-facing card with feet at its origin: frame animation, facing flip
-// (scale x through zero), walk bob, landing squash, hit wobble and a contact shadow.
+// A pixel sprite on a camera-facing card with feet at its origin. Every motion is a drawn frame:
+// front, back and side walks and idles (left mirrors the side), one-shot action poses, hit flash,
+// and a contact shadow.
 export class SpriteActor {
   readonly root = new THREE.Group();
   private card: THREE.Mesh<THREE.PlaneGeometry, THREE.MeshLambertMaterial>;
   private shadow: THREE.Mesh<THREE.CircleGeometry, THREE.MeshBasicMaterial>;
   private meta: SheetMeta;
   private texture: THREE.Texture;
-  private animation = 'idle';
+  private animation = '';
   private clock = 0;
   private facing = 1;
-  private flip = 1;
+  private direction: 'front' | 'back' | 'side' = 'front';
+  private action = '';
+  private actionLeft = 0;
   private hit = 0;
   reducedMotion = false;
 
@@ -47,28 +50,37 @@ export class SpriteActor {
     } catch { /* stand-in stays */ }
   }
 
-  play(name: string): void { if (name !== this.animation && this.meta.animations[name]) { this.animation = name; this.clock = 0; } }
-  face(direction: number): void { if (direction) this.facing = Math.sign(direction); }
-  hurt(): void { this.hit = 1; }
+  // One-shot pose (pulse, ask, hurt, dash) held for `seconds`, then back to idle or walk.
+  act(name: string, seconds: number): void { if (this.meta.animations[name]) { this.action = name; this.actionLeft = seconds; } }
+  hurt(): void { this.hit = 1; this.act('hurt', 0.45); }
 
-  update(dt: number, moving: boolean): void {
+  // dx, dz: this frame's movement in world units. +z walks toward the camera (front).
+  update(dt: number, dx: number, dz: number): void {
     this.clock += dt;
-    this.play(moving ? 'walk' : 'idle');
-    const frames = this.meta.animations[this.animation];
+    const moving = Math.hypot(dx, dz) > 0.0005;
+    if (moving) {
+      if (Math.abs(dz) > Math.abs(dx) * 0.9) this.direction = dz > 0 ? 'front' : 'back';
+      else { this.direction = 'side'; this.facing = dx < 0 ? -1 : 1; }
+    }
+    this.actionLeft -= dt;
+    const base = (moving ? 'walk' : 'idle');
+    const name = this.actionLeft > 0 && this.action ? this.action : this.pick(base);
+    if (name !== this.animation) { this.animation = name; this.clock = 0; }
+    const frames = this.meta.animations[name];
     const frame = frames[Math.floor(this.clock * this.meta.fps) % frames.length];
     const img = this.texture.image as { width: number; height: number };
     const col = frame % this.meta.columns, row = Math.floor(frame / this.meta.columns);
     this.texture.offset.set(col * this.meta.frameWidth / img.width, 1 - (row + 1) * this.meta.frameHeight / img.height);
-    // Paper Mario turn: scale x eases through zero toward the new facing.
-    this.flip = this.reducedMotion ? this.facing : THREE.MathUtils.lerp(this.flip, this.facing, 1 - Math.exp(-dt * 18));
-    const bob = moving && !this.reducedMotion ? Math.abs(Math.sin(this.clock * 9)) * 0.08 : 0;
-    const squash = this.reducedMotion ? 1 : moving ? 1 - Math.abs(Math.sin(this.clock * 9)) * 0.04 : 1 + Math.sin(this.clock * 2.4) * 0.012;
+    // Left is the mirrored side view; front and back are never mirrored.
+    const mirror = this.direction === 'side' || this.animation === this.action ? this.facing : 1;
+    this.card.scale.set(mirror, 1, 1);
     this.hit = Math.max(0, this.hit - dt * 2.5);
-    const wobble = this.reducedMotion ? 0 : Math.sin(this.hit * 30) * this.hit * 0.25;
-    this.card.position.y = bob;
-    this.card.scale.set(this.flip * (2 - squash), squash, 1);
-    this.card.rotation.z = wobble + (moving && !this.reducedMotion && this.meta.animations.walk.length < 2 ? Math.sin(this.clock * 9) * 0.05 : 0);
     this.card.material.emissive.setRGB(this.hit * 0.8, this.hit * 0.1, this.hit * 0.1);
+  }
+
+  private pick(base: string): string {
+    const a = this.meta.animations;
+    return [`${base}_${this.direction}`, `${base}_side`, base, 'idle_side'].find(n => a[n]) ?? Object.keys(a)[0];
   }
 
   dispose(): void { this.card.geometry.dispose(); this.card.material.dispose(); this.shadow.geometry.dispose(); this.shadow.material.dispose(); this.texture.dispose(); }
@@ -96,5 +108,5 @@ export function wandererStandIn(): { texture: THREE.Texture; meta: SheetMeta } {
     draw(0, 0, 0, 0); draw(F.w, 0, 0, 1);
     draw(F.w * 2, 0, 2, 0); draw(F.w * 3, 1, 1, 1); draw(F.w * 4, 2, 0, 0); draw(F.w * 5, 1, 1, 1);
   }, 5);
-  return { texture, meta: { frameWidth: F.w, frameHeight: F.h, columns: 6, fps: 8, animations: { idle: [0, 1], walk: [2, 3, 4, 5] } } };
+  return { texture, meta: { frameWidth: F.w, frameHeight: F.h, columns: 6, fps: 8, animations: { idle_side: [0, 1], walk_side: [2, 3, 4, 5] } } };
 }

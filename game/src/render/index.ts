@@ -3,12 +3,14 @@ import type { Faction } from '@protocol/messages';
 import type { EventBus, GameEvents } from '../core/events';
 import type { Land, LandCell } from '../rules/land';
 import { Motes } from '../fx/particles';
-import { PulseRings } from '../fx/pulses';
+import { PulseRings, randomShape } from '../fx/pulses';
 import { Diorama } from './diorama';
+export { resolveCollisions } from './diorama';
 import { Ground } from './ground';
 import { Lighting } from './lighting';
 import { Post } from './post';
 import { SpriteActor, wandererStandIn } from './sprite';
+import { onSettings, settings } from '../ui/settings';
 
 export interface VisualsHost {
   renderer: THREE.WebGLRenderer;
@@ -25,7 +27,7 @@ export interface VisualsHost {
 export function installVisuals(host: VisualsHost) {
   const { renderer, scene, camera, events, player, session } = host;
   const params = new URLSearchParams(window.location.search);
-  const reducedMotion = params.get('reducedMotion') === '1' || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let reducedMotion = settings.reducedMotion;
   renderer.toneMapping = THREE.NeutralToneMapping;
   renderer.toneMappingExposure = 1.05;
   if (host.world) host.world.group.visible = false;
@@ -52,9 +54,19 @@ export function installVisuals(host: VisualsHost) {
   ground.apply(snapshot, true);
   lighting.setFaction(session.faction);
   const offs = [
+    onSettings(s => { reducedMotion = ground.reducedMotion = rings.reducedMotion = actor.reducedMotion = s.reducedMotion; }),
     events.on('land', e => ground.apply(e.changes)),
     events.on('faction', e => lighting.setFaction(e.faction)),
-    events.on('pulse-applied', e => rings.spawn(e.x, e.z, e.faction)),
+    events.on('pulse-applied', e => {
+      // The rules convert a radius-3 circle; the shape's spikes convert extra lobes so no two pulses match.
+      const shape = randomShape();
+      for (const s of shape.spikes) for (const t of [0.55, 0.9]) {
+        const d = 3 + s.length * t;
+        session.land.convert(e.x + Math.cos(s.angle) * d, e.z + Math.sin(s.angle) * d, 0.6 + s.length * (1 - t) * 0.6, e.faction);
+      }
+      rings.spawn(e.x, e.z, e.faction, shape); actor.act('pulse', 0.35);
+    }),
+    events.on('ask', () => actor.act('ask', 0.9)),
     events.on('game-event', e => { if (e.kind === 'player_hurt') actor.hurt(); }),
     // `lantern` arrives with the game-rules lantern (PR #15); radius is in world units.
     (events as unknown as EventBus<Record<string, { radius?: number }>>).on('lantern', e => { if (typeof e.radius === 'number') lighting.setLanternRadius(e.radius); }),
@@ -69,10 +81,8 @@ export function installVisuals(host: VisualsHost) {
   return {
     render(dt: number) {
       time += dt;
-      const moved = player.visual.position.distanceTo(last) > 0.002;
+      actor.update(dt, player.visual.position.x - last.x, player.visual.position.z - last.z);
       last.copy(player.visual.position);
-      actor.face(Math.sign(player.cutout.scale.x));
-      actor.update(dt, moved);
       lighting.update(dt, player.visual.position, time, reducedMotion);
       ground.setNight(lighting.night);
       ground.update(dt, time);

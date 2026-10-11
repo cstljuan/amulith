@@ -6,8 +6,9 @@ import { Input } from './input/Input';
 import { Wanderer } from './player/Wanderer';
 import { createWorld, zoneAt, ZONES } from './world/world';
 import { GameSession } from './rules/session';
-import { installVisuals } from './render';
+import { installVisuals, resolveCollisions } from './render';
 import { sizeRenderer } from './render/resolution';
+import { installUI } from './ui';
 import './style.css';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
@@ -39,6 +40,7 @@ const unsubscribe = events.on('pause', event => {
 });
 session.start();
 const visuals = installVisuals({ renderer, scene, camera, events, player, session, world });
+const ui = installUI({ events, input, session, player, renderer });
 const resize = () => {
   sizeRenderer(renderer, window.innerWidth, window.innerHeight);
   visuals.resize();
@@ -54,7 +56,7 @@ const stop = startLoop({
     if (input.pressed('pause')) events.emit('pause', { paused: !paused });
     if (!paused && input.pressed('pulse')) events.emit('pulse', { x: player.position.x, z: player.position.z });
   },
-  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); },
+  update(dt) { session.update(dt); player.update(dt, paused ? { x: 0, y: 0 } : input.actions.move); resolveCollisions(player.position); },
   render(alpha, dt) {
     target.lerp(player.position, 1 - Math.exp(-6 * dt));
     desired.copy(target).add(offset);
@@ -65,12 +67,13 @@ const stop = startLoop({
     const share = session.land.share();
     status.textContent = `${session.faction ?? 'Choose: 1 Bloom / 2 Blight'} | ${paused ? 'Paused' : 'Playing'} | ${session.client.mode} | Bloom ${Math.round(share.bloom*100)}% / Blight ${Math.round(share.blight*100)}%`;
     visuals.render(dt);
+    ui.frame(dt);
   },
 });
 
 // Export the integration surface for lane modules and browser verification.
 export { config, events, input, player, session };
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  stop(); visuals.dispose(); session.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  stop(); ui.dispose(); visuals.dispose(); session.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
   window.removeEventListener('resize', resize);
 });

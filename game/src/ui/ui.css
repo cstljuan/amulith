@@ -1,0 +1,83 @@
+@font-face { font-family: 'Amulith Serif'; src: url('./fonts/NotoSerif-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; }
+@font-face { font-family: 'Amulith Serif'; src: url('./fonts/NotoSerif-Italic.ttf') format('truetype'); font-weight: 400; font-style: italic; }
+@font-face { font-family: 'Amulith Serif'; src: url('./fonts/NotoSerif-Bold.ttf') format('truetype'); font-weight: 700; }
+@font-face { font-family: 'Amulith Sans'; src: url('./fonts/NotoSans-Regular.ttf') format('truetype'); font-weight: 400; }
+@font-face { font-family: 'Amulith Sans'; src: url('./fonts/NotoSans-Bold.ttf') format('truetype'); font-weight: 700; }
+
+:root {
+  --ink: #120d1a;
+  --night: rgba(18, 13, 26, 0.82);
+  --parchment: #f3ead2;
+  --gold: #e8bd5a;
+  --bloom: #f1dfae;
+  --blight: #3b2352;
+  --vein: #c7dc45;
+  --rule: rgba(232, 189, 90, 0.55);
+  --sub: 30px;
+}
+/* The scaffold's placeholder title, status and controls are replaced by this layer. */
+body > header, body > aside#status, body > footer { display: none !important; }
+
+#ui { position: fixed; inset: 0; pointer-events: none; font-family: 'Amulith Sans', system-ui, sans-serif; color: var(--parchment); }
+#ui .serif { font-family: 'Amulith Serif', Georgia, serif; }
+#ui [hidden] { display: none !important; }
+
+/* HUD */
+.hud-zone { position: absolute; top: 28px; left: 36px; font-family: 'Amulith Serif', serif; font-style: italic; font-size: 22px; text-shadow: 0 2px 10px #000a; }
+.hud-zone small { display: block; font-family: 'Amulith Sans', sans-serif; font-style: normal; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+.hud-share { position: absolute; top: 30px; left: 50%; transform: translateX(-50%); width: min(520px, 46vw); }
+.hud-share .bar { position: relative; height: 14px; border: 2px solid var(--ink); outline: 1px solid var(--rule); background: var(--blight); overflow: hidden; }
+.hud-share .bloom { position: absolute; inset: 0 auto 0 0; background: var(--bloom); transition: width .6s ease; }
+.hud-share .blight-veins { position: absolute; inset: 0; background: repeating-linear-gradient(115deg, transparent 0 9px, rgba(199,220,69,.55) 9px 11px); }
+.hud-share .labels { display: flex; justify-content: space-between; margin-top: 6px; font-size: 14px; font-weight: 700; text-shadow: 0 2px 6px #000c; }
+.hud-share .labels span:last-child { color: var(--vein); }
+.hud-prompts { position: absolute; right: 32px; bottom: 26px; display: flex; gap: 18px; font-size: 15px; text-shadow: 0 2px 6px #000c; }
+.btn { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; font: 700 14px 'Amulith Sans', sans-serif; color: #fff; margin-right: 7px; vertical-align: middle; box-shadow: 0 2px 0 #0006; }
+.btn.a { background: #3f9b47; } .btn.b { background: #c4473b; } .btn.x { background: #3d6fc4; } .btn.y { background: #d6a52b; color: #1a1300; }
+.btn.menu { border-radius: 6px; background: #2a2433; width: 34px; font-size: 11px; }
+.btn.stick { background: #2a2433; font-size: 11px; }
+
+/* Amulith dialogue */
+.dialogue { position: absolute; left: 50%; bottom: 72px; transform: translateX(-50%); width: min(1040px, 86vw); display: grid; grid-template-columns: 128px 1fr; gap: 22px; align-items: center;
+  background: linear-gradient(var(--night), rgba(12, 9, 18, 0.9)); border: 2px solid var(--ink); outline: 2px solid var(--rule); outline-offset: -6px; padding: 18px 26px 18px 18px; transition: opacity .35s ease, transform .35s ease; }
+.dialogue.gone { opacity: 0; transform: translate(-50%, 16px); }
+.dialogue img { width: 128px; height: 128px; image-rendering: auto; filter: drop-shadow(0 0 14px rgba(160, 90, 255, .55)); }
+.dialogue.thinking img { animation: think 1.1s ease-in-out infinite; }
+@keyframes think { 50% { filter: drop-shadow(0 0 26px rgba(199, 220, 69, .9)); } }
+.dialogue .name { font-family: 'Amulith Serif', serif; font-size: 15px; letter-spacing: .3em; color: var(--gold); display: flex; justify-content: space-between; }
+.dialogue .name em { font-family: 'Amulith Sans', sans-serif; font-style: normal; letter-spacing: .08em; font-size: 12px; color: #cfc4e0; opacity: .8; }
+.dialogue .line { font-family: 'Amulith Serif', serif; font-size: var(--sub); line-height: 1.35; margin-top: 8px; min-height: 1.35em; }
+
+/* Title / faction pick */
+.title { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; background: radial-gradient(ellipse at center, rgba(10, 6, 16, .25), rgba(10, 6, 16, .82)); transition: opacity .6s ease; }
+.title.gone { opacity: 0; }
+.title h1 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: clamp(64px, 10vw, 150px); letter-spacing: .14em; margin: 0; text-shadow: 0 6px 30px #000, 0 0 40px rgba(150, 90, 255, .35); }
+.title p { font-family: 'Amulith Serif', serif; font-style: italic; font-size: 30px; margin: 8px 0 42px; color: #e9dcc0; }
+.choices { display: flex; gap: 28px; justify-content: center; }
+.choice { width: 300px; padding: 22px 20px; border: 2px solid var(--ink); outline: 2px solid transparent; outline-offset: -7px; background: var(--night); transition: transform .2s ease, outline-color .2s ease; }
+.choice h2 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 34px; margin: 0 0 6px; }
+.choice span { font-size: 15px; color: #d6cbe4; }
+.choice.bloom h2 { color: var(--bloom); } .choice.blight h2 { color: var(--vein); }
+.choice.on { outline-color: var(--gold); transform: translateY(-6px); }
+.title .hint { margin-top: 30px; font-size: 16px; color: #d6cbe4; }
+
+/* Pause */
+.pause { position: absolute; inset: 0; display: grid; place-content: center; background: rgba(8, 5, 14, .72); }
+.pause .panel { width: 520px; padding: 34px 40px; background: var(--night); border: 2px solid var(--ink); outline: 2px solid var(--rule); outline-offset: -8px; }
+.pause h2 { font-family: 'Amulith Serif', serif; font-weight: 400; font-size: 46px; margin: 0; text-align: center; }
+.pause .say { font-family: 'Amulith Serif', serif; font-style: italic; text-align: center; color: var(--vein); font-size: 20px; margin: 6px 0 22px; min-height: 1em; }
+.pause ul { list-style: none; margin: 0; padding: 0; }
+.pause li { display: flex; justify-content: space-between; padding: 12px 16px; font-size: 20px; border-left: 3px solid transparent; }
+.pause li.on { border-left-color: var(--gold); background: rgba(232, 189, 90, .1); }
+.pause li b { color: var(--gold); font-weight: 700; }
+.pause .hint { margin-top: 20px; text-align: center; font-size: 14px; color: #cfc4e0; }
+
+/* Judge mode */
+.judge { position: absolute; top: 84px; right: 28px; width: 330px; padding: 16px 18px; background: rgba(6, 10, 8, .86); border: 1px solid #76b900; font: 15px/1.55 'Amulith Sans', ui-monospace, monospace; }
+.judge h3 { margin: 0 0 8px; font-size: 13px; letter-spacing: .22em; color: #76b900; }
+.judge dl { display: grid; grid-template-columns: auto 1fr; gap: 2px 14px; margin: 0; }
+.judge dt { color: #9fb39a; } .judge dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+.judge .note { margin-top: 10px; font-size: 12px; color: #9fb39a; }
+
+@media (prefers-reduced-motion: reduce) { #ui * { transition: none !important; animation: none !important; } }
+#ui.still * { transition: none !important; animation: none !important; }
