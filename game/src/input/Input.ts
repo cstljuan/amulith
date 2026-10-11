@@ -71,8 +71,10 @@ export class Input {
     if (magnitude <= 0.2) { x = 0; y = 0; }
     else { const strength = Math.min(1, (magnitude - 0.2) / 0.8); x = x / magnitude * strength; y = y / magnitude * strength; }
     const key = (...codes: string[]) => codes.some(code => this.keys.has(code));
-    x += Number(key('KeyD', 'ArrowRight')) - Number(key('KeyA', 'ArrowLeft'));
-    y += Number(key('KeyS', 'ArrowDown')) - Number(key('KeyW', 'ArrowUp'));
+    // D-pad (standard buttons 12 up, 13 down, 14 left, 15 right) moves like the keyboard.
+    const dpad = (i: number) => Number(Boolean(pad?.buttons[i]?.pressed));
+    x += Number(key('KeyD', 'ArrowRight')) - Number(key('KeyA', 'ArrowLeft')) + dpad(15) - dpad(14);
+    y += Number(key('KeyS', 'ArrowDown')) - Number(key('KeyW', 'ArrowUp')) + dpad(13) - dpad(12);
     const length = Math.hypot(x, y);
     this.actions.move.x = x / Math.max(1, length);
     this.actions.move.y = y / Math.max(1, length);

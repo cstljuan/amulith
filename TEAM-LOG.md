@@ -2,6 +2,12 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 2:09 AM, Lawrence Capistrano, PR #18 review
+- Reviewed visuals/hd2d-polish head bbfcea2: 8-direction/faction sprite sheets, lantern shader patch, pixel pulse pool, d-pad input and no-hint director schema. No blocking code issue found.
+- Validation: 21 tests and TypeScript/Vite production build pass. Headless Chrome with post-processing enabled and a simulated standard controller verifies faction title start, d-pad movement, faction switch, pulse rendering, judge overlay, pause/resume, B dash, X/F edges, paused interact guard, shrine collision and controlled obstacle chase. No browser or shader errors; screenshot inspected. Checks wait on state/events instead of fixed wall-clock delays for software rendering.
+- Python AST and hint/no-hint schema field checks pass. No local inference or device measurements were performed; the reported 1.5B Jetson speedup remains Juan's measurement. Existing bundle warning remains.
+- Follow-up: ui-audio/relic-sound overlaps render/sprite.ts and render/index.ts; incorporate new main before merging that branch. Hardware/deployment unchanged in this review.
+
 ## 2026-10-11 1:22 AM, Lawrence Capistrano, game-rules/obstacles-dash-interact
 - Reviewed and merged #16 at a56fa4a after dependency install, build, 19 tests, and browser checks of controller title choice, start, judge overlay, pause/resume and rendering. Normal merge commit f0faa06aea5811c739bbd0274c8671fdcba44fd2.
 - Added enemy obstacle grids from the existing render COLLIDERS supplied after installVisuals in main.ts. Circles include actor clearance and cell half-diagonal padding; blocked spawn/target cells use a nearby open cell. Navigation has no render dependency. Added a normalized 3-unit B/Shift dash over 0.18 s with 0.8 s cooldown, pause cancellation, and collision substeps to avoid tunneling. X/F emits interact on active-run press edges. New typed dash/interact position events.
