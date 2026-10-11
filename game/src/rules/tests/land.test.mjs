@@ -22,8 +22,10 @@ test('offline director waits 25 active seconds and resets on connection/pause',(
  director.update(24,false,false,'bloom');assert.equal(director.update(1,false,true,'bloom'),null);
 });
 test('session shrine, pulse cooldown, game event forwarding and pause state',()=>{
- const bus=new EventBus();const session=new GameSession('localhost:8765',bus,{x:0,z:0});const emitted=[];bus.on('game-event',m=>emitted.push(m.kind));
+ const bus=new EventBus(),position={x:0,z:0};const session=new GameSession('localhost:8765',bus,position);const emitted=[];bus.on('game-event',m=>emitted.push(m.kind));
  session.select('sleepy');assert.equal(session.faction,'bloom');assert.equal(session.paused,false);assert.deepEqual(emitted,['run_start']);
+ // Keep this pulse/pause fixture outside either possible Grove shard's lantern range.
+ Object.assign(position,{x:0,z:0});
  let pulses=0;bus.on('pulse-applied',()=>pulses++);bus.emit('pulse',{x:0,z:0});bus.emit('pulse',{x:5,z:0});assert.equal(pulses,1);
  session.update(0.6);bus.emit('pulse',{x:5,z:0});assert.equal(pulses,2);session.select('hand');assert.equal(session.paused,false);
  session.select('empty');assert.equal(session.paused,true);session.select('angry');assert.equal(session.faction,'blight');assert.deepEqual(emitted,['run_start','faction_flip']);

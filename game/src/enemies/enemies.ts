@@ -4,6 +4,7 @@ import { astar } from '../pathfinding/astar.ts';
 import type { Point } from '../pathfinding/astar.ts';
 import type { Land } from '../rules/land.ts';
 import { obstacleGrid, nearestOpen } from '../world/obstacles.ts';
+import type { LevelDefinition } from '../levels/types.ts';
 import type { CircleObstacle } from '../world/obstacles.ts';
 export interface Enemy {
   id:number;kind:EnemyKind;state:'wander'|'chase'|'attack'|'defeated';x:number;z:number;
@@ -15,8 +16,10 @@ export class Enemies {
   private sequence = 0;
   private grid: boolean[][] = Array.from({length:40},()=>Array(60).fill(true));
   constructor(private bus:EventBus<GameEvents>,private land:Land,private random:()=>number=Math.random){}
-  setObstacles(circles: readonly CircleObstacle[]): void {
-    this.grid = obstacleGrid(circles);
+  private tuning = { chaseSpeed: 2.5, wanderSpeed: 1, damage: 0.1, attackCooldown: 1, landRadius: 0.8 };
+  configure(level: LevelDefinition, circles: readonly CircleObstacle[]): void { this.tuning=level.tuning; this.setObstacles(circles,level.bounds); }
+  setObstacles(circles: readonly CircleObstacle[], bounds?: LevelDefinition['bounds']): void {
+    this.grid = obstacleGrid(circles,bounds);
     for (const e of this.enemies) {
       const point = cell(e.x,e.z);
       if (!this.grid[point.y][point.x]) { const open = nearestOpen(this.grid,point); e.x=open.x-29.5; e.z=open.y-19.5; }
@@ -24,12 +27,12 @@ export class Enemies {
     }
   }
   reset():void{this.enemies=[];this.changed();}
-  spawn(kind:EnemyKind,count:number,zone:Zone):void{
+  spawn(kind:EnemyKind,count:number,zone:Zone, position?:{x:number;z:number}):void{
     this.enemies=this.enemies.filter(e=>e.state!=='defeated');
     const center=zone==='hollow'?-20:zone==='glade'?0:20;
     for(let i=0;i<Math.min(count,24-this.enemies.length);i++){
-      let x=center+(this.random()-0.5)*12,z=(this.random()-0.5)*28;
-      const point=cell(x,z);if(!this.grid[point.y][point.x]){const open=nearestOpen(this.grid,point);x=open.x-29.5;z=open.y-19.5;}
+      let x=(position?.x??center)+(this.random()-0.5)*(position?2:12),z=(position?.z??0)+(this.random()-0.5)*(position?2:28);
+      const point=cell(x,z);const open=this.grid[point.y][point.x]?point:nearestOpen(this.grid,point);x=open.x-29.5;z=open.y-19.5;
       this.enemies.push({id:++this.sequence,kind,state:'wander',x,z,hits:0,attackCooldown:0,pathTimer:0,landTimer:0,path:[],target:cell(x,z)});
     }this.changed();
   }
@@ -43,7 +46,7 @@ export class Enemies {
       const distance=Math.hypot(e.x-position.x,e.z-position.z);
       const hostile=e.kind===(faction==='bloom'?'chomper':'petalborn');
       e.state=hostile&&distance<=1.2?'attack':hostile&&distance<=range?'chase':'wander';
-      if(e.state==='attack'&&e.attackCooldown<=0){e.attackCooldown=1;hurt(0.1);}
+      if(e.state==='attack'&&e.attackCooldown<=0){e.attackCooldown=this.tuning.attackCooldown;hurt(this.tuning.damage);}
       if(e.state!=='attack'){
         if(e.pathTimer<=0){
           e.pathTimer=0.5;
@@ -52,10 +55,10 @@ export class Enemies {
           if(!this.grid[e.target.y][e.target.x])e.target=nearestOpen(this.grid,e.target);
           e.path=astar(this.grid,cell(e.x,e.z),e.target).slice(1);
         }
-        const next=e.path[0];if(next){const x=next.x-29.5,z=next.y-19.5,dx=x-e.x,dz=z-e.z,d=Math.hypot(dx,dz),step=dt*(e.state==='chase'?2.5:1);
+        const next=e.path[0];if(next){const x=next.x-29.5,z=next.y-19.5,dx=x-e.x,dz=z-e.z,d=Math.hypot(dx,dz),step=dt*(e.state==='chase'?this.tuning.chaseSpeed:this.tuning.wanderSpeed);
           if(d<=step){e.x=x;e.z=z;e.path.shift();}else{e.x+=dx/d*step;e.z+=dz/d*step;}}
       }
-      if(e.landTimer>=1){e.landTimer%=1;this.land.convert(e.x,e.z,0.8,e.kind==='chomper'?'blight':'bloom');}
+      if(e.landTimer>=1){e.landTimer%=1;this.land.convert(e.x,e.z,this.tuning.landRadius,e.kind==='chomper'?'blight':'bloom');}
     }
     this.changed();
   }
