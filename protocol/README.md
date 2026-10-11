@@ -21,7 +21,7 @@ TypeScript types: [`messages.ts`](messages.ts). The game imports them, it does n
 | `director` | About every 25 s, on key events, and after an `ask` | `id`, `line`, `mood` (`calm`, `smug`, `furious`), `spread` or null, `spawn` or null, `hint` or null, `source` (`llm` or `scripted`), `latency_ms` |
 | `speech` | When audio for a `director.id` is ready | `id`, `url`, `duration_ms`, `engine` (`elevenlabs`, `cached`, `piper`) |
 | `thinking` | LLM starts or stops generating | `active` (bool) |
-| `telemetry` | Every 1 s | `gpu_pct`, `cpu_pct`, `ram_used_mb`, `ram_total_mb`, `power_mw`, `temp_c`, `tok_s` (last generation, or null) |
+| `telemetry` | Every 1 s | `gpu_pct`, `cpu_pct`, `ram_used_mb`, `ram_total_mb`, `power_mw`, `temp_c`, `tok_s` (last generation, or null). Any field may be null when the device does not report it; show it as unavailable, never 0. |
 
 `spread`: `{ zone, amount }` where `zone` is `hollow`, `glade`, or `rootdeep` and `amount` is 0..1 (share of that zone to flip toward Amulith's side).
 `spawn`: `{ kind, count, zone }` where `kind` is `chomper` or `petalborn`, `count` 1..4.
@@ -33,7 +33,7 @@ Note: Amulith always pushes toward Blight. In a Bloom run `spread` corrupts land
 
 | type | When | Fields |
 |---|---|---|
-| `state` | Every 2 s during a run | `faction` (`bloom`, `blight`, or null), `zone`, `shards_found`, `shards_total` (3), `land` `{bloom, blight}` 0..1, `hp` 0..1, `lantern` 0..1, `enemies_near`, `elapsed_s`, `asks_used` |
+| `state` | Every 2 s during a run | `faction` (`bloom`, `blight`, or null), `zone`, `shards_found`, `shards_total` (3), `land` `{bloom, blight}` 0..1, `hp` 0..1, `lantern` 0..1, `enemies_near`, `elapsed_s`, `asks_used`, optional `nearest_shard` and `nearest_shard_zone` (aims hints) |
 | `event` | On game events | `kind` (`run_start`, `shard_found`, `shard_resolved`, `player_hurt`, `faction_flip`, `run_end`), `data` (free object, small) |
 | `ask` | Player pressed "Ask Amulith" on the controller (the relic button is handled inside remnant) | none |
 | `led` | Game wants a specific LED mode | `mode` (`idle`, `thinking`, `near`, `solid`, `off`), `level` 0..1 |
