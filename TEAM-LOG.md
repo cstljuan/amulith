@@ -2,6 +2,11 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11, Lawrence Capistrano, game-rules/level-hollow
+- Replaced Hollow scaffold data with a compact 44 by 28 map, two mushroom loops, 12 visible solid cap clusters, two candidate shard sites, guards and three bounded waves. One shard is active, and the eastern exit leads to Deepwood. Names/signs remain in the lore contract.
+- Reused existing mushroom cards, enemy sheets and shard art. Added data tints for Juan's art pass; Hollow cap-cluster and floor-tile requests are prepared for issue #20, whose comments are currently blocked by GitHub API network access.
+- Validation: TypeScript/Vite production build and 31 tests passed, including both shard routes, enemy tuning and actual enemy movement/spawn clearance across both factions and deterministic edge samples. No hardware or judging-length balance measurements claimed.
+
 ## 2026-10-11, Lawrence Capistrano, game-core/level-manager
 - Added data-driven progression through grove, hollow and deepwood, one randomized shard per level, gated exits, a short curtain and judge URL starts. Faction, land, HP, play time, asks, lantern and resolved site flags carry. Hollow and Deepwood definitions are initial scaffolds for their separate layout tasks.
 - Kept lore/render/UI/audio/art/protocol files unchanged. Reused existing art in an instanced level adapter, preserved land conversion and the renderer's every-third-frame thinking throttle.
