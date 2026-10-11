@@ -2,6 +2,12 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11, Lawrence Capistrano, game-core/level-manager
+- Added data-driven progression through grove, hollow and deepwood, one randomized shard per level, gated exits, a short curtain and judge URL starts. Faction, land, HP, play time, asks, lantern and resolved site flags carry. Hollow and Deepwood definitions are initial scaffolds for their separate layout tasks.
+- Kept lore/render/UI/audio/art/protocol files unchanged. Reused existing art in an instanced level adapter, preserved land conversion and the renderer's every-third-frame thinking throttle.
+- Validation: TypeScript/Vite build, 21 existing tests and six new progression checks passed. Controlled Chromium runs completed three real shard holds and exits for both factions; judge starts, loss and reset passed. Physical controller, Jetson GPU performance and judging-length balance were not measured.
+- GitHub API network access is blocked in this environment. New feature issue claims, PR publication, art comments and protocol level-field request remain pending that access. The handoff's existing coordination issues #3 and #5 are assigned to Lawrence.
+
 ## 2026-10-11 08:46 UTC, Juan Castillo, lore/bible
 - Did: added the world bible, canon and fan-addition boundaries, places, faction beliefs, T.K./Lenny character limits, glossary and shared Remnant voice guide under docs/lore/. Progression IDs stay separate from the existing wire zones. No reserved gameplay, art, rendering, vision or UI paths changed.
 - Coordination: four parallel workspace lanes handle levels-contract, bible, remnant-voice and npcs-items-codex in isolated branches. Codex Cloud task API access returned HTTP 401; these are workspace agents, not standalone Cloud tasks. The levels-only PR #25 shipped first. Shared the guide with the Remnant lane.

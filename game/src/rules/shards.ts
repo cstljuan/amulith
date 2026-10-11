@@ -18,7 +18,16 @@ export class Shards {
     for(const site of this.sites) Object.assign(site,{active:active&&order.slice(0,3).includes(site),visible:false,found:false,resolved:false,hinted:false,progress:0});
     this.changed();
   }
-  hint(hint: Hint): void { const shard=this.sites.find(s=>s.id===hint.shard)!;shard.hinted=true;this.changed(); }
+  load(candidates: {id:ShardId;zone:Zone;x:number;z:number}[], count: number): void {
+    const selected=[...candidates];
+    for(let i=selected.length-1;i>0;i--){const j=Math.floor(this.random()*(i+1));[selected[i],selected[j]]=[selected[j],selected[i]];}
+    for(const site of this.sites) { site.active=false;site.visible=false;site.progress=0; }
+    for(const candidate of selected.slice(0,count)) {
+      const site=this.sites.find(s=>s.id===candidate.id)!; Object.assign(site,candidate,{active:!site.resolved,found:false,hinted:false,progress:0});
+    }
+    this.changed();
+  }
+  hint(hint: Hint): void { const shard=this.sites.find(s=>s.id===hint.shard);if(!shard)return;shard.hinted=true;this.changed(); }
   cancelInteraction(): void { for(const shard of this.sites)shard.progress=0;this.changed(); }
   nearest(position: {x:number;z:number}): Shard | null {
     return this.sites.filter(s=>s.active&&!s.resolved).sort((a,b)=>Math.hypot(a.x-position.x,a.z-position.z)-Math.hypot(b.x-position.x,b.z-position.z))[0]??null;
