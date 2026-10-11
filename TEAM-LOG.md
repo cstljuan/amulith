@@ -2,6 +2,12 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-11 08:46 UTC, Juan Castillo, lore/bible
+- Did: added the world bible, canon and fan-addition boundaries, places, faction beliefs, T.K./Lenny character limits, glossary and shared Remnant voice guide under docs/lore/. Progression IDs stay separate from the existing wire zones. No reserved gameplay, art, rendering, vision or UI paths changed.
+- Coordination: four parallel workspace lanes handle levels-contract, bible, remnant-voice and npcs-items-codex in isolated branches. Codex Cloud task API access returned HTTP 401; these are workspace agents, not standalone Cloud tasks. The levels-only PR #25 shipped first. Shared the guide with the Remnant lane.
+- Verified: reviewed all authored prose for canon boundaries, character voice, spelling and unsupported implementation claims; checked whitespace, changed-path scope and absence of em dashes. Documentation-only change, no build or hardware measurements claimed.
+- Next: consume the world bible when writing dialogue and content; the UI session owns title flavor, level intro cards and codex presentation. Parent session posts the combined issue #7 summary.
+
 ## 2026-10-11 4:05 AM, Lawrence Capistrano, PR #19 merge review
 - Reviewed c4a8564 and tested its clean merge with main 7ee592b, preserving #18 sprite/lantern/pulse changes. No source edits made during review. All 21 tests and TypeScript/Vite production build pass.
 - Re-ran supplied audio integration fixtures against the combined tree: silent startup, simulated controller start, both local music loops, effects, faction crossfade, speech duck/recovery/error, scripted shrine interaction, dash pose, pause volume/mute, settings persistence and ending pass. Fresh production context passes with external HTTP and WebSockets blocked. No browser exceptions or missing bundled audio.
@@ -31,8 +37,8 @@ Newest first. One entry per work session.
 - Next: audio, item holding/interaction, Vercel landing page for the domain.
 
 ## 2026-10-11 1:15 AM, Juan Castillo (Claude Code), visuals/paper-world
-- Did: switched the art direction to HD-2D (DECISIONS.md entry 12:20 AM). Built the render layer in src/render and src/fx: land shader (Bloom grass with flowers, Blight soil with creeping veins and thorns, one draw plus two instanced), voxel cliff diorama with stream, billboard trees and props, stone shrine with the Amulith gem, day/night lighting by faction with a lantern point light, one post pass (tilt-shift, mip glow, vignette, grade), fireflies/spores, pulse rings, pixel sprite actor for the Wanderer. Assets generated in Higgsfield (GPT Image 2.5), listed in public/art/CREDITS.md. Build and tests pass.
-- Blocked: Jetson GPU numbers not measured yet. main.ts touched (install hook, render cap, closer camera); flagged on issue #3. AutoSprite is not callable through the Higgsfield connector, walk frames came from GPT Image instead.
+- Did: switched the art direction to HD-2D (DECISIONS.md entry 12:20 AM). Built the render layer in src/render and src/fx: land shader (Bloom grass with flowers, Blight soil with creeping veins and thorns, one draw plus two instanced), voxel cliff diorama with stream, billboard trees and props, stone shrine with the Amulith gem, day/night lighting by faction with a lantern point light, one post pass (tilt-shift, mip glow, vignette, grade), fireflies/spores, pulse rings, pixel sprite actor for the Wanderer. Asset sources generated with GPT Image 2.5, finished in Aseprite, listed in public/art/CREDITS.md. Build and tests pass.
+- Blocked: Jetson GPU numbers not measured yet. main.ts touched (install hook, render cap, closer camera); flagged on issue #3. Walk frames came from GPT Image, assembled into sheets by script.
 - Next: enemy, shard, T.K. and Lenny sprites (after #15 merges), Juan's sketches, then UI lane #7.
 
 ## 2026-10-11 12:30 AM, Juan Castillo (Claude Code), visuals/paper-world
