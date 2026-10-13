@@ -29,6 +29,7 @@ export class GameSession {
   private pulseHeld = false;
   private relicButton: 'down'|'up' = 'up';
   private fallback = new FallbackDirector();
+  storyMode = true;
   private unsubscribers: (() => void)[];
   get faction(): Faction | null { return this.run.faction; }
   get paused(): boolean { return this.run.phase !== 'playing' || this.levels.transitioning; }
@@ -72,6 +73,7 @@ export class GameSession {
         }
         if(msg.kind==='faction_flip'&&this.faction)this.enemies.flip(this.faction);
         this.client.send(msg);
+        if (!this.client.connected) this.fallback.event(msg, this.state());
       }),
       bus.on('run',msg=>{if(msg.phase==='attract'){this.complete=false;this.levels.reset();this.loadLevel(false);this.shards.reset(false);this.enemies.reset();this.land.reset();this.fallback.reset();}}),
       this.land.onChange(changes => bus.emit('land', { changes, share: this.land.share() })),
@@ -95,6 +97,7 @@ export class GameSession {
     this.lanternDelta=input.actions.lanternDelta;this.pulseHeld=input.held('pulse');
     if (input.pressed('ask') && !this.paused && this.run.ask()) {
       this.land.tax(this.faction!);this.client.send({type:'ask'});this.bus.emit('ask',undefined);
+      if (!this.client.connected) this.bus.emit('director', this.fallback.ask(this.state(), this.levels.current.id, this.shards.nearest(this.position), this.position));
     }
   }
   update(dt: number): void {
@@ -103,7 +106,7 @@ export class GameSession {
     if (!this.paused && this.faction) {
       this.cooldown=Math.max(0,this.cooldown-dt);this.stateElapsed+=dt;
       this.lantern.update(dt,this.lanternDelta);
-      this.enemies.update(dt,this.position,this.faction,this.lantern.detectionRange,amount=>this.run.hurt(amount));
+      this.enemies.update(dt,this.position,this.faction,this.lantern.detectionRange,amount=>this.run.hurt(amount * (this.storyMode ? 0.35 : 1)));
       if(!this.paused)this.shards.update(dt,this.position,this.lantern.radius,this.pulseHeld,this.faction);
       const level=this.levels.current;
       const ready=level.shards.filter(candidate=>this.shards.sites.find(site=>site.id===candidate.id)?.resolved).length>=level.shardCount;
@@ -113,7 +116,7 @@ export class GameSession {
       }
       if(this.stateElapsed>=2){this.stateElapsed%=2;if(!this.paused)this.client.send(this.state());}
     }
-    const director=this.fallback.update(dt,this.client.connected,!this.paused,this.faction);
+    const director=this.fallback.update(dt,this.client.connected,!this.paused,this.faction,this.state(),this.levels.current.id);
     if(director)this.bus.emit('director',director);
   }
   state(): GameState {
@@ -121,4 +124,5 @@ export class GameSession {
     return {type:'state',faction:this.faction,zone,shards_found:this.run.shards,shards_total:3,land:this.land.share(),hp:this.run.hp,lantern:this.lantern.value,enemies_near:this.enemies.near(this.position,this.lantern.detectionRange),elapsed_s:this.elapsed,asks_used:this.asksUsed,nearest_shard:nearest?.id??null,nearest_shard_zone:nearest?.zone??null};
   }
   dispose(): void { this.client.dispose();this.lantern.dispose();this.unsubscribers.forEach(off=>off()); }
+  speakAtShrine(): void { if(this.faction && !this.paused) this.bus.emit('director', this.fallback.interact(this.faction, this.levels.current.id)); }
 }

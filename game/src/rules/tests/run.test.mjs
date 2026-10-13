@@ -17,9 +17,9 @@ test('run shrine pause cannot be bypassed and flips preserve progress',()=>{
  const {run,messages}=setup();run.select('sleepy');run.update(10);run.resolve('s1','hollow');run.select('empty');run.pause(false);assert.equal(run.phase,'paused');run.update(10);assert.equal(run.elapsed,10);
  run.select('hand');assert.equal(run.phase,'paused');run.select('angry');assert.equal(run.phase,'playing');assert.equal(run.shards,1);assert.equal(run.faction,'blight');assert(messages.some(m=>m.kind==='faction_flip'));
 });
-test('three unique shards win, payload is final, and ending resets after 20 seconds',()=>{
+test('three unique shards win, payload is final, and ending waits for explicit replay',()=>{
  const {run,messages}=setup();run.select('sleepy');run.update(12);run.ask();run.resolve('s1','hollow');run.resolve('s1','hollow');assert.equal(run.shards,1);run.resolve('s3','glade');run.resolve('s5','rootdeep');assert.equal(run.phase,'ending');
- assert.deepEqual(messages.find(m=>m.kind==='run_end').data,{faction:'bloom',result:'win',shards:3,asks_used:1,elapsed_s:12});run.select('angry');assert.equal(run.faction,'bloom');run.update(19);assert.equal(run.phase,'ending');run.update(1);assert.equal(run.phase,'attract');assert.equal(run.faction,null);
+ assert.deepEqual(messages.find(m=>m.kind==='run_end').data,{faction:'bloom',result:'win',shards:3,asks_used:1,elapsed_s:12});run.select('angry');assert.equal(run.faction,'bloom');run.update(60);assert.equal(run.phase,'ending');run.reset();assert.equal(run.phase,'attract');assert.equal(run.faction,null);
 });
 test('zero HP loses once and ignores actions in ending',()=>{
  const {run,messages}=setup();run.select('angry');for(let i=0;i<12;i++)run.hurt(0.1);assert.equal(run.hp,0);assert.equal(run.result,'lose');assert.equal(messages.filter(m=>m.kind==='run_end').length,1);assert.equal(run.ask(),false);
@@ -37,5 +37,5 @@ test('ask converts three percent of owned land and reset clears all session stat
  const land=new Land(()=>0);assert.equal(land.tax('bloom').length,36);assert.equal(land.share().bloom,1164/2400);
  const bus=new EventBus(),session=new GameSession('localhost:8765',bus,{x:0,z:0});session.select('sleepy');const before=session.land.share().bloom;
  const input={pressed:a=>a==='ask',held:()=>false,actions:{lanternDelta:0}};session.frame(input);assert.equal(session.asksUsed,1);assert(session.land.share().bloom<before);assert.equal(session.state().nearest_shard?.length,2);
- session.run.hurt(1);session.update(20);assert.equal(session.run.phase,'attract');assert.equal(session.enemies.enemies.length,0);assert.equal(session.shards.sites.filter(s=>s.active).length,0);session.dispose();
+ session.run.hurt(1);session.update(20);assert.equal(session.run.phase,'ending');session.run.reset();assert.equal(session.run.phase,'attract');assert.equal(session.enemies.enemies.length,0);assert.equal(session.shards.sites.filter(s=>s.active).length,0);session.dispose();
 });

@@ -1,0 +1,5 @@
+.compatibility { box-sizing: border-box; min-height: 100vh; display: grid; align-content: center; justify-items: start; gap: 22px; width: min(690px, 100%); margin: auto; padding: 36px; background: #120d1a; color: #f3ead2; font-family: Georgia, serif; }
+.compatibility img { width: 64px; height: 84px; }
+.compatibility h1 { font-size: clamp(30px, 5vw, 48px); line-height: 1.2; font-weight: 400; margin: 0; }
+.compatibility p { line-height: 1.6; font-size: 18px; margin: 0; }
+.compatibility a, .compatibility button { font: 16px system-ui, sans-serif; color: #f3ead2; background: #3b2352; border: 1px solid #e8bd5a; padding: 12px 20px; border-radius: 3px; text-decoration: none; cursor: pointer; }

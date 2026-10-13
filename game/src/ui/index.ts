@@ -6,6 +6,8 @@ import { onSettings, settings, updateSettings } from './settings';
 import { installAudio } from '../audio';
 import { LEVEL_LORE, type LevelId } from '../lore/levels';
 import { CODEX_ENTRIES } from '../lore/codex';
+import { installStoryUI } from '../story/ui';
+import { CLOSINGS } from '../story/scenes';
 import './ui.css';
 
 const ZONE_NAMES = { hollow: 'Mushroom Hollow', glade: 'Petal Glade', rootdeep: 'Rootdeep' } as const;
@@ -30,6 +32,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
   root.id = 'ui';
   root.innerHTML = `
     <div class="hud" hidden>
+      <div class="hud-objective"><b data-objective></b><span>North is up. Talk to the small lights with F / X.</span></div>
       <div class="hud-zone"><small data-faction></small><span data-zone></span></div>
       <div class="hud-share"><div class="bar"><div class="blight-veins"></div><div class="bloom" data-bloom></div></div>
         <div class="labels"><span data-bloom-label></span><span data-blight-label></span></div></div>
@@ -44,21 +47,26 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       <div><div class="name">AMULITH <em data-source></em></div><div class="line" data-line></div></div>
     </div>
     <div class="title">
+      <img class="brand-symbol" src="${import.meta.env.BASE_URL}brand/symbol.svg" alt="A fractured gem held by roots">
       <h1>AMULITH</h1>
-      <div class="flavor">${LEVEL_LORE.grove.subtitle}</div>
-      <p>Place him on the stone.</p>
+      <div class="edition">Portable story edition</div>
+      <div class="flavor">The roots remember.</div>
+      <p>A broken thing is still listening.</p>
       <div class="choices">
-        <div class="choice bloom on" data-choice="bloom"><h2>Bloom</h2><span>Wake the Knight. Sleepy Lenny.</span></div>
-        <div class="choice blight" data-choice="blight"><h2>Blight</h2><span>Feed the Gem. Angry Lenny.</span></div>
+        <button class="choice bloom on" data-choice="bloom"><h2>Bloom</h2><span>Break the shards. Wake the Knight.</span></button>
+        <button class="choice blight" data-choice="blight"><h2>Blight</h2><span>Gather the shards. Feed the Gem.</span></button>
       </div>
-      <div class="hint"><i class="btn stick">L</i>choose <i class="btn a">A</i>begin, or place a figure on the shrine</div>
+      <div class="hint">Click a path, press 1 / 2, or use the stick and A.</div>
+      <div class="portable-tools"><button class="portable-button" data-difficulty>Story mode: gentler combat</button><button class="portable-button" data-chronicle>Chronicle</button></div>
+      <div class="controls">WASD / arrows: move · Space / A: pulse and hold at a shard · Shift / B: dash<br>F / X: talk · E / Y: ask for a direction · Q / R or triggers: lantern · Esc / Start: pause<br>All dialogue and music are bundled. No device or account required.</div>
     </div>
     <div class="level-intro gone" role="status" aria-live="polite"><h2 data-intro-name></h2><div class="sub" data-intro-sub></div><div class="lines" data-intro-lines></div></div>
     <div class="ending" hidden><div class="ending-inner">
       <h2 data-end-title></h2><p data-end-text></p><div class="outro" data-end-outro></div><blockquote data-end-line></blockquote>
       <div class="credits"><h3>Credits</h3>
+        <div class="ending-actions"><button class="portable-button" data-replay>Begin another journey</button><button class="portable-button" data-chronicle>Read your chronicle</button></div>
         <p>Lenny, T.K., the gem and the Knight Hacks IX lore belong to the Knight Hacks design team. Non-commercial fan project.</p>
-        <p>Built by Juan Castillo and Lawrence Capistrano. Amulith speaks through an open model running on the NVIDIA Jetson Orin Nano.</p>
+        <p>Built by Juan Castillo and Lawrence Capistrano. This edition uses an authored reactive script. The original Knight Hacks build used local inference on an NVIDIA Jetson Orin Nano.</p>
         <p>Pixel art by Juan in Aseprite, from AI-generated sources (GPT Image 2.5). Lenny and T.K. pixel art from official Knight Hacks IX art. Type: Noto Serif and Noto Sans (SIL OFL).</p>
         <p>Music and effects: original compositions by Juan Castillo (CC0 1.0).</p></div>
     </div></div>
@@ -69,8 +77,8 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
         <div class="codex-body"><ul data-codex-list></ul><article data-codex-detail></article></div>
         <div class="hint"><i class="btn stick">L</i>move <i class="btn b">B</i>back</div></div>
     </div>
-    <div class="judge" hidden><h3>JUDGE MODE / ON THE JETSON</h3><dl data-judge></dl>
-      <div class="note">Live from the device. n/a means the device did not report it.</div></div>
+    <div class="judge" hidden><h3>DIAGNOSTICS / AMULITH</h3><dl data-judge></dl>
+      <div class="note">Browser frame rate is local. Hardware fields require a connected device.</div></div>
     <button class="sound-unlock" data-sound hidden>Enable sound: click or press a key</button>`;
   document.body.append(root);
   const audio = installAudio(events, settings);
@@ -86,10 +94,12 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     const [head, text] = e.result === 'lose' ? ['The lantern goes out.', bloom ? 'The roots keep the Knight. Amulith keeps the forest.' : 'Even the Gem forgets who fed it.']
       : bloom ? ['The Knight wakes.', 'The last shard breaks. T.K. stands, and the gem goes dark.'] : ['The Gem is whole.', 'The shards fuse. The treeline closes behind you.'];
     $('[data-end-title]').textContent = head; $('[data-end-text]').textContent = text;
-    $('[data-end-line]').textContent = lastDirector ? `"${lastDirector.line}"` : '';
+    const closing = CLOSINGS[bloom ? 'bloom' : 'blight'][e.result === 'win' ? 'win' : 'lose'].find(b => b.speaker === 'Amulith');
+    $('[data-end-line]').textContent = closing ? `"${closing.text}"` : '';
     const outro = e.result === 'win' ? LEVEL_LORE.deepwood[bloom ? 'outroBloom' : 'outroBlight'] : [];
     $('[data-end-outro]').replaceChildren(...outro.map(l => Object.assign(document.createElement('div'), { textContent: l })));
     ending.hidden = false; hud.hidden = true; pause.hidden = true; intro.classList.add('gone'); introHideAt = 0;
+    dialogue.classList.add('gone'); hideAt = 0; thinking = false;
   };
 
   // State fed by events.
@@ -163,7 +173,7 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
       shrineSpokeAt = clock;
       $<HTMLImageElement>('[data-face]').src = art('amulith/calm.png');
       $('[data-source]').textContent = 'scripted shrine line';
-      say(session.faction === 'bloom' ? 'Break my pieces, little Wanderer. See what wakes beneath the moss.' : 'Bring my pieces home. Let the roots keep what they have found.');
+      session.speakAtShrine();
       audio.select();
     }),
     events.on('faction', e => { hud.hidden = !e.faction; }),
@@ -179,19 +189,40 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     }),
   ];
 
+  const story = installStoryUI(root, events, session, input, player);
+  root.querySelectorAll<HTMLButtonElement>('[data-choice]').forEach(button => button.onclick = () => {
+    audio.select(); session.select(button.dataset.choice === 'bloom' ? 'sleepy' : 'angry');
+  });
+  root.querySelectorAll<HTMLButtonElement>('[data-chronicle]').forEach(button => button.onclick = () => story.journal());
+  $('[data-difficulty]').onclick = () => { session.storyMode = !session.storyMode; $('[data-difficulty]').textContent = session.storyMode ? 'Story mode: gentler combat' : 'Challenge mode: original combat'; };
+  $('[data-replay]').onclick = () => session.run.reset();
+
   const menu = () => [
     { label: 'Resume', value: '', run: () => events.emit('pause', { paused: false }) },
     { label: 'Codex', value: `${CODEX_ENTRIES.filter(c => discovered.has(c.id)).length}/${CODEX_ENTRIES.length}`, run: () => setCodex(true) },
+    { label: 'Chronicle', value: 'Conversations', run: () => story.journal() },
+    { label: 'Combat', value: session.storyMode ? 'Story' : 'Challenge', run: () => { session.storyMode = !session.storyMode; } },
     { label: 'Reduced motion', value: settings.reducedMotion ? 'On' : 'Off', run: () => updateSettings({ reducedMotion: !settings.reducedMotion }) },
     { label: 'Subtitle size', value: settings.subtitleSize, run: () => updateSettings({ subtitleSize: settings.subtitleSize === 'S' ? 'M' : settings.subtitleSize === 'M' ? 'L' : 'S' }) },
     { label: 'Volume', value: `${Math.round(settings.volume * 100)}%`, run: () => updateSettings({ volume: settings.volume >= 1 ? 0 : Math.min(1, Math.round((settings.volume + 0.2) * 10) / 10) }) },
     { label: 'Mute', value: settings.muted ? 'On' : 'Off', run: () => updateSettings({ muted: !settings.muted }) },
     { label: 'Judge mode', value: settings.judge ? 'On' : 'Off', run: () => updateSettings({ judge: !settings.judge }) },
     { label: 'Switch faction', value: session.faction === 'bloom' ? 'to Blight' : 'to Bloom', run: () => session.select(session.faction === 'bloom' ? 'angry' : 'sleepy') },
+    { label: 'Return to title', value: '', run: () => session.run.reset() },
   ];
+  let menuSignature = '';
   const drawMenu = () => {
-    $('[data-menu]').innerHTML = menu().map((item, i) => `<li class="${i === menuIndex ? 'on' : ''}"><span>${item.label}</span><b>${item.value}</b></li>`).join('');
+    const items = menu(); const signature = JSON.stringify([menuIndex, items.map(item => [item.label, item.value])]);
+    if (signature === menuSignature) return;
+    menuSignature = signature;
+    $('[data-menu]').innerHTML = items.map((item, i) => `<li role="button" tabindex="0" data-menu-index="${i}" class="${i === menuIndex ? 'on' : ''}"><span>${item.label}</span><b>${item.value}</b></li>`).join('');
   };
+  const activateMenu = (event: Event) => {
+    const target = (event.target as HTMLElement).closest<HTMLElement>('[data-menu-index]');
+    if (target) menu()[Number(target.dataset.menuIndex)]?.run();
+  };
+  $('[data-menu]').addEventListener('click', activateMenu);
+  $('[data-menu]').addEventListener('keydown', event => { if (event.key === 'Enter') activateMenu(event); });
 
   // Menu navigation: stick or d-pad edges, A to select, B to go back.
   const navY = () => {
@@ -206,6 +237,8 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
   const frame = (dt: number) => {
     audio.frame(input.actions);
+    story.frame();
+    if (story.active) return;
     $('[data-sound]').hidden = audio.status() !== 'suspended';
     $('[data-shrine-prompt]').hidden = session.paused || !session.faction || !nearShrine(player.position);
     root.classList.toggle('menu-open', session.paused && Boolean(session.faction));
@@ -243,6 +276,11 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
 
     // HUD
     if (session.faction) {
+      const remaining = session.shards.nearest(player.position);
+      const exit = session.levels.current.exit;
+      const dx = exit.x - player.position.x, dz = exit.z - player.position.z;
+      const direction = Math.abs(dx) > Math.abs(dz) ? (dx < 0 ? 'west' : 'east') : (dz < 0 ? 'north' : 'south');
+      $('[data-objective]').textContent = remaining ? 'Find the shard. E / Y asks for a direction.' : `Follow the path ${direction} to ${exit.next ? 'the next area' : 'finish the journey'}.`;
       const share = session.land.share();
       $('[data-bloom]').style.width = `${(share.bloom * 100).toFixed(1)}%`;
       $('[data-bloom-label]').textContent = `Bloom ${Math.round(share.bloom * 100)}%`;
@@ -286,6 +324,6 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
   return {
     frame,
     showLevelIntro,
-    dispose() { offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.dispose(); root.remove(); },
+    dispose() { story.dispose(); offs.forEach(off => off()); window.removeEventListener('resize', fit); audio.dispose(); root.remove(); },
   };
 }

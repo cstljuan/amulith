@@ -37,7 +37,7 @@ export class Run {
   }
   update(dt: number): void {
     if (this.phase === 'playing') this.elapsed += dt;
-    if (this.phase === 'ending') { this.endingTime += dt; if (this.endingTime >= 20) this.reset(); }
+    if (this.phase === 'ending') this.endingTime += dt;
   }
   hurt(amount: number): void {
     if (this.phase !== 'playing' || !Number.isFinite(amount) || amount <= 0) return;
@@ -59,7 +59,7 @@ export class Run {
     this.bus.emit('pause',{paused:true}); this.changed();
     this.bus.emit('game-event',{type:'event',kind:'run_end',data:{faction:this.faction,result,shards:this.shards,asks_used:this.asksUsed,elapsed_s:this.elapsed}});
   }
-  private reset(): void {
+  reset(): void {
     this.phase = 'attract'; this.faction = null; this.shrinePresent = false; this.result = null;
     this.hp = 1; this.elapsed = this.shards = this.asksUsed = 0; this.resolved.clear();
     this.bus.emit('faction',{faction:null});this.bus.emit('pause',{paused:true});this.changed();
