@@ -1,0 +1,58 @@
+name: Portable story verification and preview
+on:
+  push:
+    branches: [game-core/portable-story]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: amulith-portable-preview
+  cancel-in-progress: true
+jobs:
+  verify-and-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: game/package-lock.json
+      - name: Build and unit tests
+        working-directory: game
+        run: npm ci && npm test && npm run build
+      - name: Install isolated browser QA tools
+        working-directory: game
+        run: npm install --no-save --package-lock=false playwright@1.58.2 && npx playwright install --with-deps chromium
+      - name: Verify browser story and offline production
+        run: |
+          cd game
+          npm run dev -- --port 5174 > /tmp/amulith-dev.log 2>&1 &
+          npm run preview -- --port 5175 > /tmp/amulith-production.log 2>&1 &
+          cd ..
+          export AMULITH_PLAYWRIGHT_MODULE="$PWD/game/node_modules/playwright"
+          export AMULITH_TEST_OUTPUT="$PWD/portable-review"
+          node tools/portable/browser-check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: portable-browser-review
+          path: portable-review/
+      - uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: _pages
+      - name: Publish verified portable preview
+        run: |
+          mkdir -p _pages/story/play
+          rsync -a --delete game/dist/ _pages/story/play/
+          rsync -a --exclude review site/ _pages/story/
+          touch _pages/.nojekyll
+          cd _pages
+          git config user.name "Juan Castillo"
+          git config user.email "juanfelipe.castillo0222@gmail.com"
+          git add story .nojekyll
+          if ! git diff --cached --quiet; then
+            git commit -m "Publish verified portable Amulith preview"
+            git push origin gh-pages
+          fi

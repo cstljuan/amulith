@@ -130,6 +130,8 @@ test('loss ends once and a fresh judge run resets HP, asks and resolved sites', 
   assert.equal(session.run.result, 'lose');
   assert.equal(events.filter(event => event.kind === 'run_end').length, 1);
   session.update(20);
+  assert.equal(session.run.phase, 'ending');
+  session.run.reset();
   assert.equal(session.run.phase, 'attract');
   assert.equal(session.enemies.enemies.length, 0);
   assert.equal(session.shards.sites.filter(site => site.active).length, 0);

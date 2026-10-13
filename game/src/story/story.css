@@ -1,0 +1,49 @@
+.story-panel { position: absolute; inset: 0; display: grid; place-items: center; background: #08060de6; padding: 24px; pointer-events: auto; z-index: 30; }
+.story-card { width: min(850px, 100%); max-height: 88vh; overflow: auto; background: #16111f; border: 1px solid #e8bd5a88; border-radius: 4px; padding: clamp(22px, 4vw, 50px); box-shadow: 0 30px 100px #0008; }
+.story-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 30px; color: var(--gold); font-size: 13px; }
+.story-card h2 { font: 400 30px 'Amulith Serif', serif; color: var(--gold); margin: 18px 0; }
+.story-card > p { font: 400 clamp(22px, 3vw, 32px)/1.55 'Amulith Serif', serif; min-height: 150px; margin: 0 0 30px; }
+.story-card button, .portable-button { border: 1px solid #e8bd5a77; border-radius: 3px; background: #23192f; color: #f3ead2; padding: 12px 18px; cursor: pointer; font: 15px 'Amulith Sans', sans-serif; pointer-events: auto; }
+.story-card button:hover, .story-card button.selected, .portable-button:hover { background: #3b2352; border-color: #e8bd5a; }
+#ui button:focus-visible, #ui [tabindex]:focus-visible { outline: 3px solid #e8bd5a; outline-offset: 4px; }
+.story-card [data-story-options] { display: grid; gap: 12px; }
+.story-note { display: block; margin-top: 20px; color: #b6a8c8; }
+.story-journal { max-height: 40vh; overflow: auto; border-top: 1px solid #e8bd5a55; margin-top: 20px; }
+.story-journal p { font: 18px/1.5 'Amulith Serif', serif; }
+.story-journal strong { color: var(--gold); }
+#ui.reading .pause, #ui.reading .dialogue, #ui.reading .level-intro { visibility: hidden; }
+.title .brand-symbol { width: 68px; height: 90px; margin: 0 auto 16px; }
+.title .edition { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #cfc4e0; margin: 8px 0 22px; }
+.title .choice { cursor: pointer; pointer-events: auto; font-family: inherit; text-align: center; color: inherit; }
+.title .portable-tools { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }
+.title .controls { font: 13px/1.8 'Amulith Sans', sans-serif; margin: 20px auto 0; max-width: 620px; color: #cfc4e0; }
+.hud-objective { position: absolute; top: 105px; left: 36px; font-size: 13px; max-width: 290px; color: #f3ead2; text-shadow: 0 2px 6px #000; }
+.hud-objective b { display: block; color: var(--gold); margin-bottom: 6px; }
+.ending .ending-actions { display: flex; gap: 12px; justify-content: center; margin: 22px 0; }
+.pause li { pointer-events: auto; cursor: pointer; }
+.pause .panel { max-height: 92vh; overflow: auto; }
+.offline-status { position: fixed; bottom: 8px; left: 12px; color: #cfc4e0; font: 10px sans-serif; pointer-events: none; z-index: 5; }
+.install-app { position: fixed; top: 12px; right: 12px; z-index: 50; }
+@media (max-width: 900px) {
+  .title h1 { font-size: clamp(42px, 9vw, 90px); }
+  .title .brand-symbol { width: 48px; height: 64px; margin-bottom: 6px; }
+  .title p { font-size: 20px; margin: 8px 0 20px; }
+  .choice { width: min(34vw, 270px); padding: 16px 12px; }
+  .choice h2 { font-size: 26px; }
+  .choice span { font-size: 12px; }
+  .hud-run { top: 16px; right: 16px; }
+  .hud-zone { left: 16px; top: 16px; }
+  .hud-share { top: 75px; width: 40vw; }
+  .hud-objective { top: 120px; left: 16px; max-width: 210px; }
+  .hud-prompts { right: 12px; bottom: 12px; font-size: 11px; gap: 8px; }
+  .dialogue { bottom: 50px; grid-template-columns: 64px 1fr; gap: 12px; padding: 14px; }
+  .dialogue img { width: 64px; height: 64px; }
+  .dialogue .line { font-size: 22px; }
+  .dialogue .name em { font-size: 9px; }
+  .pause .panel, .pause .panel.codex { width: min(90vw, 720px); padding: 24px; box-sizing: border-box; }
+  .codex-body { grid-template-columns: 220px 1fr; }
+  .level-intro { padding: 18px; }
+  .level-intro h2 { font-size: 34px; }
+  .level-intro p, .level-intro .sub { font-size: 18px; }
+}
+@media (max-height: 740px) { .title .flavor { font-size: 22px; } .title .hint { margin-top: 16px; } .title .controls { margin-top: 12px; } }

@@ -13,11 +13,12 @@ export class RemnantClient {
   } = {}) {}
 
   get connected(): boolean { return this.socket?.readyState === 1; }
-  start(): void { if (!this.stopped) return; this.stopped = false; this.connect(); }
+  start(): void { if (!this.stopped || !this.host) return; this.stopped = false; this.connect(); }
   private connect(): void {
     if (this.stopped) return;
     try {
-      const socket = (this.options.socketFactory ?? (url => new WebSocket(url)))(`ws://${this.host}/ws`);
+      const endpoint = /^wss?:\/\//.test(this.host) ? this.host : `${globalThis.location?.protocol === 'https:' ? 'wss' : 'ws'}://${this.host}`;
+      const socket = (this.options.socketFactory ?? (url => new WebSocket(url)))(`${endpoint.replace(/\/$/, '')}/ws`);
       this.socket = socket;
       socket.onopen = () => {
         if (this.stopped || this.socket !== socket) return;

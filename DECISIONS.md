@@ -2,6 +2,18 @@
 
 Newest first. Add entries instead of rewriting old ones. Every agent reads the LOCKED SPEC before working.
 
+## 2026-10-13: Portable story edition after the hardware return
+- Who decided: Juan Castillo, explicit request on October 12 in America/New_York; implementation date October 13 UTC.
+- The hackathon deadlines and hardware-first scope below remain historical. Juan no longer has the borrowed Jetson and authorized a browser edition, extensive authored script, Figma rebrand and portfolio preparation.
+- Default play connects to no external service. The existing protocol and hardware implementation remain available through an explicit Remnant URL.
+- The original three levels and two faction paths remain. Six original forest spirits have 12 branching conversations. All four win/loss paths receive full closing sequences. T.K. and Lenny remain silent; fan additions do not become official canon.
+- The authored director reacts to current state and events. Its hint points to the actual active unresolved shard and charges the existing land cost. Portable hints are mechanically truthful; Amulith remains possessive and unreliable in its interpretation of the forest.
+- Authored ambient dialogue does not spawn additional waves or spread corruption. Existing level waves, enemies and land rules still provide gameplay pressure. Story combat applies 35 percent of original incoming enemy damage; Challenge uses original damage. Conversation reading pauses the simulation.
+- Endings remain until explicit replay. Chronicle text persists on the browser. No campaign checkpoint or cloud save is claimed.
+- The game is installable as a browser application and caches bundled assets after first load. The offline download includes a Python 3 localhost launcher. Neither is a native executable or an LLM runtime.
+- Identity 02 uses the fractured gem and two roots, Noto Serif/Noto Sans and the existing gold, ink, parchment and violet palette. Logos, app icons and shipped art live in the Amulith Figma file. Historical proposal pages remain for process evidence.
+- Publish changes on a review branch with a PR. A separately verified preview may be deployed under `story/` on the existing Pages branch. Do not overwrite the original landing page before review.
+
 ## 2026-10-11 5:20 AM: Shrine vision without on-device training (replaces spec section 5.2 and cut order item 7)
 - Who decided: Juan Castillo (handoff of 2026-10-11, approved in the hotel session), written up by Claude Code.
 - Judging rooms change light, background and camera angle every 6 minutes with 2 minutes of setup, so there is no photo session at the venue. The detector must not rely on a classifier trained on desk photos.

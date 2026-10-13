@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { config } from './core/config';
+import { installPortable } from './core/portable';
 import { events } from './core/events';
 import { startLoop } from './core/loop';
 import { Input } from './input/Input';
@@ -15,9 +16,11 @@ import { sizeRenderer } from './render/resolution';
 import { installUI } from './ui';
 import { EnemyView } from './enemies/EnemyView';
 import { ShardView } from './rules/ShardView';
+import { installStoryMarkers } from './story/markers';
 import './style.css';
 
 const canvas = document.querySelector<HTMLCanvasElement>('#game')!;
+installPortable();
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setClearColor(0x192724);
 const scene = new THREE.Scene();
@@ -53,6 +56,7 @@ session.setGroveObstacles(COLLIDERS);
 const staticGroups=scene.children.filter(object=>!beforeVisuals.has(object)).filter(object=>object instanceof THREE.Group).slice(0,2);
 const levelScene=installLevelScene(scene,session,staticGroups,Math.atan2(camera.position.y,camera.position.z),player.position);
 const ui = installUI({ events, input, session, player, renderer });
+const storyMarkers = installStoryMarkers(scene, session, events);
 const resize = () => {
   sizeRenderer(renderer, window.innerWidth, window.innerHeight);
   visuals.resize();
@@ -92,6 +96,6 @@ const stop = startLoop({
 // Export the integration surface for lane modules and browser verification.
 export { config, events, input, player, session };
 if (import.meta.hot) import.meta.hot.dispose(() => {
-  stop(); levelScene.dispose(); ui.dispose(); visuals.dispose(); session.dispose(); enemyView.dispose(); shardView.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
+  stop(); storyMarkers.dispose(); levelScene.dispose(); ui.dispose(); visuals.dispose(); session.dispose(); enemyView.dispose(); shardView.dispose(); input.dispose(); unsubscribe(); player.dispose(); world.dispose(); renderer.dispose();
   window.removeEventListener('resize', resize);
 });

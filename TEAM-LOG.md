@@ -2,6 +2,13 @@
 
 Newest first. One entry per work session.
 
+## 2026-10-13, Juan Castillo, game-core/portable-story
+- Did: audited current main ae3d467, the seven pinned kh-skills guides and handoffs, 36 relevant vault notes, lore, Figma guide and Devpost records. Coordinated cross-lane changes on #3, #4, #5, #6, #7, #8 and #20 under #44.
+- Added hardware-free default startup, authored state/event dialogue, immediate real-shard hints, six visible spirits with 12 branching conversations, persistent chronicle, four closing sequences, explicit replay, Story/Challenge combat, pointer-accessible title/menu controls, PWA caching and a portable Python launcher. Preserved protocol and hardware source.
+- Rebranded in Figma with a fractured-gem/root symbol, palette treatments and app icon; exported vector identity assets. Updated landing-page and README claims, separated original hardware work from the scripted edition, and prepared a LinkedIn draft.
+- Verified so far: 41 Node tests and TypeScript/Vite production build pass. The script contains 696 unique beats and 7,913 words; every Amulith spoken beat stays within 22 words. Figma identity screenshot inspected after fixing clipped auto-layout heights.
+- Browser verification moves to the portable preview workflow because this environment has no installed Chromium, its browser download returns invalid bytes, and the remote browser cannot reach localhost. Full browser/offline claims remain pending workflow results. No new Jetson or physical controller measurements are claimed.
+
 ## 2026-10-11, Lawrence Capistrano, game-core/all-integration
 - Integrated levels, new art, landing page, lore UI and shrine vision under Lawrence's explicit merge authorization. Fixed later-level pause/resume intros and Grove cast visibility; applied reduced motion to Lenny and T.K.
 - Posted four art requests on #20 and optional protocol coordination on #38. Validation records are in the integration PR. Cloud vision fixtures cannot replace live camera or Jetson checks.
