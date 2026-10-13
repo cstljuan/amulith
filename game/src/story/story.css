@@ -17,6 +17,7 @@
 .title .brand-symbol { width: 54px; height: 72px; margin: 0 auto 12px; }
 .title .flavor { font-size: 24px; }
 .title p { font-size: 25px; margin-bottom: 30px; }
+body:has(#ui) [data-level-overlay] { display: none !important; }
 #ui:has(.ending:not([hidden])) .dialogue { visibility: hidden; }
 .title .edition { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #cfc4e0; margin: 8px 0 22px; }
 .title .choice { cursor: pointer; pointer-events: auto; font-family: inherit; text-align: center; color: inherit; }
