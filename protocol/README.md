@@ -6,7 +6,7 @@ TypeScript types: [`messages.ts`](messages.ts). The game imports them, it does n
 
 ## Connection
 
-- One WebSocket: `ws://<host>:8765/ws`. `<host>` is `localhost` when the game runs on the Jetson, `192.168.55.1` (USB-C link) or the Jetson's Wi-Fi IP when the game runs on a laptop. The game reads it from the `?remnant=` URL parameter, default `localhost:8765`.
+- One WebSocket: `ws://<host>:8765/ws`. `<host>` is `localhost` when the game runs on the Jetson, `192.168.55.1` (USB-C link) or the Jetson's Wi-Fi IP when the game runs on a laptop. The game reads it from an explicit `?remnant=` URL parameter. Portable mode leaves it empty and creates no socket. HTTPS pages choose `wss://`; an explicit scheme is respected.
 - Audio files: `http://<host>:8765/audio/<id>.mp3`.
 - Every message is one JSON object with a `type` field.
 - The game must keep working if the socket is down: reconnect every 2 s, and run its own scripted director meanwhile.
@@ -40,6 +40,6 @@ Note: Amulith always pushes toward Blight. In a Bloom run `spread` corrupts land
 
 ## Ownership of behavior
 
-- remnant decides WHEN Amulith speaks and WHAT it says. The game only applies `spread`, `spawn`, `hint` and shows `line`.
+- In connected hardware mode, remnant decides WHEN Amulith speaks and WHAT it says. Portable mode owns its authored director and conversations locally. The game only applies `spread`, `spawn`, `hint` and shows `line`.
 - The relic button triggers an ask inside remnant directly; remnant still sends the resulting `director`.
 - The LED is driven by remnant by default (`thinking` while generating); `led` from the game overrides for shard proximity and endings.

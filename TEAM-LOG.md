@@ -1,5 +1,10 @@
 # Team log
 
+## 2026-10-13, Juan Castillo, game-core/portable-story
+- Did: completed portable authored story, identity and source asset gallery, complete static story reader, local launcher and live portfolio. 41 tests and production build passed; CI run 38349622031 passed both complete faction runs, offline reload and no-WebGL recovery.
+- Blocked: live Devpost contents could not be retrieved; LinkedIn is prepared as an unpublished draft. Human balance and physical-controller testing remain follow-ups.
+- Next: review PR #45; future notes use the portable edition rather than assuming possession of the borrowed Jetson.
+
 Newest first. One entry per work session.
 
 ## 2026-10-13, Juan Castillo, game-core/portable-story

@@ -53,12 +53,14 @@ Amulith was built at Knight Hacks IX. The saved Devpost project was not finalize
 
 41 Node tests and production build passed locally. New tests exercise absent sockets, corpus uniqueness/voice limits, all six NPC route pairs, per-level banks, event queue limits, reset isolation, immediate ask replies and actual shard targets. The Figma identity passed visual inspection after its auto-layout fix.
 
-Browser checks run in `.github/workflows/portable-preview.yml`. They cover two three-level wins, real hold inputs with controlled positions, conversation choices, chronicle, endings, replay and fresh-cache offline production reload. Their fixture is not a human playtime or physical-controller measurement. This environment could not run Chromium, so final browser status must be read from the workflow artifact before publishing a completion claim.
+Browser checks run in `.github/workflows/portable-preview.yml`. They cover two three-level wins, real hold inputs with controlled positions, conversation choices, chronicle, endings, replay and fresh-cache offline production reload. Their fixture is not a human playtime or physical-controller measurement. All browser checks passed in GitHub Actions run 38349622031 against source 58fd812, including recovery with WebGL unavailable and the complete bundled story reader. Local Chromium was unavailable; the CI artifact is the verification evidence.
 
 ## Launch package
 
-- Playable preview under the Pages `story/` path after browser verification succeeds.
+- Verified playable preview: https://cstljuan.github.io/amulith/story/play/
 - Review PR containing executable story, brand exports, static landing page and launch tooling.
 - Figma: https://www.figma.com/design/rn6yGida1u6Qg3KAK0vSnB/Untitled?node-id=17-3
 - LinkedIn draft in `linkedin.md`, paired with the new social cover and actual gameplay/venue footage.
 - Follow-up improvements: measured human balance/playtime, native desktop packaging if desired, richer spirit-specific sprites, campaign checkpoints and a finished narrated demo. These are not claims about the current build.
+
+Figma identity includes editable logo variants, app icons and a social cover. The source gallery documents all 23 shipped PNGs, with 22 native image previews and a repository reference for the oversized shrine texture. Existing character and environment pixels remain preserved; a complete new sprite set is not claimed.
