@@ -49,8 +49,8 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     <div class="title">
       <img class="brand-symbol" src="${import.meta.env.BASE_URL}brand/symbol.svg" alt="A fractured gem held by roots">
       <h1>AMULITH</h1>
-      <div class="edition">The roots remember / Portable story edition</div>
-      <div class="flavor">${LEVEL_LORE.grove.subtitle}</div>
+      <div class="edition">Portable story edition</div>
+      <div class="flavor">The roots remember.</div>
       <p>A broken thing is still listening.</p>
       <div class="choices">
         <button class="choice bloom on" data-choice="bloom"><h2>Bloom</h2><span>Break the shards. Wake the Knight.</span></button>
@@ -94,11 +94,12 @@ export function installUI({ events, input, session, player, renderer }: UiHost) 
     const [head, text] = e.result === 'lose' ? ['The lantern goes out.', bloom ? 'The roots keep the Knight. Amulith keeps the forest.' : 'Even the Gem forgets who fed it.']
       : bloom ? ['The Knight wakes.', 'The last shard breaks. T.K. stands, and the gem goes dark.'] : ['The Gem is whole.', 'The shards fuse. The treeline closes behind you.'];
     $('[data-end-title]').textContent = head; $('[data-end-text]').textContent = text;
-    const closing = CLOSINGS[bloom ? 'bloom' : 'blight'][e.result === 'win' ? 'win' : 'lose'].filter(b => b.speaker === 'Amulith').at(-1);
+    const closing = CLOSINGS[bloom ? 'bloom' : 'blight'][e.result === 'win' ? 'win' : 'lose'].find(b => b.speaker === 'Amulith');
     $('[data-end-line]').textContent = closing ? `"${closing.text}"` : '';
     const outro = e.result === 'win' ? LEVEL_LORE.deepwood[bloom ? 'outroBloom' : 'outroBlight'] : [];
     $('[data-end-outro]').replaceChildren(...outro.map(l => Object.assign(document.createElement('div'), { textContent: l })));
     ending.hidden = false; hud.hidden = true; pause.hidden = true; intro.classList.add('gone'); introHideAt = 0;
+    dialogue.classList.add('gone'); hideAt = 0; thinking = false;
   };
 
   // State fed by events.

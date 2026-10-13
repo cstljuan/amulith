@@ -12,7 +12,12 @@
 .story-journal p { font: 18px/1.5 'Amulith Serif', serif; }
 .story-journal strong { color: var(--gold); }
 #ui.reading .pause, #ui.reading .dialogue, #ui.reading .level-intro { visibility: hidden; }
-.title .brand-symbol { width: 68px; height: 90px; margin: 0 auto 16px; }
+.title { padding: 24px; box-sizing: border-box; }
+.title h1 { font-size: clamp(56px, 8vw, 112px); line-height: 1.05; }
+.title .brand-symbol { width: 54px; height: 72px; margin: 0 auto 12px; }
+.title .flavor { font-size: 24px; }
+.title p { font-size: 25px; margin-bottom: 30px; }
+#ui:has(.ending:not([hidden])) .dialogue { visibility: hidden; }
 .title .edition { font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #cfc4e0; margin: 8px 0 22px; }
 .title .choice { cursor: pointer; pointer-events: auto; font-family: inherit; text-align: center; color: inherit; }
 .title .portable-tools { display: flex; justify-content: center; gap: 12px; margin-top: 20px; }

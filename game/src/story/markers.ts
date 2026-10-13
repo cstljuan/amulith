@@ -3,7 +3,7 @@ import type { GameSession } from '../rules/session.ts';
 import type { EventBus, GameEvents } from '../core/events.ts';
 import { spiritPlaces } from './places.ts';
 export function installStoryMarkers(scene: THREE.Scene, session: GameSession, events: EventBus<GameEvents>) {
-  const group = new THREE.Group(); group.name = 'Forest spirits'; scene.add(group);
+  const group = new THREE.Group(); group.name = 'Forest spirits'; group.visible = Boolean(session.faction); scene.add(group);
   const clear = () => { for (const child of [...group.children]) {
     if (child instanceof THREE.Sprite) { child.material.map?.dispose(); child.material.dispose(); }
     group.remove(child);
@@ -23,6 +23,6 @@ export function installStoryMarkers(scene: THREE.Scene, session: GameSession, ev
       sprite.position.set(npc.x, 1.7, npc.z); sprite.scale.set(4.4, 2.2, 1); group.add(sprite);
     }
   };
-  const off = events.on('level', rebuild); rebuild();
-  return { dispose() { off(); clear(); scene.remove(group); } };
+  const off = events.on('level', rebuild); const offFaction = events.on('faction', event => { group.visible = Boolean(event.faction); }); rebuild();
+  return { dispose() { off(); offFaction(); clear(); scene.remove(group); } };
 }
