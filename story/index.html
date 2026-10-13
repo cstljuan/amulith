@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en" data-theme="bloom">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff1d6">
+  <meta name="description" content="Amulith: The roots remember. Play a portable forest story with Bloom and Blight paths. Explore the original Knight Hacks edge-AI build.">
+  <meta property="og:title" content="Amulith | Bloom or Blight">
+  <meta property="og:description" content="A broken thing is still listening. Choose Bloom or Blight, meet six forest spirits, and carry a lantern through three areas.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/art/shrine-keyart.jpg">
+  <title>Amulith | Bloom or Blight</title>
+  <link rel="icon" href="assets/brand/symbol.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/NotoSerif-Regular.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="style.css">
+  <script src="main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="hero-shell" id="top">
+    <img class="hero-art" src="assets/art/shrine-keyart.jpg" alt="An enchanted forest divided between golden flowers and violet corruption, with an eye inside a gem on a stone shrine." width="1600" height="905" fetchpriority="high">
+    <header class="site-header">
+      <a class="wordmark" href="#top" aria-label="Amulith home">
+        <img src="assets/brand/symbol.svg" width="24" height="32" alt="">
+        Amulith
+      </a>
+      <nav aria-label="Main navigation">
+        <a href="play/">Play now</a>
+        <a href="#build">The build</a>
+        <a href="https://github.com/cstljuan/amulith">GitHub</a>
+      </nav>
+      <div class="theme-switch" role="group" aria-label="Choose the page's forest palette" hidden>
+        <button type="button" data-faction="bloom" aria-pressed="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6 2.1-2.1"/><circle cx="12" cy="12" r="4"/></svg>Bloom</button>
+        <button type="button" data-faction="blight" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 15a8 8 0 0 1-10-10 8 8 0 1 0 10 10Z"/></svg>Blight</button>
+      </div>
+    </header>
+    <div class="hero-title">
+      <p class="event">Made at Knight Hacks IX</p>
+      <h1>Amulith</h1>
+      <p class="hero-line">The roots remember.</p>
+    </div>
+    <div class="hero-bottom">
+      <p>A broken thing is still listening. A portable forest game about what a hand chooses to hold, and what it learns to let go.</p>
+      <a class="hero-link" href="play/">Play Amulith <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16m-6-6 6 6 6-6"/></svg></a>
+    </div>
+    <p class="art-caption">Game concept art, not a gameplay capture</p>
+  </div>
+
+  <main id="main" tabindex="-1">
+    <section class="play-section section-wrap" id="play" aria-labelledby="play-title">
+      <div class="section-intro">
+        <h2 id="play-title">The forest takes<br>your side.</h2>
+        <div class="intro-copy">
+          <p>The gem shattered. Its pieces sank into the soil, and a forest grew too fast. Lenny is free, but T.K. lies beneath the moss. The consciousness left behind is Amulith, the Remnant.</p>
+          <p>You decide what happens to its shards.</p>
+        </div>
+      </div>
+      <ol class="play-steps">
+        <li>
+          <span class="step-number" aria-hidden="true">01</span>
+          <h3>Choose a path.</h3>
+          <p>Bloom breaks the shards to wake the Knight. Blight returns them to the voice beneath the roots. Start with a mouse, keyboard or controller.</p>
+        </li>
+        <li>
+          <span class="step-number" aria-hidden="true">02</span>
+          <h3>Carry a little light.</h3>
+          <p>Explore as the Wanderer. Pulse to reclaim the ground, turn your lantern to reveal shards, and watch for the other faction.</p>
+        </li>
+        <li>
+          <span class="step-number" aria-hidden="true">03</span>
+          <h3>Ask the Remnant.</h3>
+          <p>Ask Amulith for a direction, or talk to the six forest spirits. Branching conversations pause the world while you read. Keep what you hear in your chronicle.</p>
+        </li>
+      </ol>
+      <p class="development-note">The portable story edition bundles its authored dialogue, music and art. No Jetson, webcam, Arduino, account or AI service is required. Install it from a supporting desktop browser, or play here.</p>
+
+      <div class="factions" aria-label="The two paths">
+        <article class="faction bloom-path">
+          <div class="faction-text">
+            <p class="path-name"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 16C4 16 4 2 10 4c4 0 6 6 6 12Zm0 0C16 4 30 4 28 10c0 4-6 6-12 6Zm0 0c12 0 12 14 6 12-4 0-6-6-6-12Zm0 0C16 28 2 28 4 22c0-4 6-6 12-6Z"/></svg>Bloom</p>
+            <h3>Wake the Knight.</h3>
+            <p>Destroy the shards. Free T.K. and Lenny from what the gem left behind.</p>
+            <span class="path-detail">Golden day. Flowers reclaim the ground.</span>
+          </div>
+          <img class="sprite" src="assets/art/wanderer-bloom.png" alt="The green-cloaked Wanderer carrying a lantern for Bloom." width="108" height="188" loading="lazy">
+        </article>
+        <article class="faction blight-path">
+          <div class="faction-text">
+            <p class="path-name"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="m17 2-2 12L4 10l10 9-3 11 8-11 10 3-8-8 6-9Z"/></svg>Blight</p>
+            <h3>Feed the Gem.</h3>
+            <p>Gather the shards. Keep the forest corrupted, and the Remnant awake.</p>
+            <span class="path-detail">Violet night. Thorns and veins take root.</span>
+          </div>
+          <img class="sprite" src="assets/art/wanderer-blight.png" alt="The violet-cloaked Wanderer carrying a lantern for Blight." width="108" height="188" loading="lazy">
+        </article>
+      </div>
+    </section>
+
+    <section class="build-section" id="build" aria-labelledby="build-title">
+      <div class="section-wrap build-layout">
+        <div class="build-heading">
+          <p class="section-label">The original Knight Hacks build</p>
+          <h2 id="build-title">A mind inside<br>the stone.</h2>
+          <p>Amulith began on a borrowed NVIDIA Jetson Orin Nano. The original build combined local Qwen inference, a shrine camera and an Arduino relic. After the hardware was returned, the game gained this portable story edition.</p>
+          <a class="text-link" href="https://github.com/cstljuan/amulith">Explore the source on GitHub</a>
+          <figure class="remnant-figure">
+            <img class="sprite gem" src="assets/art/amulith-gem.png" alt="The Amulith gem, a violet crystal with a watchful eye." width="171" height="256" loading="lazy">
+            <figcaption>The consciousness the gem left behind.</figcaption>
+          </figure>
+        </div>
+        <div class="build-details">
+          <dl>
+            <div><dt>Mind</dt><dd><h3>Local inference, then authored story.</h3><p>The Jetson build used CUDA llama.cpp and constrained Qwen replies. This browser edition uses 696 unique authored beats, including faction-specific conversations and endings. It performs no live inference.</p></dd></div>
+            <div><dt>Eyes</dt><dd><h3>A camera at the shrine.</h3><p>The original detector learned the empty shrine and combined foreground, color, shape and a pretrained embedding. No vision model was trained or published for it. Manual faction choice remains available.</p></dd></div>
+            <div><dt>Hands</dt><dd><h3>A relic with portable equivalents.</h3><p>The Arduino interface provided a lantern knob, ask button and LED heartbeat. Keyboard and controller controls cover those actions in the portable edition.</p></dd></div>
+            <div><dt>World</dt><dd><h3>Pixel art in a lit diorama.</h3><p>Three.js, TypeScript and Vite render Shrine Grove, Mushroom Hollow and Rootdeep. A* enemies, land conversion, lantern risk, two faction endings and a browser chronicle remain part of play.</p></dd></div>
+          </dl>
+          <p class="build-note">The original hardware implementation remains in the source. The portable edition has bundled music and subtitles. Live speech synthesis was planned during the hackathon and is not claimed as a shipped feature.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="team-section section-wrap" id="team" aria-labelledby="team-title">
+      <div>
+        <h2 id="team-title">Made by Juan &amp; Lawrence.</h2>
+        <p class="team-names">Juan Castillo <span aria-hidden="true">/</span> Lawrence Capistrano</p>
+        <p>Built at Knight Hacks IX at UCF. A forest on a screen, a shrine on a table, and a mind inside the stone.</p>
+      </div>
+      <div class="project-links">
+        <a class="source-button" href="https://github.com/cstljuan/amulith">View the project on GitHub</a>
+        <a class="source-button" href="play/">Play the portable edition</a>
+        <a class="devpost-placeholder" href="https://devpost.com/software/amulith" aria-describedby="devpost-note">Devpost portfolio page</a>
+        <p id="devpost-note">Built at Knight Hacks IX. The saved project was not finalized as a competition submission.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer section-wrap">
+    <a class="footer-wordmark" href="#top">Amulith</a>
+    <div class="credits">
+      <p>Lenny, T.K., and the Knight Hacks lore belong to the Knight Hacks design team: Lena Tran, Gabriela Zambrano, Christina Nguyen, David Navarrete, and Amira Bhuiyan.</p>
+      <p>A non-commercial fan project made at Knight Hacks IX. Game art directed by Juan Castillo with AI-assisted generation. <a href="assets/CREDITS.md">Art and font credits</a>.</p>
+    </div>
+    <a class="back-to-top" href="#top">Back to top</a>
+  </footer>
+  <p class="visually-hidden" id="theme-status" role="status" aria-live="polite"></p>
+</body>
+</html>
