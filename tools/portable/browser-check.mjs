@@ -53,7 +53,9 @@ try {
     await page.click('[data-replay]');
     await page.waitForFunction(() => window.__amulith.session.run.phase === 'attract' && !document.querySelector('.title').hidden);
     assert.equal(await page.evaluate(() => window.__amulith.session.asksUsed),0);
-    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(sockets,[]);
+    assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);
+    // Vite's local hot-reload socket belongs to the dev server. Hardware sockets use /ws.
+    assert.deepEqual(sockets.filter(url=>new URL(url).pathname==='/ws'),[]);
     report.push({test:`${faction}: choice, immediate ask, conversation branch, persistent chronicle, three real shard holds and exits, ending, replay`,result:'pass',fixture:'Controlled positions; real game loop, input and shard hold. Not a human playtime measurement.'});
     await context.close();
   }

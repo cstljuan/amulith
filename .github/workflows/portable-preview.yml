@@ -2,9 +2,11 @@ name: Portable story verification and preview
 on:
   push:
     branches: [game-core/portable-story]
+    paths: ['game/**', 'site/**', 'tools/portable/**', '.github/workflows/portable-preview.yml']
   workflow_dispatch:
 permissions:
   contents: write
+  pages: write
 concurrency:
   group: amulith-portable-preview
   cancel-in-progress: true
@@ -56,3 +58,7 @@ jobs:
             git commit -m "Publish verified portable Amulith preview"
             git push origin gh-pages
           fi
+      - name: Request Pages rebuild
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh api --method POST repos/cstljuan/amulith/pages/builds
