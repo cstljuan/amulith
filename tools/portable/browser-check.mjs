@@ -75,5 +75,14 @@ try {
   assert.deepEqual(errors,[]);assert.deepEqual(missing,[]);assert.deepEqual(sockets,[]);
   report.push({test:'Fresh production cache, no external network or sockets, service-worker install, offline reload, faction start, ask and conversation',result:'pass'});
   await context.close();
+  const readerContext=await browser.newContext();const readerPage=await readerContext.newPage();
+  await readerPage.addInitScript(()=>{const original=HTMLCanvasElement.prototype.getContext;HTMLCanvasElement.prototype.getContext=function(type,...args){return String(type).includes('webgl')?null:original.call(this,type,...args);};});
+  await readerPage.goto('http://127.0.0.1:5175/');
+  await readerPage.getByRole('link',{name:'Read the complete story'}).waitFor();
+  await readerPage.getByRole('link',{name:'Read the complete story'}).click();
+  await readerPage.getByRole('heading',{name:'Amulith: The roots remember',exact:true}).waitFor();
+  assert((await readerPage.locator('h2').count())>20);
+  report.push({test:'Missing WebGL produces a readable recovery screen and a complete bundled story reader',result:'pass'});
+  await readerContext.close();
   await writeFile(`${output}/verification.json`,JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
 } finally { await browser.close(); }
